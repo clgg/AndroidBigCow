@@ -32,7 +32,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('标准答案'), findsOneWidget);
-    expect(find.textContaining('作答时先给出核心结论'), findsOneWidget);
+    expect(find.text('一句话回答'), findsOneWidget);
+    expect(find.textContaining('作答时先给出核心结论'), findsNothing);
   });
 }
 

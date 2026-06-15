@@ -4,7 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../models/question.dart';
 import '../theme/app_theme.dart';
-import '../widgets/question_card.dart';
+import '../utils/standard_answer_builder.dart';
 
 enum AiTool {
   qianwen('千问', 'https://www.qianwen.com/'),
@@ -37,7 +37,7 @@ class _AiExplainerScreenState extends State<AiExplainerScreen> {
   @override
   void initState() {
     super.initState();
-    _copyPrompt(showMessage: false);
+    _copyPrompt(showMessage: true);
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -94,69 +94,14 @@ class _AiExplainerScreenState extends State<AiExplainerScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          _PromptPanel(prompt: _prompt, selectedTool: _selectedTool),
-          Expanded(
-            child: Stack(
-              children: [
-                WebViewWidget(controller: _webViewController),
-                if (_isLoading)
-                  const Align(
-                    alignment: Alignment.topCenter,
-                    child: LinearProgressIndicator(minHeight: 2),
-                  ),
-              ],
+          WebViewWidget(controller: _webViewController),
+          if (_isLoading)
+            const Align(
+              alignment: Alignment.topCenter,
+              child: LinearProgressIndicator(minHeight: 2),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PromptPanel extends StatelessWidget {
-  const _PromptPanel({required this.prompt, required this.selectedTool});
-
-  final String prompt;
-  final AiTool selectedTool;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-      decoration: BoxDecoration(
-        color: palette.surface,
-        border: Border(bottom: BorderSide(color: palette.border)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.auto_awesome, size: 18, color: palette.accent),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  '已复制到剪贴板，登录 ${selectedTool.label} 后粘贴发送',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          AppCard(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              prompt,
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
         ],
       ),
     );
@@ -179,6 +124,9 @@ String _buildPrompt(InterviewQuestion question) {
 5. 最后给我一版 1 分钟口述答案。
 
 我当前题库里的参考要点：
+标准答案：
+${StandardAnswerBuilder.resolve(question)}
+
 考察点：
 ${question.checkpoints.map((item) => '- $item').join('\n')}
 

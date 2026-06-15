@@ -4,7 +4,9 @@ import '../models/question.dart';
 import '../screens/ai_explainer_screen.dart';
 import '../state/app_controller.dart';
 import '../theme/app_theme.dart';
+import '../utils/standard_answer_builder.dart';
 import '../widgets/question_card.dart';
+import '../widgets/standard_answer_view.dart';
 
 class QuestionDetailScreen extends StatelessWidget {
   const QuestionDetailScreen({
@@ -128,7 +130,7 @@ class _StandardAnswerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.palette;
+    final answer = StandardAnswerBuilder.resolve(question);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -137,92 +139,10 @@ class _StandardAnswerCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('标准答案', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text(
-              _opening,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 12),
-            if (question.answerPoints.isNotEmpty) ...[
-              Text(
-                '回答时可以按这几个层次展开：',
-                style: TextStyle(
-                  color: palette.textPrimary,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 8),
-              for (var i = 0; i < question.answerPoints.length; i++)
-                _NumberedPoint(index: i + 1, text: question.answerPoints[i]),
-            ],
-            if (question.checkpoints.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(
-                '面试官重点看你是否能覆盖：${question.checkpoints.join('；')}',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-            if (question.mistakes.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: palette.warning.withOpacity(0.10),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '注意不要只背结论。常见扣分点是：${question.mistakes.join('；')}',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            ],
+            const SizedBox(height: 10),
+            StandardAnswerView(text: answer),
           ],
         ),
-      ),
-    );
-  }
-
-  String get _opening {
-    return '这道题属于「${question.module}」模块。作答时先给出核心结论，再解释关键机制，最后补充边界场景或常见问题。这样回答比单独罗列名词更完整，也更容易体现你真的理解了题目。';
-  }
-}
-
-class _NumberedPoint extends StatelessWidget {
-  const _NumberedPoint({required this.index, required this.text});
-
-  final int index;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 22,
-            height: 22,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: palette.accentMuted,
-              borderRadius: BorderRadius.circular(99),
-            ),
-            child: Text(
-              '$index',
-              style: TextStyle(
-                color: palette.accent,
-                fontSize: 12,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(child: Text(text)),
-        ],
       ),
     );
   }

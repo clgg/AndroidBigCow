@@ -87,6 +87,8 @@ Map<String, Object?> _parseBlock({
     'answerPoints': _section(lines, '答案要点：'),
     'followUps': _section(lines, '深挖追问：'),
     'mistakes': _section(lines, '常见误区：'),
+    if (_section(lines, '标准答案：').isNotEmpty)
+      'standardAnswer': _section(lines, '标准答案：').join('\n\n'),
   };
 }
 

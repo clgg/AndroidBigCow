@@ -26,6 +26,7 @@ class InterviewQuestion {
     required this.answerPoints,
     required this.followUps,
     required this.mistakes,
+    this.standardAnswer,
   });
 
   final String id;
@@ -37,6 +38,7 @@ class InterviewQuestion {
   final List<String> answerPoints;
   final List<String> followUps;
   final List<String> mistakes;
+  final String? standardAnswer;
 
   factory InterviewQuestion.fromJson(Map<String, Object?> json) {
     return InterviewQuestion(
@@ -49,6 +51,7 @@ class InterviewQuestion {
       answerPoints: _stringList(json['answerPoints']),
       followUps: _stringList(json['followUps']),
       mistakes: _stringList(json['mistakes']),
+      standardAnswer: json['standardAnswer'] as String?,
     );
   }
 
@@ -63,6 +66,7 @@ class InterviewQuestion {
       'answerPoints': answerPoints,
       'followUps': followUps,
       'mistakes': mistakes,
+      if (standardAnswer != null) 'standardAnswer': standardAnswer,
     };
   }
 
@@ -80,6 +84,7 @@ class InterviewQuestion {
       ...answerPoints,
       ...followUps,
       ...mistakes,
+      if (standardAnswer != null) standardAnswer!,
     ].any((value) => value.toLowerCase().contains(normalized));
   }
 }
