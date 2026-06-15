@@ -8,22 +8,45 @@ import '../models/user_progress.dart';
 
 class QuestionRepository {
   QuestionRepository(List<InterviewQuestion> questions)
-    : _questions = List.unmodifiable(questions);
+      : _questions = List.unmodifiable(questions);
 
   final List<InterviewQuestion> _questions;
   final Random _random = Random();
 
+  static const defaultAssetPaths = [
+    'assets/question_bank.json',
+    'assets/question_bank_extension_2026_06.json',
+  ];
+
   static Future<QuestionRepository> loadFromAsset([
     String path = 'assets/question_bank.json',
+  ]) {
+    return loadFromAssets([path]);
+  }
+
+  static Future<QuestionRepository> loadFromAssets([
+    List<String> paths = defaultAssetPaths,
   ]) async {
+    final questions = <InterviewQuestion>[];
+    final seenIds = <String>{};
+    for (final path in paths) {
+      final loaded = await _loadQuestions(path);
+      for (final question in loaded) {
+        if (seenIds.add(question.id)) {
+          questions.add(question);
+        }
+      }
+    }
+    return QuestionRepository(questions);
+  }
+
+  static Future<List<InterviewQuestion>> _loadQuestions(String path) async {
     final raw = await rootBundle.loadString(path);
     final decoded = jsonDecode(raw) as List;
-    return QuestionRepository(
-      decoded
-          .cast<Map<String, Object?>>()
-          .map(InterviewQuestion.fromJson)
-          .toList(growable: false),
-    );
+    return decoded
+        .cast<Map<String, Object?>>()
+        .map(InterviewQuestion.fromJson)
+        .toList(growable: false);
   }
 
   List<InterviewQuestion> get all => _questions;
@@ -55,13 +78,11 @@ class QuestionRepository {
     String? module,
     Set<String> tags = const {},
   }) {
-    return _questions
-        .where((question) {
-          final moduleMatches = module == null || question.module == module;
-          final tagsMatch = tags.isEmpty || tags.every(question.tags.contains);
-          return moduleMatches && tagsMatch && question.matches(query);
-        })
-        .toList(growable: false);
+    return _questions.where((question) {
+      final moduleMatches = module == null || question.module == module;
+      final tagsMatch = tags.isEmpty || tags.every(question.tags.contains);
+      return moduleMatches && tagsMatch && question.matches(query);
+    }).toList(growable: false);
   }
 
   InterviewQuestion? byId(String id) {
@@ -79,15 +100,13 @@ class QuestionRepository {
   }
 
   List<DecoratedQuestion> withProgress(UserProgress progress) {
-    return _questions
-        .map((question) {
-          final state = progress.stateFor(question.id);
-          return DecoratedQuestion(
-            question: question,
-            status: state.status ?? question.seedStatus,
-            isFavorite: state.isFavorite,
-          );
-        })
-        .toList(growable: false);
+    return _questions.map((question) {
+      final state = progress.stateFor(question.id);
+      return DecoratedQuestion(
+        question: question,
+        status: state.status ?? question.seedStatus,
+        isFavorite: state.isFavorite,
+      );
+    }).toList(growable: false);
   }
 }

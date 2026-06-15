@@ -4,6 +4,7 @@ import '../data/question_repository.dart';
 import '../models/question.dart';
 import '../screens/bank_screen.dart';
 import '../screens/home_screen.dart';
+import '../screens/module_questions_screen.dart';
 import '../screens/question_detail_screen.dart';
 import '../screens/review_screen.dart';
 import '../screens/settings_screen.dart';
@@ -38,6 +39,18 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  void _openModule(String module) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => ModuleQuestionsScreen(
+          module: module,
+          repository: widget.repository,
+          controller: widget.controller,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screens = [
@@ -45,6 +58,7 @@ class _AppShellState extends State<AppShell> {
         repository: widget.repository,
         controller: widget.controller,
         onOpenQuestion: _openQuestion,
+        onOpenModule: _openModule,
       ),
       BankScreen(
         repository: widget.repository,

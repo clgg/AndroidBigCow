@@ -12,25 +12,25 @@ class HomeScreen extends StatelessWidget {
     required this.repository,
     required this.controller,
     required this.onOpenQuestion,
+    required this.onOpenModule,
   });
 
   final QuestionRepository repository;
   final AppController controller;
   final ValueChanged<InterviewQuestion> onOpenQuestion;
+  final ValueChanged<String> onOpenModule;
 
   @override
   Widget build(BuildContext context) {
     final decorated = repository.withProgress(controller.progress);
-    final mastered = decorated
-        .where((item) => item.status == ReviewStatus.mastered)
-        .length;
+    final mastered =
+        decorated.where((item) => item.status == ReviewStatus.mastered).length;
     final nextReview = decorated
         .where((item) => item.status == ReviewStatus.nextReview)
         .toList(growable: false);
     final favorites = decorated.where((item) => item.isFavorite).length;
-    final progress = repository.all.isEmpty
-        ? 0.0
-        : mastered / repository.all.length;
+    final progress =
+        repository.all.isEmpty ? 0.0 : mastered / repository.all.length;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
@@ -103,41 +103,43 @@ class HomeScreen extends StatelessWidget {
           action: '${repository.modules.length} 个模块',
         ),
         const SizedBox(height: 10),
-        ...repository.modules
-            .map((module) {
-              final count = repository.filter(module: module).length;
-              return AppCard(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 12,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            module,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            '$count 道题 · 高频 / 底层 / 场景题',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+        ...repository.modules.map((module) {
+          final count = repository.filter(module: module).length;
+          return InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => onOpenModule(module),
+            child: AppCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          module,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          '$count 道题 · 点击查看列表',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ),
-                    Icon(
-                      Icons.chevron_right,
-                      color: context.palette.textSecondary,
-                    ),
-                  ],
-                ),
-              );
-            })
-            .expand((widget) => [widget, const SizedBox(height: 10)]),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    color: context.palette.textSecondary,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).expand((widget) => [widget, const SizedBox(height: 10)]),
       ],
     );
   }

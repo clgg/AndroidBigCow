@@ -55,6 +55,34 @@ class QuestionCard extends StatelessWidget {
   }
 }
 
+class QuestionTagRow extends StatelessWidget {
+  const QuestionTagRow({
+    super.key,
+    required this.status,
+    required this.tags,
+  });
+
+  final ReviewStatus status;
+  final List<String> tags;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      clipBehavior: Clip.none,
+      child: Row(
+        children: [
+          StatusChip(status: status),
+          for (final tag in tags) ...[
+            const SizedBox(width: 8),
+            QuestionTagChip(label: tag),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class StatusChip extends StatelessWidget {
   const StatusChip({super.key, required this.status});
 
@@ -63,23 +91,71 @@ class StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final color = switch (status) {
-      ReviewStatus.mastered => palette.success,
-      ReviewStatus.nextReview => palette.warning,
-      ReviewStatus.notMastered => palette.accent,
+    final (backgroundColor, foregroundColor, borderColor) = switch (status) {
+      ReviewStatus.mastered => (
+          palette.success.withOpacity(0.12),
+          palette.success,
+          palette.success.withOpacity(0.28),
+        ),
+      ReviewStatus.nextReview => (
+          palette.warning.withOpacity(0.14),
+          palette.warning,
+          palette.warning.withOpacity(0.30),
+        ),
+      ReviewStatus.notMastered => (
+          palette.accent.withOpacity(0.12),
+          palette.accent,
+          palette.accent.withOpacity(0.28),
+        ),
     };
+
+    return QuestionTagChip(
+      label: status.label,
+      foregroundColor: foregroundColor,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+    );
+  }
+}
+
+class QuestionTagChip extends StatelessWidget {
+  const QuestionTagChip({
+    super.key,
+    required this.label,
+    this.foregroundColor,
+    this.backgroundColor,
+    this.borderColor,
+  });
+
+  final String label;
+  final Color? foregroundColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      height: 28,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: backgroundColor ?? palette.surfaceAlt,
         borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: borderColor ?? palette.border,
+        ),
       ),
       child: Text(
-        status.label,
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: color,
-          fontSize: 11,
-          fontWeight: FontWeight.w800,
+          color: foregroundColor ?? palette.textSecondary,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          height: 1,
         ),
       ),
     );

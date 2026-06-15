@@ -82,4 +82,16 @@ void main() {
     expect(handler.isFavorite, isTrue);
     expect(handler.status, ReviewStatus.nextReview);
   });
+
+  test('loads bundled base and extension assets together', () async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+
+    final repository = await QuestionRepository.loadFromAssets();
+    final uniqueIds = repository.all.map((question) => question.id).toSet();
+
+    expect(repository.all.length, 322);
+    expect(uniqueIds.length, repository.all.length);
+    expect(repository.modules.length, 12);
+    expect(repository.filter(module: 'Java').length, greaterThanOrEqualTo(27));
+  });
 }

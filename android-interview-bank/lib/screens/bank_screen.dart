@@ -23,6 +23,17 @@ class BankScreen extends StatefulWidget {
 }
 
 class _BankScreenState extends State<BankScreen> {
+  static const _primaryTags = [
+    '高频',
+    '基础',
+    '进阶',
+    '底层',
+    '易混',
+    '场景题',
+    '性能',
+    '架构',
+  ];
+
   String _query = '';
   String? _module;
   final Set<String> _tags = {};
@@ -74,8 +85,10 @@ class _BankScreenState extends State<BankScreen> {
           }),
         ),
         const SizedBox(height: 10),
-        _TagWrap(
-          values: widget.repository.tags,
+        _CompactTagFilter(
+          values: _primaryTags
+              .where(widget.repository.tags.contains)
+              .toList(growable: false),
           selected: _tags,
           onToggle: (tag) => setState(() {
             if (_tags.contains(tag)) {
@@ -84,6 +97,7 @@ class _BankScreenState extends State<BankScreen> {
               _tags.add(tag);
             }
           }),
+          onClear: _tags.isEmpty ? null : () => setState(_tags.clear),
         ),
         const SizedBox(height: 18),
         Text(
@@ -142,29 +156,51 @@ class _ChipScroller extends StatelessWidget {
   }
 }
 
-class _TagWrap extends StatelessWidget {
-  const _TagWrap({
+class _CompactTagFilter extends StatelessWidget {
+  const _CompactTagFilter({
     required this.values,
     required this.selected,
     required this.onToggle,
+    required this.onClear,
   });
 
   final List<String> values;
   final Set<String> selected;
   final ValueChanged<String> onToggle;
+  final VoidCallback? onClear;
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final value in values)
-          FilterChip(
-            label: Text(value),
-            selected: selected.contains(value),
-            onSelected: (_) => onToggle(value),
+        Row(
+          children: [
+            Text('常用标签', style: Theme.of(context).textTheme.labelMedium),
+            const Spacer(),
+            TextButton(
+              onPressed: onClear,
+              child: const Text('清空'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final value in values)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    label: Text(value),
+                    selected: selected.contains(value),
+                    onSelected: (_) => onToggle(value),
+                  ),
+                ),
+            ],
           ),
+        ),
       ],
     );
   }

@@ -1779,5 +1779,413 @@
       "看不到本地复现就无法推进。",
       "不区分输入、广播、服务、ContentProvider 不同 ANR 场景。"
     ]
+  },
+  {
+    "id": "java-6",
+    "module": "Java",
+    "title": "synchronized 和 ReentrantLock 有什么区别？实际项目如何选择？",
+    "tags": ["高频", "并发", "易混"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["锁语义。", "可中断与公平性。", "项目选型。"],
+    "answerPoints": [
+      "synchronized 是 JVM 内置监视器锁，语法简单，进入和退出代码块时自动加锁释放锁，异常场景也能自动释放。",
+      "ReentrantLock 是 JUC 提供的显式锁，需要手动 lock/unlock，通常放在 try/finally 中释放，使用不当容易遗漏 unlock。",
+      "ReentrantLock 提供更多能力，例如可中断锁、尝试加锁、超时获取、公平锁以及多个 Condition 队列。",
+      "普通互斥场景优先用 synchronized，代码更简单；需要超时、取消等待、多个条件队列或精细控制时再选 ReentrantLock。",
+      "性能上不能简单说谁一定更快，现代 JVM 对 synchronized 已做偏向锁、轻量级锁、自旋、锁消除等优化，应结合具体竞争场景判断。"
+    ],
+    "followUps": ["Condition 和 Object.wait/notify 有什么区别？", "什么是锁重入？", "公平锁为什么吞吐可能更低？"],
+    "mistakes": ["只背 ReentrantLock 功能更多，不说明释放风险。", "把 synchronized 说成一定低性能。"]
+  },
+  {
+    "id": "java-7",
+    "module": "Java",
+    "title": "Java 线程池核心参数如何理解？线上如何配置线程池？",
+    "tags": ["高频", "并发", "场景题"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["核心参数。", "任务类型。", "拒绝策略。"],
+    "answerPoints": [
+      "线程池核心参数包括 corePoolSize、maximumPoolSize、keepAliveTime、workQueue、threadFactory 和 rejectedExecutionHandler。",
+      "任务提交后通常先使用核心线程，核心线程满了进入队列，队列满了再尝试创建非核心线程，达到最大线程数后触发拒绝策略。",
+      "CPU 密集型任务线程数接近 CPU 核数或略高；IO 密集型任务可以适当放大，但要结合下游容量和响应时间限制。",
+      "队列不能无脑使用无界队列，否则流量突增时会堆积内存并放大延迟；应设置容量、监控队列长度和拒绝次数。",
+      "线上要给线程命名，区分业务线程池，设置合理拒绝策略，并监控活跃线程、队列、耗时、异常和任务堆积。"
+    ],
+    "followUps": ["为什么 Executors.newFixedThreadPool 也可能有风险？", "CallerRunsPolicy 适合什么场景？", "线程池隔离有什么价值？"],
+    "mistakes": ["只会背核心参数，不会结合 CPU/IO 和下游容量。", "所有异步任务共用一个全局线程池。"]
+  },
+  {
+    "id": "kotlin-6",
+    "module": "Kotlin",
+    "title": "Kotlin 的 inline、noinline、crossinline 分别解决什么问题？",
+    "tags": ["进阶", "Kotlin", "易混"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["内联机制。", "Lambda 分配。", "非局部返回。"],
+    "answerPoints": [
+      "inline 会把函数体和可内联 lambda 调用点展开，减少函数调用和 lambda 对象分配，常用于高阶函数和性能敏感的小函数。",
+      "noinline 表示某个 lambda 参数不内联，因为它可能被存储、传递给其他函数或作为对象使用。",
+      "crossinline 禁止 lambda 中的非局部 return，适用于 lambda 会在另一个执行上下文中调用，但仍希望它被内联的场景。",
+      "inline 不是越多越好，过度内联会增加字节码体积，也会让调试栈更复杂。",
+      "reified 泛型依赖 inline，因为泛型类型信息需要在调用点展开后才能使用具体类型。"
+    ],
+    "followUps": ["reified 为什么只能用于 inline 函数？", "inline 对闭包捕获有什么影响？", "非局部 return 是什么？"],
+    "mistakes": ["把 inline 简单理解为一定提升性能。", "不区分 noinline 和 crossinline 的使用场景。"]
+  },
+  {
+    "id": "kotlin-7",
+    "module": "Kotlin",
+    "title": "协程中的 structured concurrency 是什么？为什么不建议随意 GlobalScope.launch？",
+    "tags": ["高频", "协程", "架构"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["结构化并发。", "生命周期。", "异常传播。"],
+    "answerPoints": [
+      "结构化并发要求协程有明确父子关系，子协程的生命周期受父协程管理，父作用域取消时子协程也会被取消。",
+      "在 ViewModel、Lifecycle、Repository 中使用合适的 CoroutineScope，可以让任务跟随业务生命周期结束，避免泄漏和无主任务。",
+      "GlobalScope 创建的是进程级无主协程，调用方无法自然等待、取消和感知异常，容易造成后台任务泄漏或异常丢失。",
+      "结构化并发还能让异常传播更可控，例如普通 Job 下子协程异常会影响父作用域，SupervisorJob 则可以隔离子任务失败。",
+      "实际项目中应优先使用 viewModelScope、lifecycleScope 或由业务注入的明确 Scope。"
+    ],
+    "followUps": ["SupervisorJob 和 Job 的异常传播有什么区别？", "coroutineScope 和 supervisorScope 有什么区别？", "如何设计 Repository 中的协程作用域？"],
+    "mistakes": ["用 GlobalScope 解决生命周期取消问题。", "只知道 launch/async，不理解父子 Job 关系。"]
+  },
+  {
+    "id": "android-basic-6",
+    "module": "Android 基础",
+    "title": "Activity 的 launchMode 有哪些？singleTask 和 singleTop 有什么区别？",
+    "tags": ["高频", "Android", "易混"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["任务栈。", "复用规则。", "onNewIntent。"],
+    "answerPoints": [
+      "standard 每次启动都会创建新实例；singleTop 在目标 Activity 已经位于栈顶时复用，否则仍创建新实例。",
+      "singleTask 会在匹配 task 中查找已有实例，存在则复用并把它上方的 Activity 出栈，同时回调 onNewIntent。",
+      "singleInstance 或新的 singleInstancePerTask 会让 Activity 处于更独立的任务栈语义，适合少数强隔离页面。",
+      "singleTop 常用于通知重复打开当前页；singleTask 常用于首页、入口页或需要栈清理的业务入口。",
+      "复用 Activity 时不会重新走 onCreate，要在 onNewIntent 中处理新参数。"
+    ],
+    "followUps": ["taskAffinity 会如何影响任务栈？", "DeepLink 打开首页为什么可能出现多个实例？", "onNewIntent 中要注意什么状态同步？"],
+    "mistakes": ["以为 singleTask 只是防止重复创建，不考虑清栈行为。", "复用后仍在 onCreate 里读取新 Intent。"]
+  },
+  {
+    "id": "android-basic-7",
+    "module": "Android 基础",
+    "title": "Service、IntentService、前台服务和 WorkManager 分别适合什么场景？",
+    "tags": ["高频", "Android", "场景题"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["后台限制。", "生命周期。", "任务可靠性。"],
+    "answerPoints": [
+      "Service 本身不等于子线程，它运行在应用进程中，耗时任务仍需要自己切线程。",
+      "IntentService 会串行处理 Intent 并自动停止，但已经不推荐作为新方案，很多场景可用 WorkManager 或自定义协程/线程替代。",
+      "前台服务适合用户可感知且需要持续运行的任务，例如导航、音乐播放、运动记录，需要展示通知并遵守系统后台限制。",
+      "WorkManager 适合可延迟、需要约束条件和可靠执行的后台任务，例如日志上传、同步、清理缓存。",
+      "选择时要看任务是否用户可感知、是否必须立刻执行、是否要跨进程重启后继续、是否需要网络/充电等约束。"
+    ],
+    "followUps": ["Android 8 后后台服务限制是什么？", "WorkManager 能保证精确时间执行吗？", "前台服务通知可以隐藏吗？"],
+    "mistakes": ["把 Service 当成后台线程。", "所有后台任务都用前台服务，忽略系统限制和用户感知。"]
+  },
+  {
+    "id": "view-draw-6",
+    "module": "View / 事件 / 绘制",
+    "title": "RecyclerView 为什么会出现条目错乱？如何系统排查？",
+    "tags": ["高频", "View", "场景题"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["复用机制。", "状态重置。", "异步加载。"],
+    "answerPoints": [
+      "RecyclerView 会复用 ViewHolder，如果 bind 时没有完整覆盖旧状态，就会把上一个条目的显示状态带到新条目。",
+      "常见原因包括图片异步回调未校验目标、选中态/展开态没有从数据源恢复、监听器复用导致位置错乱、payload 更新不完整。",
+      "排查时先确认数据源是否稳定，再检查 onBindViewHolder 是否把所有可变 UI 状态都设置一遍。",
+      "图片加载要绑定目标尺寸和请求生命周期，必要时取消旧请求或校验当前绑定 ID。",
+      "点击事件不要长期依赖初始化时的 position，应使用 bindingAdapterPosition 或直接绑定数据对象。"
+    ],
+    "followUps": ["DiffUtil 和 stableId 对错乱有什么帮助？", "payload 局部刷新有什么风险？", "嵌套 RecyclerView 如何处理状态保存？"],
+    "mistakes": ["在 onCreateViewHolder 中设置所有内容状态。", "异步回调直接更新 ImageView，不校验当前条目。"]
+  },
+  {
+    "id": "view-draw-7",
+    "module": "View / 事件 / 绘制",
+    "title": "自定义 View 如何处理 wrap_content、padding 和多次测量？",
+    "tags": ["进阶", "View", "易混"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["MeasureSpec。", "尺寸计算。", "绘制边界。"],
+    "answerPoints": [
+      "自定义 View 要重写 onMeasure，根据 MeasureSpec 的 EXACTLY、AT_MOST、UNSPECIFIED 分别处理父容器约束。",
+      "wrap_content 对应的通常是 AT_MOST，View 需要给出自身期望尺寸，再和父容器最大限制取 min。",
+      "计算内容区域时要把 padding 纳入尺寸和绘制坐标，否则文字或图形可能贴边或被裁剪。",
+      "父布局可能多次调用 onMeasure，测量逻辑应保持幂等，避免在测量中做昂贵加载或依赖调用次数。",
+      "最终要通过 setMeasuredDimension 设置宽高，并确保最小尺寸、背景最小尺寸和建议尺寸被合理考虑。"
+    ],
+    "followUps": ["resolveSize 和 resolveSizeAndState 有什么区别？", "onSizeChanged 适合做什么？", "为什么不要在 onDraw 中频繁 new 对象？"],
+    "mistakes": ["wrap_content 时直接当成 match_parent。", "忽略 padding 导致内容绘制越界。"]
+  },
+  {
+    "id": "handler-thread-6",
+    "module": "Handler / 线程 / 协程",
+    "title": "HandlerThread 的原理是什么？它和普通线程池如何选择？",
+    "tags": ["高频", "并发", "Android"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["Looper。", "串行任务。", "生命周期释放。"],
+    "answerPoints": [
+      "HandlerThread 本质是带 Looper 的 Thread，启动后可以通过 Handler 向它的 MessageQueue 投递任务。",
+      "它适合需要串行执行、依赖消息队列、需要延迟任务或与 Handler API 配合的后台场景。",
+      "线程池适合大量相互独立的并发任务，可以复用多线程并控制队列和并发度。",
+      "HandlerThread 长期持有一个线程，不适合大量短任务随意创建；不用时要调用 quitSafely 或 quit 释放。",
+      "选择时看任务是否需要严格串行和消息语义，还是需要并发吞吐和资源隔离。"
+    ],
+    "followUps": ["quit 和 quitSafely 有什么区别？", "HandlerThread 内存泄漏如何发生？", "IntentService 为什么基于类似思想？"],
+    "mistakes": ["每个任务都 new 一个 HandlerThread。", "忘记退出 Looper 导致线程常驻。"]
+  },
+  {
+    "id": "handler-thread-7",
+    "module": "Handler / 线程 / 协程",
+    "title": "协程取消为什么需要协作？withContext(NonCancellable) 适合什么场景？",
+    "tags": ["协程", "进阶", "易混"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["取消协作。", "挂起点。", "资源清理。"],
+    "answerPoints": [
+      "协程取消不是强制杀线程，而是通过 Job 状态传播，协程代码需要在挂起点或主动检查 isActive/ensureActive 时响应取消。",
+      "delay、withContext、channel 等挂起函数通常会检查取消状态，CPU 密集循环则需要自己插入检查。",
+      "捕获异常时不要吞掉 CancellationException，否则会破坏取消语义，让上层误以为任务正常完成。",
+      "finally 中可以做资源释放，但如果需要执行挂起清理动作，普通取消状态下挂起函数可能立刻取消。",
+      "withContext(NonCancellable) 适合短时间、必须完成的清理动作，例如关闭连接、写入最终状态，但不能滥用来绕过取消。"
+    ],
+    "followUps": ["CancellationException 应该被上报吗？", "CPU 密集任务如何支持取消？", "超时取消和手动取消有什么区别？"],
+    "mistakes": ["以为 cancel 会立即终止所有代码。", "在 catch Exception 中吞掉 CancellationException。"]
+  },
+  {
+    "id": "jetpack-arch-6",
+    "module": "Jetpack / 架构",
+    "title": "ViewModel 中应该保存哪些状态？SavedStateHandle 解决什么问题？",
+    "tags": ["高频", "Jetpack", "架构"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["UI 状态。", "进程死亡。", "状态分层。"],
+    "answerPoints": [
+      "ViewModel 适合保存和组织页面 UI 状态、业务加载状态、用户输入中间态以及页面级协程任务。",
+      "ViewModel 能跨配置变化保留，但不能保证进程被系统杀死后仍存在。",
+      "SavedStateHandle 用于保存少量可序列化关键状态，例如筛选条件、详情 ID、草稿字段，用来在进程重建后恢复 ViewModel。",
+      "大对象、列表缓存、文件内容不适合直接塞进 SavedStateHandle，应放数据库、磁盘或仓储层。",
+      "状态分层上，持久数据归 Repository/数据库，页面派生状态归 ViewModel，纯展示瞬时状态可以留在 UI。"
+    ],
+    "followUps": ["ViewModel 能持有 Context 吗？", "SavedStateHandle 和 Bundle 有什么关系？", "单 Activity 多页面如何共享 ViewModel？"],
+    "mistakes": ["以为 ViewModel 能解决所有进程死亡恢复。", "把大列表或 Bitmap 放进 SavedStateHandle。"]
+  },
+  {
+    "id": "jetpack-arch-7",
+    "module": "Jetpack / 架构",
+    "title": "Repository 层的职责是什么？它应该返回 DTO、Entity 还是 UI Model？",
+    "tags": ["架构", "场景题", "易混"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["分层边界。", "数据源协调。", "模型转换。"],
+    "answerPoints": [
+      "Repository 负责屏蔽数据来源细节，协调网络、数据库、缓存和本地配置，为上层提供稳定的数据访问接口。",
+      "DTO 是网络传输模型，Entity 是本地持久化模型，UI Model 是展示模型，三者不应无边界混用。",
+      "Repository 可以返回领域模型或接近业务语义的数据模型，让 ViewModel 再组合成 UI State。",
+      "如果直接向 UI 暴露 DTO，会把接口字段、空值约定和后端变化泄漏到展示层；直接暴露 Entity 也会让数据库结构绑死 UI。",
+      "模型转换看项目复杂度决定，小项目可以轻量处理，大项目要明确 mapper 和边界，避免到处手写拼装。"
+    ],
+    "followUps": ["离线优先架构中 Repository 如何设计？", "分页数据的缓存策略放在哪里？", "错误码转换应该在哪层做？"],
+    "mistakes": ["Repository 只是 Retrofit 的一层转发。", "所有层共用一个大 Model，导致改一处牵全身。"]
+  },
+  {
+    "id": "performance-6",
+    "module": "性能优化",
+    "title": "冷启动优化应该从哪些阶段拆解？如何验证优化有效？",
+    "tags": ["高频", "性能", "场景题"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["启动阶段。", "主线程。", "指标验证。"],
+    "answerPoints": [
+      "冷启动可以拆成进程创建、Application 初始化、首个 Activity 创建、首帧绘制和首个可交互状态。",
+      "优化重点是减少主线程同步工作，延迟非首屏任务，治理 ContentProvider 自动初始化，控制依赖注入和 SDK 初始化成本。",
+      "首屏必要数据要区分强依赖和弱依赖，弱依赖可以骨架屏、异步加载或首帧后执行。",
+      "验证不能只看本机体感，要用 StartupTiming、Trace、Perfetto、线上埋点和分机型分版本数据观察。",
+      "优化后要关注副作用，例如任务延迟是否影响功能、异步初始化是否引入竞态、首帧快但可交互变慢。"
+    ],
+    "followUps": ["ContentProvider 初始化为什么影响启动？", "首帧和可交互时间有什么区别？", "Baseline Profile 对启动有什么帮助？"],
+    "mistakes": ["把所有初始化都丢到子线程，不处理依赖顺序。", "只用 Debug 包体感判断启动优化。"]
+  },
+  {
+    "id": "performance-7",
+    "module": "性能优化",
+    "title": "内存泄漏和内存抖动有什么区别？分别如何定位？",
+    "tags": ["高频", "性能", "内存"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["泄漏。", "抖动。", "定位工具。"],
+    "answerPoints": [
+      "内存泄漏是对象已经不需要却仍被引用链持有，导致 GC 后不能回收，常见于 Activity、Fragment、View、Context 被长生命周期对象引用。",
+      "内存抖动是短时间大量创建临时对象，频繁触发 GC，可能造成卡顿，但对象不一定长期泄漏。",
+      "泄漏定位可以用 LeakCanary、Heap Dump、MAT/Android Studio Profiler，看 GC Root 到泄漏对象的引用链。",
+      "抖动定位可以用 Allocation Tracker、Profiler、Trace，关注高频分配点，例如 onDraw、onBind、滚动回调、字符串拼接。",
+      "治理泄漏重在解除引用和生命周期绑定；治理抖动重在复用对象、减少临时分配、缓存计算结果和移动分配时机。"
+    ],
+    "followUps": ["Handler 为什么可能泄漏 Activity？", "Bitmap 内存如何分析？", "频繁 GC 一定是泄漏吗？"],
+    "mistakes": ["看到内存上涨就断定泄漏。", "只关注 Java 堆，忽略 native/graphics 内存。"]
+  },
+  {
+    "id": "framework-binder-6",
+    "module": "Framework / Binder",
+    "title": "Binder 一次调用为什么有大小限制？TransactionTooLargeException 如何处理？",
+    "tags": ["高频", "Binder", "Framework"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["Binder buffer。", "跨进程传输。", "规避方案。"],
+    "answerPoints": [
+      "Binder 通过内核驱动和进程映射的缓冲区传输数据，单进程可用 Binder buffer 有限制，不适合传大对象。",
+      "Intent extras、Bundle、AIDL 参数、ContentProvider 返回数据等都可能走 Binder，因此大 Bitmap、大列表、大 JSON 都有风险。",
+      "TransactionTooLargeException 不一定只发生在 startActivity，也可能发生在保存 Activity 状态或 Fragment 参数过大时。",
+      "处理方式是只传 ID、URI、分页参数等轻量引用，大数据放数据库、文件、缓存或共享内存，再由接收方按需读取。",
+      "排查时要看崩溃堆栈、Intent/Bundle 大小、savedInstanceState 内容和跨进程接口返回值。"
+    ],
+    "followUps": ["onSaveInstanceState 为什么可能触发这个异常？", "AIDL 传大文件应该怎么做？", "ContentProvider 查询大量数据有什么风险？"],
+    "mistakes": ["把异常理解成手机内存不足。", "用 Serializable 传复杂对象跨页面。"]
+  },
+  {
+    "id": "framework-binder-7",
+    "module": "Framework / Binder",
+    "title": "AMS 在 Activity 启动流程中负责什么？应用进程什么时候创建？",
+    "tags": ["Framework", "Android", "底层"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["启动流程。", "进程管理。", "跨进程通信。"],
+    "answerPoints": [
+      "Activity 启动会从应用侧通过 Binder 请求系统服务，AMS/ATMS 负责校验启动权限、解析目标、维护任务栈和调度生命周期。",
+      "如果目标应用进程不存在，系统会通过 Zygote fork 新进程，并在进程启动后绑定 ApplicationThread。",
+      "系统侧确定启动后，会通过 Binder 回调应用进程，让 ActivityThread 创建 Application、Activity，并执行生命周期。",
+      "AMS/ATMS 不负责直接绘制 UI，窗口展示还会涉及 WMS、SurfaceFlinger 和应用侧 ViewRootImpl。",
+      "理解这个流程有助于解释冷启动、任务栈、启动黑白屏和跨进程调度延迟。"
+    ],
+    "followUps": ["ActivityThread 是线程吗？", "Zygote fork 有什么优势？", "启动过程中 WMS 什么时候参与？"],
+    "mistakes": ["把 AMS 当成应用进程内部对象。", "只背生命周期，不理解系统和应用之间的 Binder 调度。"]
+  },
+  {
+    "id": "opengl-6",
+    "module": "图形渲染 / OpenGL",
+    "title": "SurfaceView、TextureView 和普通 View 在渲染上有什么区别？",
+    "tags": ["图形", "View", "高频"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["Surface。", "合成路径。", "适用场景。"],
+    "answerPoints": [
+      "普通 View 绘制到应用窗口的 View hierarchy 中，由 UI 线程或硬件加速管线统一处理。",
+      "SurfaceView 拥有独立 Surface，通常可以在独立线程绘制，适合视频、相机、游戏等高频渲染场景，但早期在动画、遮挡和层级上有更多限制。",
+      "TextureView 把内容作为纹理参与 View 层级合成，支持普通 View 的变换、透明和动画，但可能有额外合成开销。",
+      "视频播放、相机预览优先考虑 SurfaceView 的性能和低延迟；需要旋转、缩放、复杂动画叠加时 TextureView 更灵活。",
+      "选择时要结合 Android 版本、功耗、延迟、动画需求和是否需要截图/变换。"
+    ],
+    "followUps": ["为什么 SurfaceView 可以不阻塞 UI 线程绘制？", "TextureView 为什么可能更耗性能？", "相机预览如何选择？"],
+    "mistakes": ["认为 TextureView 是 SurfaceView 的完全替代。", "只看 API 易用性，不考虑合成路径。"]
+  },
+  {
+    "id": "opengl-7",
+    "module": "图形渲染 / OpenGL",
+    "title": "OpenGL ES 中纹理、FBO、Shader 分别解决什么问题？",
+    "tags": ["OpenGL", "图形", "进阶"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["纹理采样。", "离屏渲染。", "可编程管线。"],
+    "answerPoints": [
+      "纹理用于把图片或外部图像数据送入 GPU，片元着色器可以按纹理坐标采样得到颜色。",
+      "Shader 是 GPU 上运行的小程序，顶点着色器处理顶点坐标和变换，片元着色器处理像素颜色、滤镜和混合效果。",
+      "FBO 是帧缓冲对象，用于离屏渲染，可以把渲染结果输出到纹理，再作为后续 pass 的输入。",
+      "滤镜、美颜、模糊、水印、转场通常会组合纹理、Shader 和 FBO 做多阶段处理。",
+      "实际开发要注意纹理尺寸、坐标翻转、上下文线程、资源释放和多 pass 性能。"
+    ],
+    "followUps": ["为什么相机纹理常用 OES Texture？", "多级模糊为什么要用多次 FBO？", "OpenGL 资源为什么要在 GL 线程释放？"],
+    "mistakes": ["把 Shader 当成 CPU 代码理解。", "创建纹理/FBO 后不释放导致显存泄漏。"]
+  },
+  {
+    "id": "network-storage-security-6",
+    "module": "网络 / 存储 / 安全",
+    "title": "HTTPS 为什么仍可能被抓包？App 如何做证书锁定？",
+    "tags": ["高频", "安全", "网络"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["TLS 信任链。", "用户证书。", "证书锁定。"],
+    "answerPoints": [
+      "HTTPS 的安全依赖证书信任链和 TLS 握手，如果设备安装并信任了代理根证书，调试代理可以伪造站点证书实现中间人抓包。",
+      "Android 7 以后默认不信任用户安装 CA，但应用可以通过 network security config 改变信任策略，Debug 和 Release 应分开配置。",
+      "证书锁定是把服务端证书或公钥摘要固定在客户端，请求时校验实际证书链是否匹配预期。",
+      "OkHttp 可以使用 CertificatePinner 做公钥 pinning，但要设计证书轮换和备用 pin，避免证书更新导致线上全量不可用。",
+      "安全策略要结合业务风险，登录、支付、隐私接口更适合加强校验，同时保留灰度和应急开关能力。"
+    ],
+    "followUps": ["pin 证书和 pin 公钥有什么区别？", "Debug 包如何保留抓包能力？", "证书过期如何平滑切换？"],
+    "mistakes": ["以为 HTTPS 一定无法抓包。", "只 pin 一个证书且没有轮换预案。"]
+  },
+  {
+    "id": "network-storage-security-7",
+    "module": "网络 / 存储 / 安全",
+    "title": "Room 数据库迁移如何设计？线上漏写 Migration 会发生什么？",
+    "tags": ["存储", "Jetpack", "场景题"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["schema 版本。", "迁移测试。", "数据保留。"],
+    "answerPoints": [
+      "Room 通过数据库 version 管理 schema，升级版本时需要提供从旧版本到新版本的 Migration。",
+      "Migration 中要写清楚表结构变更、字段默认值、数据搬迁和索引更新，确保老用户数据库能平滑升级。",
+      "漏写 Migration 时，默认会抛出异常导致数据库打开失败，若使用 destructive migration 则可能清空本地数据。",
+      "应导出 schema 文件并编写 migration test，用历史 schema 创建旧库，再验证升级后的结构和数据。",
+      "复杂迁移要考虑灰度、回滚、兼容旧 App 写入以及多版本跨越升级。"
+    ],
+    "followUps": ["fallbackToDestructiveMigration 有什么风险？", "新增非空字段如何迁移？", "如何测试从 1 直接升到 5？"],
+    "mistakes": ["只在新安装场景测试数据库。", "为了不崩溃直接开启破坏性迁移。"]
+  },
+  {
+    "id": "gradle-4",
+    "module": "Gradle / 工程化",
+    "title": "Gradle 的 configuration phase 和 execution phase 有什么区别？为什么会影响构建速度？",
+    "tags": ["Gradle", "工程化", "进阶"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["配置阶段。", "任务图。", "性能优化。"],
+    "answerPoints": [
+      "配置阶段会解析项目脚本、创建和配置 Task、计算任务图；执行阶段才真正运行被选中的 Task。",
+      "如果在配置阶段做大量 IO、网络请求、遍历文件或 eagerly 创建任务，即使只执行一个小任务也会拖慢构建。",
+      "优化方向包括使用 task registration/lazy configuration、避免 afterEvaluate 滥用、减少 buildSrc 重编译成本、开启 configuration cache。",
+      "插件开发中要区分 Provider、Property 和 TaskProvider，尽量延迟读取值和创建任务输出。",
+      "构建慢要用 build scan、profile、--configuration-cache-problems 等工具定位，而不是盲目删任务。"
+    ],
+    "followUps": ["tasks.register 和 tasks.create 有什么区别？", "configuration cache 有哪些限制？", "buildSrc 为什么会影响全量配置？"],
+    "mistakes": ["把所有耗时都归因于编译，不看配置阶段。", "在 Gradle 脚本顶层执行复杂逻辑。"]
+  },
+  {
+    "id": "gradle-5",
+    "module": "Gradle / 工程化",
+    "title": "Android 多模块工程如何拆分？拆太细会有什么问题？",
+    "tags": ["工程化", "架构", "场景题"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["模块边界。", "依赖方向。", "构建成本。"],
+    "answerPoints": [
+      "多模块拆分的目标是降低耦合、提升并行开发效率、控制依赖边界并改善增量构建，而不是为了数量本身。",
+      "常见拆法包括基础库、业务能力模块、功能模块、壳工程、测试工具模块，也可以按领域或页面聚合。",
+      "依赖方向应稳定清晰，底层不依赖上层，业务之间尽量通过接口、路由或能力抽象协作。",
+      "拆太细会增加 Gradle 配置成本、依赖管理复杂度、跨模块跳转成本和 API 维护成本。",
+      "判断拆分是否合理要看团队协作边界、变更频率、构建数据、复用价值和业务独立性。"
+    ],
+    "followUps": ["api 和 implementation 对模块边界有什么影响？", "如何治理循环依赖？", "动态特性模块适合什么场景？"],
+    "mistakes": ["按类数量机械拆模块。", "模块之间互相暴露内部实现，导致边界形同虚设。"]
+  },
+  {
+    "id": "project-practice-6",
+    "module": "项目实战场景题",
+    "title": "App 首页接口很多，首屏慢，你会如何做加载编排？",
+    "tags": ["场景题", "性能", "架构"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["关键路径。", "并发编排。", "降级策略。"],
+    "answerPoints": [
+      "先拆分首屏关键路径，区分必须阻塞首屏的数据、可延迟数据和可用缓存兜底的数据。",
+      "必须数据尽量并发请求，减少串行依赖；非首屏模块延迟到首帧后或用户滚动前预取。",
+      "接口层要支持超时、部分失败展示、缓存优先、骨架屏和模块级降级，避免一个慢接口拖垮整个首页。",
+      "服务端可配合做聚合接口、字段裁剪、分页和按需返回，客户端减少重复请求和无效刷新。",
+      "最终用端到端指标验证，例如首屏可见时间、可交互时间、接口耗时分布、缓存命中率和失败率。"
+    ],
+    "followUps": ["聚合接口和客户端并发各有什么优缺点？", "首页缓存如何避免脏数据？", "首屏指标如何定义？"],
+    "mistakes": ["简单把所有请求并发，不考虑下游压力和失败展示。", "只优化接口耗时，不看渲染和主线程。"]
+  },
+  {
+    "id": "project-practice-7",
+    "module": "项目实战场景题",
+    "title": "线上崩溃只发生在少数机型，你如何定位和止血？",
+    "tags": ["场景题", "稳定性", "高频"],
+    "reviewStatus": "未掌握",
+    "checkpoints": ["崩溃聚合。", "机型差异。", "止血方案。"],
+    "answerPoints": [
+      "先确认崩溃量级、影响版本、机型系统分布、发生页面、前后台状态、堆栈和最近发布变更。",
+      "少数机型问题常见原因包括 ROM 差异、系统 API 行为差异、厂商 WebView/相机/权限实现差异、ABI 或资源适配问题。",
+      "定位时要拿同机型复现，结合日志、远程配置、灰度对比、符号化堆栈和用户路径还原。",
+      "止血可以通过远程开关关闭问题能力、回滚配置、降低实验流量、热修或快速发版。",
+      "修复后要补兼容性测试、机型白名单/黑名单策略和监控告警，避免同类问题重复出现。"
+    ],
+    "followUps": ["Native 崩溃如何符号化？", "无法拿到同机型时怎么推进？", "远程开关设计要注意什么？"],
+    "mistakes": ["因为复现不了就等待更多用户反馈。", "只看 Java 堆栈，不关联版本、机型和发布变更。"]
   }
 ]
