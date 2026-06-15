@@ -4,7 +4,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../models/question.dart';
 import '../theme/app_theme.dart';
-import '../utils/standard_answer_builder.dart';
 
 enum AiTool {
   qianwen('千问', 'https://www.qianwen.com/'),
@@ -29,7 +28,7 @@ class AiExplainerScreen extends StatefulWidget {
 
 class _AiExplainerScreenState extends State<AiExplainerScreen> {
   late final WebViewController _webViewController;
-  late final String _prompt = _buildPrompt(widget.question);
+  late final String _prompt = widget.question.title;
 
   AiTool _selectedTool = AiTool.qianwen;
   bool _isLoading = true;
@@ -55,7 +54,7 @@ class _AiExplainerScreenState extends State<AiExplainerScreen> {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('已复制题目讲解 Prompt，可粘贴到 AI 对话框')),
+      const SnackBar(content: Text('已复制题目，可粘贴到 AI 对话框')),
     );
   }
 
@@ -79,7 +78,7 @@ class _AiExplainerScreenState extends State<AiExplainerScreen> {
         title: const Text('AI 讲解'),
         actions: [
           IconButton(
-            tooltip: '复制 Prompt',
+            tooltip: '复制题目',
             onPressed: _copyPrompt,
             icon: const Icon(Icons.copy_all_outlined),
           ),
@@ -106,34 +105,4 @@ class _AiExplainerScreenState extends State<AiExplainerScreen> {
       ),
     );
   }
-}
-
-String _buildPrompt(InterviewQuestion question) {
-  return '''
-我正在准备 Android 面试，请你用清晰、系统、适合面试表达的方式讲解下面这道题。
-
-题目：${question.title}
-模块：${question.module}
-标签：${question.tags.join('、')}
-
-请按以下结构回答：
-1. 先用 3-5 句话解释核心结论。
-2. 再分层讲清楚原理、流程、边界条件和项目实践。
-3. 补充一个实际项目中的例子。
-4. 列出面试时容易答错的点。
-5. 最后给我一版 1 分钟口述答案。
-
-我当前题库里的参考要点：
-标准答案：
-${StandardAnswerBuilder.resolve(question)}
-
-考察点：
-${question.checkpoints.map((item) => '- $item').join('\n')}
-
-答案要点：
-${question.answerPoints.map((item) => '- $item').join('\n')}
-
-常见误区：
-${question.mistakes.map((item) => '- $item').join('\n')}
-''';
 }
