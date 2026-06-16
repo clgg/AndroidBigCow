@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'data/backend_client.dart';
 import 'data/question_repository.dart';
+import 'models/tech_stack.dart';
+import 'screens/tech_stack_selection_screen.dart';
 import 'state/app_controller.dart';
 import 'theme/app_theme.dart';
 import 'widgets/app_shell.dart';
@@ -23,18 +26,21 @@ class _InterviewBankAppState extends State<InterviewBankApp> {
 
   Future<_Bootstrap> _load() async {
     final bootstrapFuture = () async {
-      final repository = await QuestionRepository.loadFromAssets();
-      final controller = AppController();
+      final backendClient = BackendClient();
+      final repository = await QuestionRepository.loadFromSources(
+        backendClient: null,
+      );
+      final controller = AppController(backendClient: backendClient);
       await controller.load();
-      return _Bootstrap(repository: repository, controller: controller);
+      return _Bootstrap(
+        repository: repository,
+        controller: controller,
+        backendClient: backendClient,
+        categories: TechStackCatalog.categories,
+      );
     }();
 
-    final results = await Future.wait([
-      bootstrapFuture,
-      Future<void>.delayed(const Duration(seconds: 2)),
-    ]);
-
-    return results.first as _Bootstrap;
+    return bootstrapFuture;
   }
 
   @override
@@ -69,14 +75,23 @@ class _InterviewBankAppState extends State<InterviewBankApp> {
 
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Android 面试题库',
+              title: '技术面试题库',
               theme: AppTheme.data(bootstrap.controller.themeStyle),
               home: AnnotatedRegion<SystemUiOverlayStyle>(
                 value: overlayStyle,
-                child: AppShell(
-                  repository: bootstrap.repository,
-                  controller: bootstrap.controller,
-                ),
+                child: bootstrap.controller.selectedTechStack == null
+                    ? TechStackSelectionScreen(
+                        controller: bootstrap.controller,
+                        categories: bootstrap.categories,
+                      )
+                    : AppShell(
+                        repository: bootstrap.repository,
+                        controller: bootstrap.controller,
+                        backendClient: bootstrap.backendClient,
+                        categories: bootstrap.categories,
+                        selectedTechStack:
+                            bootstrap.controller.selectedTechStack!,
+                      ),
               ),
             );
           },
@@ -102,10 +117,17 @@ SystemUiOverlayStyle _systemUiOverlayStyle(AppThemeStyle style) {
 }
 
 class _Bootstrap {
-  const _Bootstrap({required this.repository, required this.controller});
+  const _Bootstrap({
+    required this.repository,
+    required this.controller,
+    required this.backendClient,
+    required this.categories,
+  });
 
   final QuestionRepository repository;
   final AppController controller;
+  final BackendClient backendClient;
+  final List<TechCategory> categories;
 }
 
 class _LoadingScreen extends StatelessWidget {
@@ -115,17 +137,7 @@ class _LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(28)),
-          child: Image(
-            image: AssetImage('assets/branding/app_icon_master.png'),
-            width: 120,
-            height: 120,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
+      body: SizedBox.expand(),
     );
   }
 }

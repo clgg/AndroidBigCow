@@ -1,5 +1,6 @@
 import 'package:android_interview_bank/data/question_repository.dart';
 import 'package:android_interview_bank/models/question.dart';
+import 'package:android_interview_bank/models/tech_stack.dart';
 import 'package:android_interview_bank/models/user_progress.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -81,6 +82,39 @@ void main() {
 
     expect(handler.isFavorite, isTrue);
     expect(handler.status, ReviewStatus.nextReview);
+  });
+
+  test('filters questions by selected tech stack', () {
+    final repository = QuestionRepository([
+      ...questions,
+      const InterviewQuestion(
+        id: 'ios-arc',
+        module: 'Swift',
+        title: 'ARC 的基本原理是什么？',
+        tags: ['iOS'],
+        seedStatus: ReviewStatus.notMastered,
+        checkpoints: ['引用计数。'],
+        answerPoints: ['ARC 通过编译器插入 retain/release 管理对象生命周期。'],
+        followUps: ['循环引用如何处理？'],
+        mistakes: ['以为 ARC 等于 GC。'],
+        techCategory: 'client',
+        techLanguage: 'ios',
+      ),
+    ]);
+
+    final android = repository.forTechStack(
+      const SelectedTechStack(categoryId: 'client', languageId: 'android'),
+    );
+    final ios = repository.forTechStack(
+      const SelectedTechStack(categoryId: 'client', languageId: 'ios'),
+    );
+
+    expect(android.all.map((question) => question.id), [
+      'java-hashmap',
+      'android-activity',
+      'handler-loop',
+    ]);
+    expect(ios.all.map((question) => question.id), ['ios-arc']);
   });
 
   test('loads bundled base and extension assets together', () async {

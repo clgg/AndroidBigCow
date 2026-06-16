@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../models/tech_stack.dart';
+import '../screens/tech_stack_selection_screen.dart';
 import '../state/app_controller.dart';
 import '../theme/app_theme.dart';
 import '../widgets/question_card.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.controller});
+  const SettingsScreen({
+    super.key,
+    required this.controller,
+    required this.categories,
+  });
 
   final AppController controller;
+  final List<TechCategory> categories;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +24,60 @@ class SettingsScreen extends StatelessWidget {
       children: [
         Text('我的', style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 6),
-        Text('切换视觉风格，管理本地复习进度。', style: Theme.of(context).textTheme.bodySmall),
+        Text('切换技术栈、视觉风格和本地复习进度。',
+            style: Theme.of(context).textTheme.bodySmall),
         const SizedBox(height: 16),
+        AppCard(
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: palette.accentMuted,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.layers_outlined, color: palette.accent),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('当前技术栈',
+                        style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 3),
+                    Text(
+                      controller.selectedTechStack == null
+                          ? '未选择'
+                          : TechStackCatalog.labelFor(
+                              controller.selectedTechStack!,
+                              categories,
+                            ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => TechStackSelectionScreen(
+                        controller: controller,
+                        categories: categories,
+                        showBackButton: true,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('切换'),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
         AppCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,35 +112,6 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 14),
-        AppCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('进度导出', style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 8),
-              Text(
-                '当前 MVP 展示导出内容，后续可接入文件分享。',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: palette.surfaceAlt,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  controller.exportProgress(),
-                  maxLines: 8,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
-                ),
-              ),
             ],
           ),
         ),

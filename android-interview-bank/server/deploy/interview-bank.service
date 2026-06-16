@@ -1,0 +1,18 @@
+[Unit]
+Description=Interview Bank API and Admin
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/interview-bank-server
+Environment=PORT=8080
+Environment=ADMIN_USERNAME=admin
+Environment=ADMIN_PASSWORD=change-me-now
+ExecStart=/usr/bin/node /opt/interview-bank-server/src/server.js
+Restart=always
+RestartSec=3
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

@@ -26,7 +26,11 @@ class InterviewQuestion {
     required this.answerPoints,
     required this.followUps,
     required this.mistakes,
+    this.techCategory = 'client',
+    this.techLanguage = 'android',
     this.standardAnswer,
+    this.version = 1,
+    this.updatedAt,
   });
 
   final String id;
@@ -38,7 +42,11 @@ class InterviewQuestion {
   final List<String> answerPoints;
   final List<String> followUps;
   final List<String> mistakes;
+  final String techCategory;
+  final String techLanguage;
   final String? standardAnswer;
+  final int version;
+  final String? updatedAt;
 
   factory InterviewQuestion.fromJson(Map<String, Object?> json) {
     return InterviewQuestion(
@@ -51,7 +59,11 @@ class InterviewQuestion {
       answerPoints: _stringList(json['answerPoints']),
       followUps: _stringList(json['followUps']),
       mistakes: _stringList(json['mistakes']),
+      techCategory: json['techCategory'] as String? ?? 'client',
+      techLanguage: json['techLanguage'] as String? ?? 'android',
       standardAnswer: json['standardAnswer'] as String?,
+      version: (json['version'] as num?)?.toInt() ?? 1,
+      updatedAt: json['updatedAt'] as String?,
     );
   }
 
@@ -66,7 +78,11 @@ class InterviewQuestion {
       'answerPoints': answerPoints,
       'followUps': followUps,
       'mistakes': mistakes,
+      'techCategory': techCategory,
+      'techLanguage': techLanguage,
       if (standardAnswer != null) 'standardAnswer': standardAnswer,
+      'version': version,
+      if (updatedAt != null) 'updatedAt': updatedAt,
     };
   }
 
@@ -78,6 +94,8 @@ class InterviewQuestion {
 
     return [
       module,
+      techCategory,
+      techLanguage,
       title,
       ...tags,
       ...checkpoints,

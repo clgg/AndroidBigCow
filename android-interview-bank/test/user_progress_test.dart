@@ -1,4 +1,5 @@
 import 'package:android_interview_bank/models/question.dart';
+import 'package:android_interview_bank/models/tech_stack.dart';
 import 'package:android_interview_bank/models/user_progress.dart';
 import 'package:android_interview_bank/state/app_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -48,5 +49,21 @@ void main() {
       restored.progress.stateFor('handler-loop').status,
       ReviewStatus.nextReview,
     );
+  });
+
+  test('persists selected tech stack', () async {
+    SharedPreferences.setMockInitialValues({});
+    final controller = AppController();
+
+    await controller.load();
+    await controller.setSelectedTechStack(
+      const SelectedTechStack(categoryId: 'client', languageId: 'ios'),
+    );
+
+    final restored = AppController();
+    await restored.load();
+
+    expect(restored.selectedTechStack?.categoryId, 'client');
+    expect(restored.selectedTechStack?.languageId, 'ios');
   });
 }

@@ -1,0 +1,14 @@
+{
+  "name": "interview-bank-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JSON backed API and admin console for the technical interview question bank.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

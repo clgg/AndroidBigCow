@@ -1,5 +1,6 @@
 import 'package:android_interview_bank/data/question_repository.dart';
 import 'package:android_interview_bank/models/question.dart';
+import 'package:android_interview_bank/models/tech_stack.dart';
 import 'package:android_interview_bank/state/app_controller.dart';
 import 'package:android_interview_bank/theme/app_theme.dart';
 import 'package:android_interview_bank/widgets/app_shell.dart';
@@ -12,7 +13,7 @@ void main() {
     final fixture = await _pumpAppShell(tester);
 
     expect(fixture.repository.all, hasLength(1));
-    expect(find.text('Android 面试题库'), findsOneWidget);
+    expect(find.text('客户端 / Android'), findsOneWidget);
     expect(find.text('题库'), findsWidgets);
     expect(find.text('刷题'), findsOneWidget);
     expect(find.text('复习'), findsOneWidget);
@@ -58,7 +59,16 @@ Future<_ShellFixture> _pumpAppShell(WidgetTester tester) async {
   await tester.pumpWidget(
     MaterialApp(
       theme: AppTheme.data(AppThemeStyle.blue),
-      home: AppShell(repository: repository, controller: controller),
+      home: AppShell(
+        repository: repository,
+        controller: controller,
+        backendClient: null,
+        categories: TechStackCatalog.categories,
+        selectedTechStack: const SelectedTechStack(
+          categoryId: 'client',
+          languageId: 'android',
+        ),
+      ),
     ),
   );
 

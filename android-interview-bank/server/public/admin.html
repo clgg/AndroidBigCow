@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>技术面试题库后台</title>
+    <link rel="stylesheet" href="/admin/admin.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Interview Bank Admin</p>
+        <h1>技术面试题库后台</h1>
+      </div>
+      <button id="refreshButton" type="button">刷新数据</button>
+    </header>
+
+    <main class="layout">
+      <section class="panel summary">
+        <div>
+          <span class="metric-label">题目总数</span>
+          <strong id="questionCount">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">技术方向</span>
+          <strong id="categoryCount">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">进度上报</span>
+          <strong id="progressCount">0</strong>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <h2>题目筛选</h2>
+          <div class="button-row">
+            <button id="downloadTemplateButton" class="secondary" type="button">下载模板</button>
+            <button id="importButton" class="secondary" type="button">导入 JSON</button>
+            <button id="newQuestionButton" type="button">新增题目</button>
+          </div>
+        </div>
+        <input id="importFileInput" type="file" accept="application/json,.json" hidden />
+        <p id="importStatus" class="status-line"></p>
+        <div class="filters">
+          <label>
+            技术方向
+            <select id="categoryFilter"></select>
+          </label>
+          <label>
+            开发语言
+            <select id="languageFilter"></select>
+          </label>
+          <label>
+            搜索
+            <input id="searchInput" type="search" placeholder="标题、模块、标签" />
+          </label>
+        </div>
+        <div id="questionList" class="question-list"></div>
+      </section>
+
+      <section class="panel editor">
+        <div class="section-title">
+          <h2>题目编辑</h2>
+          <button id="deleteButton" class="danger" type="button">删除</button>
+        </div>
+        <form id="questionForm">
+          <div class="grid">
+            <label>
+              ID
+              <input name="id" placeholder="留空自动生成" />
+            </label>
+            <label>
+              模块
+              <input name="module" required />
+            </label>
+            <label>
+              技术方向
+              <input name="techCategory" required />
+            </label>
+            <label>
+              开发语言
+              <input name="techLanguage" required />
+            </label>
+          </div>
+          <label>
+            标题
+            <input name="title" required />
+          </label>
+          <label>
+            标签（每行一个）
+            <textarea name="tags"></textarea>
+          </label>
+          <label>
+            考察点（每行一个）
+            <textarea name="checkpoints"></textarea>
+          </label>
+          <label>
+            标准答案
+            <textarea name="standardAnswer" class="tall"></textarea>
+          </label>
+          <label>
+            答题要点（每行一个）
+            <textarea name="answerPoints"></textarea>
+          </label>
+          <label>
+            追问（每行一个）
+            <textarea name="followUps"></textarea>
+          </label>
+          <label>
+            易错点（每行一个）
+            <textarea name="mistakes"></textarea>
+          </label>
+          <div class="actions">
+            <button type="submit">保存题目</button>
+            <span id="saveStatus"></span>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel catalog">
+        <div class="section-title">
+          <h2>技术导航配置</h2>
+          <button id="saveCatalogButton" type="button">保存配置</button>
+        </div>
+        <textarea id="catalogEditor" spellcheck="false"></textarea>
+      </section>
+    </main>
+
+    <script src="/admin/admin.js"></script>
+  </body>
+</html>

@@ -55,7 +55,7 @@ class StandardAnswerBuilder {
       }
       sections.add(
         StandardAnswerSection(
-          title: title!,
+          title: title,
           body: body.join('\n').trim(),
         ),
       );

@@ -10,11 +10,13 @@ class ReviewScreen extends StatelessWidget {
     super.key,
     required this.repository,
     required this.controller,
+    required this.onRefresh,
     required this.onOpenQuestion,
   });
 
   final QuestionRepository repository;
   final AppController controller;
+  final Future<void> Function() onRefresh;
   final ValueChanged<InterviewQuestion> onOpenQuestion;
 
   @override
@@ -26,52 +28,56 @@ class ReviewScreen extends StatelessWidget {
     final notMastered = decorated
         .where((item) => item.status == ReviewStatus.notMastered)
         .toList(growable: false);
-    final favorites = decorated
-        .where((item) => item.isFavorite)
-        .toList(growable: false);
+    final favorites =
+        decorated.where((item) => item.isFavorite).toList(growable: false);
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
-      children: [
-        Text('复习队列', style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: 6),
-        Text('集中处理下次复习、未掌握和收藏题。', style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: _ReviewMetric(
-                label: '下次复习',
-                value: '${nextReview.length}',
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+        children: [
+          Text('复习队列', style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 6),
+          Text('集中处理下次复习、未掌握和收藏题。',
+              style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _ReviewMetric(
+                  label: '下次复习',
+                  value: '${nextReview.length}',
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _ReviewMetric(
-                label: '未掌握',
-                value: '${notMastered.length}',
+              const SizedBox(width: 10),
+              Expanded(
+                child: _ReviewMetric(
+                  label: '未掌握',
+                  value: '${notMastered.length}',
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _ReviewMetric(label: '收藏', value: '${favorites.length}'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 18),
-        _Section(
-          title: '下次复习',
-          items: nextReview,
-          onOpenQuestion: onOpenQuestion,
-          empty: '暂无下次复习题。',
-        ),
-        _Section(
-          title: '收藏题',
-          items: favorites,
-          onOpenQuestion: onOpenQuestion,
-          empty: '还没有收藏题。',
-        ),
-      ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: _ReviewMetric(label: '收藏', value: '${favorites.length}'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          _Section(
+            title: '下次复习',
+            items: nextReview,
+            onOpenQuestion: onOpenQuestion,
+            empty: '暂无下次复习题。',
+          ),
+          _Section(
+            title: '收藏题',
+            items: favorites,
+            onOpenQuestion: onOpenQuestion,
+            empty: '还没有收藏题。',
+          ),
+        ],
+      ),
     );
   }
 }

@@ -39,10 +39,10 @@ void main() {
       title: '示例题',
       tags: ['基础'],
       seedStatus: ReviewStatus.notMastered,
-      checkpoints: const [],
-      answerPoints: const ['默认答案'],
-      followUps: const [],
-      mistakes: const [],
+      checkpoints: [],
+      answerPoints: ['默认答案'],
+      followUps: [],
+      mistakes: [],
       standardAnswer: '【一句话回答】\n自定义标准答案',
     );
 

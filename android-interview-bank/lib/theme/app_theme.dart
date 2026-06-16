@@ -82,9 +82,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
 class AppTheme {
   static ThemeData data(AppThemeStyle style) {
     final palette = _palette(style);
-    final brightness = style == AppThemeStyle.dark
-        ? Brightness.dark
-        : Brightness.light;
+    final brightness =
+        style == AppThemeStyle.dark ? Brightness.dark : Brightness.light;
 
     return ThemeData(
       useMaterial3: true,
