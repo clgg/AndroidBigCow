@@ -18,9 +18,14 @@ enum AiTool {
 }
 
 class AiExplainerScreen extends StatefulWidget {
-  const AiExplainerScreen({super.key, required this.question});
+  const AiExplainerScreen({
+    super.key,
+    required this.question,
+    this.prompt,
+  });
 
   final InterviewQuestion question;
+  final String? prompt;
 
   @override
   State<AiExplainerScreen> createState() => _AiExplainerScreenState();
@@ -28,10 +33,11 @@ class AiExplainerScreen extends StatefulWidget {
 
 class _AiExplainerScreenState extends State<AiExplainerScreen> {
   late final WebViewController _webViewController;
-  late final String _prompt = widget.question.title;
 
   AiTool _selectedTool = AiTool.qianwen;
   bool _isLoading = true;
+
+  String get _prompt => widget.prompt ?? widget.question.title;
 
   @override
   void initState() {

@@ -54,7 +54,7 @@ class QuestionDetailScreen extends StatelessWidget {
               _Section(title: '考察点', items: question.checkpoints),
               _StandardAnswerCard(question: question),
               _Section(title: '答案要点', items: question.answerPoints),
-              _Section(title: '深挖追问', items: question.followUps),
+              _FollowUpSection(question: question),
               _Section(title: '常见误区', items: question.mistakes),
               const SizedBox(height: 14),
               OutlinedButton.icon(
@@ -176,6 +176,70 @@ class _Section extends StatelessWidget {
                   children: [
                     Text('• ', style: TextStyle(color: context.palette.accent)),
                     Expanded(child: Text(item)),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FollowUpSection extends StatelessWidget {
+  const _FollowUpSection({required this.question});
+
+  final InterviewQuestion question;
+
+  @override
+  Widget build(BuildContext context) {
+    if (question.followUps.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: AppCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('深挖追问', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 10),
+            for (final item in question.followUps)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        '• ',
+                        style: TextStyle(color: context.palette.accent),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(item),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton.filledTonal(
+                      tooltip: '用 AI 搜索追问',
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (context) => AiExplainerScreen(
+                              question: question,
+                              prompt: item,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.auto_awesome, size: 18),
+                    ),
                   ],
                 ),
               ),
