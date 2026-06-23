@@ -19,6 +19,7 @@ class QuestionRepository {
   static const defaultAssetPaths = [
     'assets/question_bank.json',
     'assets/question_bank_extension_2026_06.json',
+    'assets/question_bank_flutter_2026_06.json',
   ];
 
   static Future<QuestionRepository> loadFromAsset([

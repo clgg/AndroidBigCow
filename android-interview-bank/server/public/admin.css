@@ -133,6 +133,12 @@ button.danger {
   color: var(--muted);
 }
 
+.filter-count {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .filters,
 .grid {
   display: grid;

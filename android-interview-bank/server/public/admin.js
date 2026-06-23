@@ -106,6 +106,9 @@ function renderQuestions() {
       (!query || text.includes(query));
   });
 
+  $('#filteredQuestionCount').textContent =
+    `当前筛选 ${questions.length} 道 / 共 ${state.questions.length} 道`;
+
   $('#questionList').innerHTML = questions.map((question) => `
     <article class="question-item ${question.id === state.selectedId ? 'active' : ''}" data-id="${escapeHtml(question.id)}">
       <h3>${escapeHtml(question.title)}</h3>
