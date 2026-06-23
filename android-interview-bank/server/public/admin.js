@@ -198,7 +198,7 @@ async function importQuestions(event) {
       body: JSON.stringify(payload),
     });
     $('#importStatus').textContent =
-      `导入完成：新增 ${result.created} 道，更新 ${result.updated} 道，当前共 ${result.total} 道。`;
+      `导入完成：新增 ${result.created} 道，更新 ${result.updated} 道，删除 ${result.deleted || 0} 道，当前共 ${result.total} 道。`;
     await loadAll();
   } catch (error) {
     $('#importStatus').textContent = `导入失败：${error.message}`;

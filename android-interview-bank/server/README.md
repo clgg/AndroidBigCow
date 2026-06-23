@@ -47,6 +47,10 @@ ADMIN_USERNAME=your-name ADMIN_PASSWORD='your-strong-password' npm start
 
 ```json
 {
+  "replace": false,
+  "scopes": [
+    { "techCategory": "client", "techLanguage": "android" }
+  ],
   "questions": [
     {
       "id": "client-android-sample-question",
@@ -65,6 +69,8 @@ ADMIN_USERNAME=your-name ADMIN_PASSWORD='your-strong-password' npm start
   ]
 }
 ```
+
+`replace: true` 表示按 `scopes` 替换对应技术栈题库：文件中存在的题目会新增或更新，同一 `techCategory` + `techLanguage` 下不在文件里的旧题会被软删除并进入增量同步的删除列表。只想增量新增/更新时保持 `replace: false` 或省略该字段。
 
 也可以直接上传题目数组：
 

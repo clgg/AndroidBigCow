@@ -323,13 +323,18 @@ async function importQuestions(body, options = {}) {
     throw new Error('import payload must be an array or { "questions": [...] }');
   }
 
+  const replaceMode = !Array.isArray(body) &&
+    (body.replace === true || body.mode === 'replace');
+  const normalizedQuestions = importedQuestions.map(normalizeQuestion);
+  const replaceScopes = replaceMode
+    ? normalizeReplaceScopes(body.scopes, normalizedQuestions)
+    : [];
   const now = new Date().toISOString();
   let created = 0;
   let updated = 0;
   let version = await latestVersion();
 
-  for (const item of importedQuestions) {
-    const question = normalizeQuestion(item);
+  for (const question of normalizedQuestions) {
     const exists = await getSql(`SELECT id FROM questions WHERE id = ${sqlString(question.id)};`);
     version += 1;
     const nextQuestion = {
@@ -345,12 +350,77 @@ async function importQuestions(body, options = {}) {
     }
   }
 
+  const deleted = replaceMode
+    ? await deleteQuestionsMissingFromImport(normalizedQuestions, replaceScopes, now, version)
+    : 0;
+
   return {
     ok: true,
     created,
     updated,
+    deleted,
     total: Number((await getSql('SELECT COUNT(*) AS count FROM questions WHERE deleted_at IS NULL;'))?.count || 0),
   };
+}
+
+function normalizeReplaceScopes(scopes, questions) {
+  const sourceScopes = Array.isArray(scopes) && scopes.length > 0
+    ? scopes
+    : questions.map((question) => ({
+      techCategory: question.techCategory,
+      techLanguage: question.techLanguage,
+    }));
+  const seen = new Set();
+  const normalized = [];
+  for (const scope of sourceScopes) {
+    const techCategory = String(scope.techCategory || scope.category || '').trim();
+    const techLanguage = String(scope.techLanguage || scope.language || '').trim();
+    if (!techCategory || !techLanguage) {
+      throw new Error('replace scopes require techCategory and techLanguage');
+    }
+    const key = `${techCategory}\n${techLanguage}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    normalized.push({ techCategory, techLanguage });
+  }
+  return normalized;
+}
+
+async function deleteQuestionsMissingFromImport(questions, scopes, now, currentVersion) {
+  if (scopes.length === 0) {
+    return 0;
+  }
+
+  const importedIds = new Set(questions.map((question) => question.id));
+  let version = currentVersion;
+  let deleted = 0;
+
+  for (const scope of scopes) {
+    const rows = await allSql(`
+      SELECT id FROM questions
+      WHERE tech_category = ${sqlString(scope.techCategory)}
+        AND tech_language = ${sqlString(scope.techLanguage)}
+        AND deleted_at IS NULL;
+    `);
+    for (const row of rows) {
+      if (importedIds.has(row.id)) {
+        continue;
+      }
+      version += 1;
+      await runSql(`
+        UPDATE questions
+        SET deleted_at = ${sqlString(now)},
+            version = ${version},
+            updated_at = ${sqlString(now)}
+        WHERE id = ${sqlString(row.id)} AND deleted_at IS NULL;
+      `);
+      deleted += 1;
+    }
+  }
+
+  return deleted;
 }
 
 async function deleteQuestion(id) {
@@ -396,6 +466,10 @@ function normalizeQuestion(body) {
 
 function questionImportTemplate() {
   return {
+    replace: false,
+    scopes: [
+      { techCategory: 'client', techLanguage: 'android' },
+    ],
     questions: [
       {
         id: 'client-android-sample-question',
