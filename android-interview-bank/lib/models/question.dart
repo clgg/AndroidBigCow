@@ -29,6 +29,7 @@ class InterviewQuestion {
     this.techCategory = 'client',
     this.techLanguage = 'android',
     this.standardAnswer,
+    this.standardAnswerAudioUrl,
     this.version = 1,
     this.updatedAt,
   });
@@ -45,6 +46,7 @@ class InterviewQuestion {
   final String techCategory;
   final String techLanguage;
   final String? standardAnswer;
+  final String? standardAnswerAudioUrl;
   final int version;
   final String? updatedAt;
 
@@ -62,6 +64,7 @@ class InterviewQuestion {
       techCategory: json['techCategory'] as String? ?? 'client',
       techLanguage: json['techLanguage'] as String? ?? 'android',
       standardAnswer: json['standardAnswer'] as String?,
+      standardAnswerAudioUrl: json['standardAnswerAudioUrl'] as String?,
       version: (json['version'] as num?)?.toInt() ?? 1,
       updatedAt: json['updatedAt'] as String?,
     );
@@ -81,6 +84,8 @@ class InterviewQuestion {
       'techCategory': techCategory,
       'techLanguage': techLanguage,
       if (standardAnswer != null) 'standardAnswer': standardAnswer,
+      if (standardAnswerAudioUrl != null)
+        'standardAnswerAudioUrl': standardAnswerAudioUrl,
       'version': version,
       if (updatedAt != null) 'updatedAt': updatedAt,
     };

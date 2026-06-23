@@ -36,6 +36,7 @@ ADMIN_USERNAME=your-name ADMIN_PASSWORD='your-strong-password' npm start
 - `POST /api/admin/questions`：后台新增或更新题目
 - `POST /api/admin/questions/import`：后台批量导入题目，支持数组或 `{ "questions": [...] }`
 - `GET /api/admin/questions/template`：获取批量导入模板
+- `POST /api/admin/audio/generate-standard-answers`：为筛选后的题目生成“标准答案”MP3，已存在的相同文案会复用
 - `DELETE /api/admin/questions/:id`：后台删除题目
 - `GET /api/admin/tech-catalog`：后台读取技术导航
 - `PUT /api/admin/tech-catalog`：后台保存技术导航
@@ -100,6 +101,37 @@ server/data/questions.db
 ```
 
 首次启动时如果数据库为空，会自动从旧的 `server/data/questions.json` 导入一次。
+
+## 标准答案语音合成
+
+后台“题目筛选”区域提供“生成标准答案音频”按钮。它只处理 `standardAnswer` 字段，不会合成题目标题、考察点、追问或易错点。
+
+音频生成规则：
+
+- 相同标准答案文案 + 相同发音人/语速/音调/音量/格式，只调用一次科大讯飞；
+- 生成后的 MP3 保存在 `server/data/audio/*.mp3`；
+- 题目接口会返回 `standardAnswerAudioUrl`，客户端据此显示播放按钮；
+- 如果后台修改了标准答案，保存题目会清空旧音频 URL，需要重新生成。
+
+需要配置科大讯飞 WebSocket 认证信息：
+
+```bash
+XFYUN_APP_ID=your-app-id
+XFYUN_API_KEY=your-api-key
+XFYUN_API_SECRET=your-api-secret
+PUBLIC_BASE_URL=http://54.150.9.209/interview
+```
+
+可选参数：
+
+```bash
+XFYUN_TTS_VOICE=xiaoyan
+XFYUN_TTS_SPEED=50
+XFYUN_TTS_PITCH=50
+XFYUN_TTS_VOLUME=50
+```
+
+默认发音人使用 `xiaoyan`。如果在讯飞控制台选择了其他第一个发音人，可以把 `XFYUN_TTS_VOICE` 改成对应发音人参数。
 
 ## 部署到你的服务器
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../models/question.dart';
 import '../screens/ai_explainer_screen.dart';
@@ -123,14 +124,69 @@ class QuestionDetailScreen extends StatelessWidget {
   }
 }
 
-class _StandardAnswerCard extends StatelessWidget {
+class _StandardAnswerCard extends StatefulWidget {
   const _StandardAnswerCard({required this.question});
 
   final InterviewQuestion question;
 
   @override
+  State<_StandardAnswerCard> createState() => _StandardAnswerCardState();
+}
+
+class _StandardAnswerCardState extends State<_StandardAnswerCard> {
+  AudioPlayer? _player;
+  bool _isPreparing = false;
+
+  @override
+  void dispose() {
+    _player?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _toggleAudio() async {
+    final url = widget.question.standardAnswerAudioUrl;
+    if (url == null || url.isEmpty || _isPreparing) {
+      return;
+    }
+
+    var player = _player;
+    if (player == null) {
+      setState(() => _isPreparing = true);
+      try {
+        player = AudioPlayer();
+        await player.setUrl(url);
+        _player = player;
+      } catch (_) {
+        await player?.dispose();
+        _player = null;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('音频加载失败')),
+          );
+        }
+        return;
+      } finally {
+        if (mounted) {
+          setState(() => _isPreparing = false);
+        }
+      }
+    }
+
+    if (player.playing) {
+      await player.pause();
+    } else {
+      if (player.processingState == ProcessingState.completed) {
+        await player.seek(Duration.zero);
+      }
+      await player.play();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final answer = StandardAnswerBuilder.resolve(question);
+    final answer = StandardAnswerBuilder.resolve(widget.question);
+    final audioUrl = widget.question.standardAnswerAudioUrl;
+    final hasAudio = audioUrl != null && audioUrl.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -138,7 +194,45 @@ class _StandardAnswerCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('标准答案', style: Theme.of(context).textTheme.titleMedium),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '标准答案',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                if (hasAudio)
+                  StreamBuilder<PlayerState>(
+                    stream: _player?.playerStateStream,
+                    builder: (context, snapshot) {
+                      final playerState = snapshot.data;
+                      final isPlaying = playerState?.playing == true;
+                      final isLoading = _isPreparing ||
+                          playerState?.processingState ==
+                              ProcessingState.loading ||
+                          playerState?.processingState ==
+                              ProcessingState.buffering;
+                      return IconButton.filledTonal(
+                        tooltip: isPlaying ? '暂停标准答案音频' : '播放标准答案音频',
+                        onPressed: isLoading ? null : _toggleAudio,
+                        icon: isLoading
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Icon(
+                                isPlaying
+                                    ? Icons.pause
+                                    : Icons.volume_up_outlined,
+                              ),
+                      );
+                    },
+                  ),
+              ],
+            ),
             const SizedBox(height: 10),
             StandardAnswerView(text: answer),
           ],

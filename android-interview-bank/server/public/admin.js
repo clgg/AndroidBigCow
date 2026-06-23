@@ -2,7 +2,9 @@ const state = {
   questions: [],
   catalog: [],
   progress: [],
+  ttsConfig: null,
   selectedId: null,
+  audioJobTimer: null,
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -23,11 +25,13 @@ const fields = [
 
 $('#refreshButton').addEventListener('click', loadAll);
 $('#newQuestionButton').addEventListener('click', () => selectQuestion(null));
+$('#generateAudioButton').addEventListener('click', generateStandardAnswerAudio);
 $('#downloadTemplateButton').addEventListener('click', downloadTemplate);
 $('#importButton').addEventListener('click', () => $('#importFileInput').click());
 $('#importFileInput').addEventListener('change', importQuestions);
 $('#deleteButton').addEventListener('click', deleteSelected);
 $('#questionForm').addEventListener('submit', saveQuestion);
+$('#ttsConfigForm').addEventListener('submit', saveTtsConfig);
 $('#saveCatalogButton').addEventListener('click', saveCatalog);
 $('#categoryFilter').addEventListener('change', () => {
   renderLanguageFilter();
@@ -39,23 +43,42 @@ $('#searchInput').addEventListener('input', renderQuestions);
 loadAll();
 
 async function loadAll() {
-  const [questions, catalog, progress] = await Promise.all([
+  const [questions, catalog, progress, ttsConfig] = await Promise.all([
     request('/api/admin/questions'),
     request('/api/admin/tech-catalog'),
     request('/api/admin/progress'),
+    request('/api/admin/tts-config'),
   ]);
   state.questions = questions;
   state.catalog = catalog;
   state.progress = progress;
+  state.ttsConfig = ttsConfig;
   $('#questionCount').textContent = questions.length;
   $('#categoryCount').textContent = catalog.length;
   $('#progressCount').textContent = progress.length;
   $('#catalogEditor').value = JSON.stringify(catalog, null, 2);
+  renderTtsConfig();
   renderCategoryFilter();
   renderQuestions();
   if (!state.selectedId) {
     selectQuestion(questions[0] || null);
   }
+}
+
+function renderTtsConfig() {
+  const config = state.ttsConfig || {};
+  const form = $('#ttsConfigForm');
+  form.elements.appId.value = config.appId || '';
+  form.elements.apiKey.value = config.apiKey || '';
+  form.elements.apiSecret.value = '';
+  form.elements.apiSecret.placeholder = config.apiSecretConfigured
+    ? '已配置，留空保持当前密钥'
+    : '请输入 APISecret';
+  form.elements.voice.value = config.voice || 'xiaoyan';
+  form.elements.speed.value = config.speed ?? 50;
+  form.elements.pitch.value = config.pitch ?? 50;
+  form.elements.volume.value = config.volume ?? 50;
+  form.elements.publicBaseUrl.value = config.publicBaseUrl || '';
 }
 
 async function request(path, options = {}) {
@@ -112,7 +135,7 @@ function renderQuestions() {
   $('#questionList').innerHTML = questions.map((question) => `
     <article class="question-item ${question.id === state.selectedId ? 'active' : ''}" data-id="${escapeHtml(question.id)}">
       <h3>${escapeHtml(question.title)}</h3>
-      <p>${escapeHtml(question.module)} · ${escapeHtml(question.techCategory)} / ${escapeHtml(question.techLanguage)}</p>
+      <p>${escapeHtml(question.module)} · ${escapeHtml(question.techCategory)} / ${escapeHtml(question.techLanguage)}${question.standardAnswerAudioUrl ? ' · 已有音频' : ''}</p>
     </article>
   `).join('');
 
@@ -205,6 +228,114 @@ async function importQuestions(event) {
     await loadAll();
   } catch (error) {
     $('#importStatus').textContent = `导入失败：${error.message}`;
+  }
+}
+
+async function generateStandardAnswerAudio() {
+  const category = $('#categoryFilter').value;
+  const language = $('#languageFilter').value;
+  const query = $('#searchInput').value.trim();
+  const filteredCountText = $('#filteredQuestionCount').textContent;
+  if (!confirm(`${filteredCountText}\n\n将只为“标准答案”生成 MP3，已生成过的相同文案会复用。确认继续？`)) {
+    return;
+  }
+
+  const button = $('#generateAudioButton');
+  button.disabled = true;
+  $('#audioStatus').textContent = '标准答案音频任务创建中...';
+  resetAudioProgress();
+  try {
+    const job = await request('/api/admin/audio/generate-standard-answers', {
+      method: 'POST',
+      body: JSON.stringify({
+        category,
+        language,
+        query,
+        limit: 500,
+      }),
+    });
+    renderAudioProgress(job);
+    pollAudioJob(job.id);
+  } catch (error) {
+    $('#audioStatus').textContent = `音频生成失败：${error.message}`;
+    button.disabled = false;
+  }
+}
+
+function resetAudioProgress() {
+  if (state.audioJobTimer) {
+    clearTimeout(state.audioJobTimer);
+    state.audioJobTimer = null;
+  }
+  $('#audioProgress').hidden = false;
+  $('#audioProgressText').textContent = '0 / 0';
+  $('#audioProgressPercent').textContent = '0%';
+  $('#audioProgressBar').value = 0;
+  $('#audioCurrentQuestion').textContent = '';
+  $('#audioProgressDetail').textContent = '';
+}
+
+async function pollAudioJob(jobId) {
+  try {
+    const job = await request(`/api/admin/audio/jobs/${encodeURIComponent(jobId)}`);
+    renderAudioProgress(job);
+    if (job.status === 'running') {
+      state.audioJobTimer = setTimeout(() => pollAudioJob(jobId), 1000);
+      return;
+    }
+    $('#generateAudioButton').disabled = false;
+    await loadAll();
+  } catch (error) {
+    $('#audioStatus').textContent = `获取音频进度失败：${error.message}`;
+    $('#generateAudioButton').disabled = false;
+  }
+}
+
+function renderAudioProgress(job) {
+  $('#audioProgress').hidden = false;
+  $('#audioProgressText').textContent = `${job.processed} / ${job.total}`;
+  $('#audioProgressPercent').textContent = `${job.percent}%`;
+  $('#audioProgressBar').value = job.percent;
+  $('#audioCurrentQuestion').textContent = job.currentQuestion
+    ? `正在处理：${job.currentQuestion.title}`
+    : '';
+  $('#audioProgressDetail').textContent =
+    `新生成 ${job.created} 条，复用 ${job.reused} 条，更新题目 ${job.updated} 道，失败/跳过 ${job.skipped} 道。`;
+  if (job.status === 'running') {
+    $('#audioStatus').textContent = '标准答案音频生成中，请不要关闭页面...';
+  } else if (job.status === 'completed') {
+    $('#audioStatus').textContent = '标准答案音频生成完成。';
+  } else if (job.status === 'completed_with_errors') {
+    const firstError = job.failures?.[0]?.error || '部分题目失败';
+    $('#audioStatus').textContent = `音频生成完成，但有失败项：${firstError}`;
+  } else {
+    $('#audioStatus').textContent = '音频生成任务失败。';
+  }
+}
+
+async function saveTtsConfig(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const payload = {
+    appId: form.elements.appId.value.trim(),
+    apiKey: form.elements.apiKey.value.trim(),
+    apiSecret: form.elements.apiSecret.value.trim(),
+    voice: form.elements.voice.value.trim(),
+    speed: Number(form.elements.speed.value || 50),
+    pitch: Number(form.elements.pitch.value || 50),
+    volume: Number(form.elements.volume.value || 50),
+    publicBaseUrl: form.elements.publicBaseUrl.value.trim(),
+  };
+  $('#ttsConfigStatus').textContent = '保存中...';
+  try {
+    state.ttsConfig = await request('/api/admin/tts-config', {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+    renderTtsConfig();
+    $('#ttsConfigStatus').textContent = '已保存，后续生成音频会使用新配置';
+  } catch (error) {
+    $('#ttsConfigStatus').textContent = `保存失败：${error.message}`;
   }
 }
 

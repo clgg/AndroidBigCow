@@ -8,6 +8,8 @@ WorkingDirectory=/opt/interview-bank-server
 Environment=PORT=8080
 Environment=ADMIN_USERNAME=admin
 Environment=ADMIN_PASSWORD=change-me-now
+Environment=PUBLIC_BASE_URL=http://localhost:8080
+EnvironmentFile=-/etc/interview-bank.env
 ExecStart=/usr/bin/node /opt/interview-bank-server/src/server.js
 Restart=always
 RestartSec=3

@@ -1,2 +1,5 @@
+node_modules/
 data/questions.db*
 data/progress-sync.json
+data/audio/
+data/tts-config.json

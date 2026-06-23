@@ -1,25 +1,37 @@
 import { createServer } from 'node:http';
-import { timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { execFile } from 'node:child_process';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { extname, join, resolve } from 'node:path';
+import { basename, extname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
+import WebSocket from 'ws';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const rootDir = resolve(__dirname, '..');
 const dataDir = join(rootDir, 'data');
 const publicDir = join(rootDir, 'public');
+const audioDir = process.env.AUDIO_DIR || join(dataDir, 'audio');
 const questionsPath = join(dataDir, 'questions.json');
 const questionsDbPath = join(dataDir, 'questions.db');
 const catalogPath = join(dataDir, 'tech-catalog.json');
 const progressPath = join(dataDir, 'progress-sync.json');
+const ttsConfigPath = join(dataDir, 'tts-config.json');
 const execFileAsync = promisify(execFile);
 
 const port = Number(process.env.PORT || 8080);
 const adminUsername = process.env.ADMIN_USERNAME || 'admin';
 const adminPassword = process.env.ADMIN_PASSWORD || 'change-me-now';
+const publicBaseUrl = (process.env.PUBLIC_BASE_URL || `http://localhost:${port}`).replace(/\/+$/, '');
+const xfyunAppId = process.env.XFYUN_APP_ID || '';
+const xfyunApiKey = process.env.XFYUN_API_KEY || '';
+const xfyunApiSecret = process.env.XFYUN_API_SECRET || '';
+const xfyunVoice = process.env.XFYUN_TTS_VOICE || 'xiaoyan';
+const xfyunSpeed = Number(process.env.XFYUN_TTS_SPEED || 50);
+const xfyunPitch = Number(process.env.XFYUN_TTS_PITCH || 50);
+const xfyunVolume = Number(process.env.XFYUN_TTS_VOLUME || 50);
+const audioJobs = new Map();
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -54,6 +66,9 @@ createServer(async (request, response) => {
     }
     if (pathname.startsWith('/admin/')) {
       return sendStatic(response, join(publicDir, pathname.replace('/admin/', '')));
+    }
+    if (pathname.startsWith('/audio/')) {
+      return sendAudio(request, response, pathname.replace('/audio/', ''));
     }
 
     if (pathname === '/api/health' && request.method === 'GET') {
@@ -98,6 +113,25 @@ createServer(async (request, response) => {
     }
     if (pathname === '/api/admin/questions/template' && request.method === 'GET') {
       return sendJson(response, questionImportTemplate());
+    }
+    if (pathname === '/api/admin/audio/generate-standard-answers' && request.method === 'POST') {
+      const body = await readBody(request);
+      return sendJson(response, await startStandardAnswerAudioJob(body), 202);
+    }
+    if (pathname.startsWith('/api/admin/audio/jobs/') && request.method === 'GET') {
+      const id = decodeURIComponent(pathname.replace('/api/admin/audio/jobs/', ''));
+      const job = audioJobs.get(id);
+      if (!job) {
+        return sendJson(response, { error: 'job not found' }, 404);
+      }
+      return sendJson(response, publicAudioJob(job));
+    }
+    if (pathname === '/api/admin/tts-config' && request.method === 'GET') {
+      return sendJson(response, await readTtsConfig());
+    }
+    if (pathname === '/api/admin/tts-config' && request.method === 'PUT') {
+      const body = await readBody(request);
+      return sendJson(response, await saveTtsConfig(body));
     }
     if (pathname.startsWith('/api/admin/questions/') && request.method === 'DELETE') {
       const id = decodeURIComponent(pathname.replace('/api/admin/questions/', ''));
@@ -172,6 +206,7 @@ function secureEqual(value, expected) {
 
 async function ensureDataFiles() {
   await mkdir(dataDir, { recursive: true });
+  await mkdir(audioDir, { recursive: true });
   if (!existsSync(questionsPath)) {
     await writeJson(questionsPath, []);
   }
@@ -180,6 +215,9 @@ async function ensureDataFiles() {
   }
   if (!existsSync(progressPath)) {
     await writeJson(progressPath, []);
+  }
+  if (!existsSync(ttsConfigPath)) {
+    await writeJson(ttsConfigPath, {});
   }
   await ensureQuestionDatabase();
 }
@@ -190,7 +228,7 @@ async function readQuestions() {
 
 async function ensureQuestionDatabase() {
   await runSql(`
-    PRAGMA journal_mode = WAL;
+    PRAGMA journal_mode = DELETE;
     CREATE TABLE IF NOT EXISTS questions (
       id TEXT PRIMARY KEY,
       tech_category TEXT NOT NULL,
@@ -204,14 +242,32 @@ async function ensureQuestionDatabase() {
       follow_ups_json TEXT NOT NULL DEFAULT '[]',
       mistakes_json TEXT NOT NULL DEFAULT '[]',
       standard_answer TEXT NOT NULL DEFAULT '',
+      standard_answer_audio_url TEXT,
       version INTEGER NOT NULL DEFAULT 1,
       updated_at TEXT NOT NULL,
       deleted_at TEXT
+    );
+    CREATE TABLE IF NOT EXISTS audio_assets (
+      id TEXT PRIMARY KEY,
+      text_hash TEXT NOT NULL,
+      text TEXT NOT NULL,
+      voice TEXT NOT NULL,
+      speed INTEGER NOT NULL,
+      pitch INTEGER NOT NULL,
+      volume INTEGER NOT NULL,
+      format TEXT NOT NULL,
+      file_path TEXT NOT NULL,
+      url TEXT NOT NULL,
+      status TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      UNIQUE(text_hash, voice, speed, pitch, volume, format)
     );
     CREATE INDEX IF NOT EXISTS idx_questions_stack ON questions(tech_category, tech_language, deleted_at);
     CREATE INDEX IF NOT EXISTS idx_questions_sync ON questions(tech_category, tech_language, version);
     CREATE INDEX IF NOT EXISTS idx_questions_module ON questions(tech_category, tech_language, module);
   `);
+  await ensureColumn('questions', 'standard_answer_audio_url', 'TEXT');
 
   const row = await getSql('SELECT COUNT(*) AS count FROM questions;');
   if (Number(row?.count || 0) > 0) {
@@ -436,6 +492,347 @@ async function deleteQuestion(id) {
   return { deleted: Number(rows[0]?.changes || 0), id };
 }
 
+async function startStandardAnswerAudioJob(body) {
+  const ttsConfig = await readTtsConfig({ includeSecrets: true });
+  assertTtsConfigured(ttsConfig);
+  const params = new URLSearchParams();
+  if (body.category) {
+    params.set('category', body.category);
+  }
+  if (body.language) {
+    params.set('language', body.language);
+  }
+  if (body.query) {
+    params.set('query', body.query);
+  }
+  const questionIds = Array.isArray(body.questionIds)
+    ? new Set(body.questionIds.map(String))
+    : null;
+  const maxCount = Math.min(500, Math.max(1, Number(body.limit || 500)));
+  const questions = (await queryQuestions(params))
+    .filter((question) => !questionIds || questionIds.has(question.id))
+    .filter((question) => question.standardAnswer?.trim())
+    .slice(0, maxCount);
+
+  const job = {
+    id: `audio-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    status: 'running',
+    total: questions.length,
+    processed: 0,
+    created: 0,
+    reused: 0,
+    updated: 0,
+    skipped: 0,
+    failures: [],
+    currentQuestion: null,
+    startedAt: new Date().toISOString(),
+    finishedAt: null,
+  };
+  audioJobs.set(job.id, job);
+  trimAudioJobs();
+  runStandardAnswerAudioJob(job, questions, ttsConfig).catch((error) => {
+    job.status = 'failed';
+    job.finishedAt = new Date().toISOString();
+    job.failures.push({
+      id: '',
+      title: '任务异常',
+      error: error.message || 'job failed',
+    });
+  });
+  return publicAudioJob(job);
+}
+
+async function runStandardAnswerAudioJob(job, questions, ttsConfig) {
+  let version = await latestVersion();
+
+  for (const question of questions) {
+    job.currentQuestion = {
+      id: question.id,
+      title: question.title,
+    };
+    try {
+      const result = await ensureStandardAnswerAudio(question.standardAnswer, ttsConfig);
+      if (result.created) {
+        job.created += 1;
+      } else {
+        job.reused += 1;
+      }
+      if (question.standardAnswerAudioUrl !== result.url) {
+        version += 1;
+        await runSql(`
+          UPDATE questions
+          SET standard_answer_audio_url = ${sqlString(result.url)},
+              version = ${version},
+              updated_at = ${sqlString(new Date().toISOString())}
+          WHERE id = ${sqlString(question.id)} AND deleted_at IS NULL;
+        `);
+        job.updated += 1;
+      }
+    } catch (error) {
+      job.skipped += 1;
+      job.failures.push({
+        id: question.id,
+        title: question.title,
+        error: error.message || 'generate failed',
+      });
+    } finally {
+      job.processed += 1;
+    }
+  }
+
+  job.currentQuestion = null;
+  job.status = job.failures.length === 0 ? 'completed' : 'completed_with_errors';
+  job.finishedAt = new Date().toISOString();
+}
+
+function publicAudioJob(job) {
+  return {
+    id: job.id,
+    ok: job.status === 'completed' || job.status === 'running',
+    status: job.status,
+    total: job.total,
+    processed: job.processed,
+    percent: job.total === 0 ? 100 : Math.round((job.processed / job.total) * 100),
+    created: job.created,
+    reused: job.reused,
+    updated: job.updated,
+    skipped: job.skipped,
+    currentQuestion: job.currentQuestion,
+    failures: job.failures.slice(-20),
+    startedAt: job.startedAt,
+    finishedAt: job.finishedAt,
+  };
+}
+
+function trimAudioJobs() {
+  const jobs = [...audioJobs.values()]
+    .sort((a, b) => String(a.startedAt).localeCompare(String(b.startedAt)));
+  while (jobs.length > 20) {
+    const job = jobs.shift();
+    if (job && job.status !== 'running') {
+      audioJobs.delete(job.id);
+    }
+  }
+}
+
+async function ensureStandardAnswerAudio(text, ttsConfig) {
+  const normalizedText = normalizeTtsText(text);
+  const byteLength = Buffer.byteLength(normalizedText, 'utf8');
+  if (byteLength === 0) {
+    throw new Error('standard answer is empty');
+  }
+  if (byteLength >= 8000) {
+    throw new Error(`standard answer is too long for one TTS call: ${byteLength} bytes`);
+  }
+
+  const textHash = sha256(normalizedText);
+  const format = 'mp3';
+  const assetId = sha256([
+    textHash,
+    ttsConfig.voice,
+    ttsConfig.speed,
+    ttsConfig.pitch,
+    ttsConfig.volume,
+    format,
+  ].join('|'));
+  const existing = await getSql(`
+    SELECT * FROM audio_assets
+    WHERE text_hash = ${sqlString(textHash)}
+      AND voice = ${sqlString(ttsConfig.voice)}
+      AND speed = ${ttsConfig.speed}
+      AND pitch = ${ttsConfig.pitch}
+      AND volume = ${ttsConfig.volume}
+      AND format = ${sqlString(format)}
+      AND status = 'ready';
+  `);
+  if (existing && existsSync(existing.file_path)) {
+    return { url: existing.url, created: false };
+  }
+
+  const fileName = `${assetId}.mp3`;
+  const filePath = join(audioDir, fileName);
+  const url = `${ttsConfig.publicBaseUrl}/audio/${fileName}`;
+  const audio = await synthesizeWithXfyun(normalizedText, ttsConfig);
+  await writeFile(filePath, audio);
+  const now = new Date().toISOString();
+  await runSql(`
+    INSERT INTO audio_assets (
+      id, text_hash, text, voice, speed, pitch, volume, format,
+      file_path, url, status, created_at, updated_at
+    ) VALUES (
+      ${sqlString(assetId)},
+      ${sqlString(textHash)},
+      ${sqlString(normalizedText)},
+      ${sqlString(ttsConfig.voice)},
+      ${ttsConfig.speed},
+      ${ttsConfig.pitch},
+      ${ttsConfig.volume},
+      ${sqlString(format)},
+      ${sqlString(filePath)},
+      ${sqlString(url)},
+      'ready',
+      ${sqlString(now)},
+      ${sqlString(now)}
+    )
+    ON CONFLICT(text_hash, voice, speed, pitch, volume, format) DO UPDATE SET
+      file_path = excluded.file_path,
+      url = excluded.url,
+      status = excluded.status,
+      updated_at = excluded.updated_at;
+  `);
+  return { url, created: true };
+}
+
+async function readTtsConfig(options = {}) {
+  const stored = await readJson(ttsConfigPath, {});
+  const config = normalizeTtsConfig(stored, defaultTtsConfig(), { allowSecretEmpty: true });
+  if (options.includeSecrets) {
+    return config;
+  }
+  return {
+    ...config,
+    apiSecret: config.apiSecret ? '' : '',
+    apiSecretConfigured: Boolean(config.apiSecret),
+    apiKeyConfigured: Boolean(config.apiKey),
+    appIdConfigured: Boolean(config.appId),
+  };
+}
+
+async function saveTtsConfig(body) {
+  const current = await readTtsConfig({ includeSecrets: true });
+  const config = normalizeTtsConfig(body, current);
+  await writeJson(ttsConfigPath, config);
+  return readTtsConfig();
+}
+
+function defaultTtsConfig() {
+  return {
+    appId: xfyunAppId,
+    apiKey: xfyunApiKey,
+    apiSecret: xfyunApiSecret,
+    voice: xfyunVoice,
+    speed: xfyunSpeed,
+    pitch: xfyunPitch,
+    volume: xfyunVolume,
+    publicBaseUrl,
+  };
+}
+
+function normalizeTtsConfig(source, fallback, options = {}) {
+  const pickSecret = (key) => {
+    const value = source[key];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+    if (options.allowSecretEmpty && typeof value === 'string') {
+      return value.trim();
+    }
+    return fallback[key] || '';
+  };
+  return {
+    appId: pickSecret('appId'),
+    apiKey: pickSecret('apiKey'),
+    apiSecret: pickSecret('apiSecret'),
+    voice: String(source.voice || fallback.voice || 'xiaoyan').trim(),
+    speed: clampTtsNumber(source.speed, fallback.speed, 0, 100),
+    pitch: clampTtsNumber(source.pitch, fallback.pitch, 0, 100),
+    volume: clampTtsNumber(source.volume, fallback.volume, 0, 100),
+    publicBaseUrl: String(source.publicBaseUrl || fallback.publicBaseUrl || `http://localhost:${port}`)
+      .replace(/\/+$/, ''),
+  };
+}
+
+function clampTtsNumber(value, fallback, min, max) {
+  const number = Number(value ?? fallback);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, Math.round(number)));
+}
+
+function assertTtsConfigured(ttsConfig) {
+  if (!ttsConfig.appId || !ttsConfig.apiKey || !ttsConfig.apiSecret) {
+    throw new Error('XFYUN_APP_ID, XFYUN_API_KEY and XFYUN_API_SECRET are required');
+  }
+}
+
+function normalizeTtsText(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim();
+}
+
+function sha256(value) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+async function synthesizeWithXfyun(text, ttsConfig) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    const websocket = new WebSocket(buildXfyunUrl(ttsConfig));
+    const timeout = setTimeout(() => {
+      websocket.close();
+      reject(new Error('TTS request timed out'));
+    }, 60000);
+
+    websocket.on('open', () => {
+      websocket.send(JSON.stringify({
+        common: { app_id: xfyunAppId },
+        business: {
+          aue: 'lame',
+          vcn: ttsConfig.voice,
+          speed: ttsConfig.speed,
+          pitch: ttsConfig.pitch,
+          volume: ttsConfig.volume,
+          tte: 'UTF8',
+        },
+        data: {
+          status: 2,
+          text: Buffer.from(text, 'utf8').toString('base64'),
+        },
+      }));
+    });
+
+    websocket.on('message', (message) => {
+      const payload = JSON.parse(message.toString());
+      if (payload.code !== 0) {
+        clearTimeout(timeout);
+        websocket.close();
+        reject(new Error(payload.message || `TTS failed with code ${payload.code}`));
+        return;
+      }
+      if (payload.data?.audio) {
+        chunks.push(Buffer.from(payload.data.audio, 'base64'));
+      }
+      if (payload.data?.status === 2) {
+        clearTimeout(timeout);
+        websocket.close();
+        resolve(Buffer.concat(chunks));
+      }
+    });
+
+    websocket.on('error', (error) => {
+      clearTimeout(timeout);
+      reject(error);
+    });
+  });
+}
+
+function buildXfyunUrl(ttsConfig) {
+  const host = 'tts-api.xfyun.cn';
+  const path = '/v2/tts';
+  const date = new Date().toUTCString();
+  const signatureOrigin = `host: ${host}\ndate: ${date}\nGET ${path} HTTP/1.1`;
+  const signature = createHmac('sha256', ttsConfig.apiSecret)
+    .update(signatureOrigin)
+    .digest('base64');
+  const authorizationOrigin = `api_key="${ttsConfig.apiKey}", algorithm="hmac-sha256", headers="host date request-line", signature="${signature}"`;
+  const query = new URLSearchParams({
+    authorization: Buffer.from(authorizationOrigin).toString('base64'),
+    date,
+    host,
+  });
+  return `wss://${host}${path}?${query}`;
+}
+
 function normalizeQuestion(body) {
   const now = Date.now().toString(36);
   const id = String(body.id || `q-${now}`);
@@ -459,6 +856,7 @@ function normalizeQuestion(body) {
     techCategory: String(body.techCategory),
     techLanguage: String(body.techLanguage),
     standardAnswer: body.standardAnswer ? String(body.standardAnswer) : '',
+    standardAnswerAudioUrl: body.standardAnswerAudioUrl ? String(body.standardAnswerAudioUrl) : '',
     version: body.version == null ? undefined : Number(body.version),
     updatedAt: body.updatedAt || new Date().toISOString(),
   };
@@ -517,7 +915,7 @@ async function upsertQuestionRow(question) {
     INSERT INTO questions (
       id, tech_category, tech_language, module, title, review_status,
       tags_json, checkpoints_json, answer_points_json, follow_ups_json,
-      mistakes_json, standard_answer, version, updated_at, deleted_at
+      mistakes_json, standard_answer, standard_answer_audio_url, version, updated_at, deleted_at
     ) VALUES (
       ${sqlString(question.id)},
       ${sqlString(question.techCategory)},
@@ -531,6 +929,7 @@ async function upsertQuestionRow(question) {
       ${sqlJson(question.followUps)},
       ${sqlJson(question.mistakes)},
       ${sqlString(question.standardAnswer || '')},
+      ${question.standardAnswerAudioUrl ? sqlString(question.standardAnswerAudioUrl) : 'NULL'},
       ${Number(question.version || 1)},
       ${sqlString(question.updatedAt || new Date().toISOString())},
       NULL
@@ -547,6 +946,7 @@ async function upsertQuestionRow(question) {
       follow_ups_json = excluded.follow_ups_json,
       mistakes_json = excluded.mistakes_json,
       standard_answer = excluded.standard_answer,
+      standard_answer_audio_url = excluded.standard_answer_audio_url,
       version = excluded.version,
       updated_at = excluded.updated_at,
       deleted_at = NULL;
@@ -567,6 +967,7 @@ function rowToQuestion(row) {
     techCategory: row.tech_category,
     techLanguage: row.tech_language,
     standardAnswer: row.standard_answer || '',
+    standardAnswerAudioUrl: row.standard_answer_audio_url || '',
     version: Number(row.version || 1),
     updatedAt: row.updated_at,
   };
@@ -629,6 +1030,14 @@ async function getSql(sql) {
   return rows[0] || null;
 }
 
+async function ensureColumn(table, column, definition) {
+  const rows = await allSql(`PRAGMA table_info(${table});`);
+  if (rows.some((row) => row.name === column)) {
+    return;
+  }
+  await runSql(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition};`);
+}
+
 async function runSql(sql) {
   const { stdout, stderr } = await execFileAsync('sqlite3', [questionsDbPath, sql], {
     maxBuffer: 20 * 1024 * 1024,
@@ -687,6 +1096,49 @@ async function sendStatic(response, path) {
   return send(response, 200, content, mimeTypes[extname(resolved)] || 'application/octet-stream');
 }
 
+async function sendAudio(request, response, fileName) {
+  const safeName = basename(fileName);
+  if (!safeName.endsWith('.mp3')) {
+    return sendJson(response, { error: 'not found' }, 404);
+  }
+
+  const resolvedAudioDir = resolve(audioDir);
+  const resolved = resolve(resolvedAudioDir, safeName);
+  if (!resolved.startsWith(resolvedAudioDir)) {
+    return sendJson(response, { error: 'forbidden' }, 403);
+  }
+
+  const fileStat = await stat(resolved);
+  const range = request.headers.range;
+  if (!range) {
+    const content = await readFile(resolved);
+    return send(response, 200, content, 'audio/mpeg', {
+      'Accept-Ranges': 'bytes',
+      'Content-Length': fileStat.size,
+      'Cache-Control': 'public, max-age=2592000',
+    });
+  }
+
+  const match = /^bytes=(\d+)-(\d*)$/.exec(range);
+  if (!match) {
+    return send(response, 416, '', 'text/plain; charset=utf-8');
+  }
+  const start = Number(match[1]);
+  const end = match[2] ? Number(match[2]) : fileStat.size - 1;
+  if (start >= fileStat.size || end >= fileStat.size || start > end) {
+    return send(response, 416, '', 'text/plain; charset=utf-8', {
+      'Content-Range': `bytes */${fileStat.size}`,
+    });
+  }
+  const content = (await readFile(resolved)).subarray(start, end + 1);
+  return send(response, 206, content, 'audio/mpeg', {
+    'Accept-Ranges': 'bytes',
+    'Content-Length': content.length,
+    'Content-Range': `bytes ${start}-${end}/${fileStat.size}`,
+    'Cache-Control': 'public, max-age=2592000',
+  });
+}
+
 function redirect(response, location) {
   response.writeHead(302, corsHeaders({ Location: location }));
   response.end();
@@ -709,8 +1161,11 @@ function sendJson(response, body, status = 200) {
   return send(response, status, JSON.stringify(body), 'application/json; charset=utf-8');
 }
 
-function send(response, status, body, contentType) {
-  response.writeHead(status, corsHeaders({ 'Content-Type': contentType }));
+function send(response, status, body, contentType, extraHeaders = {}) {
+  response.writeHead(status, corsHeaders({
+    'Content-Type': contentType,
+    ...extraHeaders,
+  }));
   response.end(body);
 }
 

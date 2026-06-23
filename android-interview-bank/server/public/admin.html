@@ -35,6 +35,7 @@
         <div class="section-title">
           <h2>题目筛选</h2>
           <div class="button-row">
+            <button id="generateAudioButton" class="secondary" type="button">生成标准答案音频</button>
             <button id="downloadTemplateButton" class="secondary" type="button">下载模板</button>
             <button id="importButton" class="secondary" type="button">导入 JSON</button>
             <button id="newQuestionButton" type="button">新增题目</button>
@@ -57,6 +58,16 @@
           </label>
         </div>
         <p id="filteredQuestionCount" class="filter-count">当前筛选 0 道 / 共 0 道</p>
+        <p id="audioStatus" class="status-line"></p>
+        <div id="audioProgress" class="progress-card" hidden>
+          <div class="progress-header">
+            <span id="audioProgressText">0 / 0</span>
+            <strong id="audioProgressPercent">0%</strong>
+          </div>
+          <progress id="audioProgressBar" max="100" value="0"></progress>
+          <p id="audioCurrentQuestion" class="status-line"></p>
+          <p id="audioProgressDetail" class="status-line"></p>
+        </div>
         <div id="questionList" class="question-list"></div>
       </section>
 
@@ -116,6 +127,50 @@
             <button type="submit">保存题目</button>
             <span id="saveStatus"></span>
           </div>
+        </form>
+      </section>
+
+      <section class="panel tts-config">
+        <div class="section-title">
+          <h2>语音合成配置</h2>
+          <button id="saveTtsConfigButton" type="submit" form="ttsConfigForm">保存配置</button>
+        </div>
+        <form id="ttsConfigForm">
+          <div class="grid">
+            <label>
+              APPID
+              <input name="appId" autocomplete="off" />
+            </label>
+            <label>
+              APIKey
+              <input name="apiKey" autocomplete="off" />
+            </label>
+            <label>
+              APISecret
+              <input name="apiSecret" autocomplete="off" placeholder="留空保持当前密钥" />
+            </label>
+            <label>
+              发音人
+              <input name="voice" placeholder="xiaoyan" />
+            </label>
+            <label>
+              语速 0-100
+              <input name="speed" type="number" min="0" max="100" />
+            </label>
+            <label>
+              音调 0-100
+              <input name="pitch" type="number" min="0" max="100" />
+            </label>
+            <label>
+              音量 0-100
+              <input name="volume" type="number" min="0" max="100" />
+            </label>
+            <label>
+              音频访问前缀
+              <input name="publicBaseUrl" placeholder="http://54.150.9.209/interview" />
+            </label>
+          </div>
+          <p id="ttsConfigStatus" class="status-line"></p>
         </form>
       </section>
 
