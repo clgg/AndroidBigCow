@@ -123,9 +123,17 @@ void main() {
     final repository = await QuestionRepository.loadFromAssets();
     final uniqueIds = repository.all.map((question) => question.id).toSet();
 
-    expect(repository.all.length, 322);
+    expect(repository.all.length, 122);
     expect(uniqueIds.length, repository.all.length);
     expect(repository.modules.length, 12);
     expect(repository.filter(module: 'Java').length, greaterThanOrEqualTo(27));
+    expect(
+      repository.all.any(
+        (question) =>
+            question.answerPoints.any((point) => point.contains('先明确问题边界')) ||
+            (question.standardAnswer?.contains('先明确问题边界') ?? false),
+      ),
+      isFalse,
+    );
   });
 }

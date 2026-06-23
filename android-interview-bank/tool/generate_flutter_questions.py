@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Generate 300 Flutter interview questions for flutter-question-import.json."""
+"""Generate Flutter interview questions for flutter-question-import.json.
+
+The generator intentionally avoids API usage/manual-style questions. Generated
+cards should be suitable for interviews: mechanism, trade-off, debugging,
+architecture, performance, and production validation.
+"""
 
 import json
 import re
@@ -397,48 +402,57 @@ TAG_BY_MODULE = {
 }
 
 
+EXCLUDED_MODULES = {"Widget 与组件"}
+
+LOW_SIGNAL_TITLE_PATTERNS = (
+    "如何使用",
+    "怎么使用",
+    "常见用法",
+    "使用要点",
+)
+
+
 def topic_question(module, topic):
     templates = {
-        "Flutter 基础": f"Flutter 中 {topic} 是什么？如何使用？",
-        "布局与渲染": f"{topic} 在 Flutter 布局中如何工作？常见误用有哪些？",
-        "状态管理": f"Flutter 状态管理里 {topic} 适合解决什么问题？",
-        "异步与 Dart": f"Dart/Flutter 中 {topic} 的原理和最佳实践是什么？",
-        "列表与滚动": f"Flutter 列表滚动中 {topic} 的使用要点是什么？",
-        "导航与路由": f"Flutter 路由体系中 {topic} 如何使用？",
-        "动画": f"Flutter 动画开发中 {topic} 如何实现？",
-        "性能优化": f"Flutter 性能优化里如何分析和改进 {topic}？",
-        "平台通道": f"Flutter 平台通道中 {topic} 的作用是什么？",
-        "网络与数据": f"Flutter 项目里 {topic} 如何设计和落地？",
-        "存储与持久化": f"Flutter 中 {topic} 适合存储什么？如何使用？",
-        "架构与工程化": f"Flutter 工程化实践中 {topic} 如何落地？",
-        "测试": f"Flutter 测试中 {topic} 如何编写和维护？",
-        "Widget 与组件": f"Flutter 组件 {topic} 的常见用法和注意点是什么？",
-        "渲染原理": f"Flutter 渲染管线中 {topic} 处于哪一环？",
-        "混合开发与发布": f"Flutter 混合开发与发布里 {topic} 的方案是什么？",
-        "国际化与无障碍": f"Flutter 中 {topic} 如何实现？",
-        "Flutter Web/Desktop": f"Flutter 在 {topic} 场景下有哪些平台差异？",
+        "Flutter 基础": f"{topic} 在 Flutter 运行时中承担什么职责？边界在哪里？",
+        "布局与渲染": f"{topic} 触发布局异常或性能问题时怎么定位？",
+        "状态管理": f"围绕 {topic} 设计状态流时如何划分职责和生命周期？",
+        "异步与 Dart": f"{topic} 背后的调度模型是什么？线上问题如何排查？",
+        "列表与滚动": f"{topic} 在复杂滚动页中会带来哪些性能和状态风险？",
+        "导航与路由": f"{topic} 在多入口、多栈路由中如何保证状态一致？",
+        "动画": f"{topic} 动画卡顿或状态错乱时如何分析？",
+        "性能优化": f"{topic} 相关性能问题如何用证据定位和验证？",
+        "平台通道": f"{topic} 跨 Dart 和原生边界时有哪些线程与序列化风险？",
+        "网络与数据": f"{topic} 在生产项目中如何处理失败、缓存和一致性？",
+        "存储与持久化": f"{topic} 在数据可靠性、迁移和线程安全上有什么取舍？",
+        "架构与工程化": f"{topic} 落地到团队工程时如何控制复杂度？",
+        "测试": f"{topic} 应该覆盖哪些边界场景，如何降低脆弱性？",
+        "渲染原理": f"{topic} 在 Flutter 渲染管线中的职责和瓶颈是什么？",
+        "混合开发与发布": f"{topic} 在混合工程中如何处理生命周期和发布风险？",
+        "国际化与无障碍": f"{topic} 的质量问题如何在多语言和无障碍场景暴露？",
+        "Flutter Web/Desktop": f"{topic} 场景下的平台差异会如何影响架构设计？",
     }
     title = templates.get(module, f"Flutter 中 {topic} 的核心机制是什么？")
     tag = TAG_BY_MODULE.get(module, "基础")
     checkpoints = [
-        f"{topic} 的定义和职责",
-        f"{topic} 的典型使用场景",
-        "与其他方案的边界和取舍",
+        "问题触发条件和影响范围",
+        "框架机制与生命周期边界",
+        "项目落地、监控和验证方式",
     ]
     answer_points = [
-        f"{topic} 是 {module} 中的关键知识点，理解它有助于正确实现功能和排查问题。",
-        f"使用 {topic} 时要明确输入输出、生命周期、线程边界，避免在错误层级持有状态或资源。",
-        f"选型时应结合团队熟悉度、可测试性、性能成本和维护难度，而不是只看流行度。",
-        f"面试回答建议结合一个真实页面说明为什么使用 {topic}，以及如何验证效果。",
+        f"回答 {topic} 相关问题时，先说明它解决的具体生产场景，以及异常会影响 UI、数据、性能还是发布链路。",
+        "再展开框架层机制：对象生命周期、状态传播、线程或渲染阶段，以及这些机制带来的约束。",
+        "方案取舍要落到可维护性、可测试性、性能成本、团队规范和平台差异，避免只背 API 名称。",
+        "最后补充验证方式，例如 DevTools、日志、埋点、自动化测试、灰度监控或回归用例。"
     ]
     follow_ups = [
-        f"{topic} 的常见坑有哪些？",
-        f"什么情况下不应该使用 {topic}？",
-        f"如何用 DevTools 或日志验证 {topic} 的行为？",
+        f"{topic} 出现线上异常时第一现场信息应该看什么？",
+        f"什么场景下 {topic} 不是合适方案？",
+        f"如何为 {topic} 设计一个能暴露边界问题的测试用例？",
     ]
     mistakes = [
-        f"只背 {topic} 名词，不会结合场景说明。",
-        "不区分适用边界，所有场景都用同一种方案。",
+        f"把 {topic} 当作 API 用法题回答，缺少机制、边界和验证。",
+        "不区分页面规模、生命周期、平台差异和团队维护成本。",
     ]
     return make_question(title, module, [tag], checkpoints, answer_points, follow_ups, mistakes)
 
@@ -463,13 +477,15 @@ def main():
     for item in SEED_QUESTIONS:
         add(dict(item))
 
-    modules = list(TOPICS.keys())
+    modules = [module for module in TOPICS if module not in EXCLUDED_MODULES]
     idx = 0
     while len(questions) < 300:
         module = modules[idx % len(modules)]
         topics = TOPICS[module]
         topic = topics[(len(questions) + idx) % len(topics)]
-        add(topic_question(module, topic))
+        question = topic_question(module, topic)
+        if not any(pattern in question["title"] for pattern in LOW_SIGNAL_TITLE_PATTERNS):
+            add(question)
         idx += 1
 
     questions = questions[:300]
