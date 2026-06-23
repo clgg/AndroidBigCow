@@ -8465,5 +8465,2741 @@
     "standardAnswer": "【一句话回答】\n发布链路要支持版本回滚/下架/开关降级，同时保留帧指标、日志、符号和问题设备信息。\n\n【核心机制】\n• 发布链路要支持版本回滚/下架/开关降级，同时保留帧指标、日志、符号和问题设备信息。\n• 回答时要把 flavor、环境配置、依赖版本、代码生成、CI、签名、包体积和发布灰度串成可重复流水线。\n• 项目落地要说明如何锁版本、校验生成文件、管理多端差异、保护密钥、自动化回归和监控发布质量。\n• 最后要给出验证方式，例如 DevTools、日志、自动化测试、灰度监控、性能指标或最小复现代码。\n\n【考察重点】\n• 问题触发条件和影响范围\n• 框架机制与生命周期边界\n• 项目落地、监控和验证方式\n\n【项目落地】\n• 项目落地要说明如何锁版本、校验生成文件、管理多端差异、保护密钥、自动化回归和监控发布质量。\n• 回答时建议按“现象 -> 机制 -> 取舍 -> 验证 -> 线上兜底”的顺序组织，补充真实项目中的异常路径。\n• 如果涉及生命周期、线程、缓存、平台差异或性能成本，要主动说明边界条件和降级策略。\n\n【深挖追问】\n• 如果这个问题在线上出现，你会先收集哪些第一现场信息？ 回答时要继续补充原因、反例、异常路径和验证手段。\n• 什么场景下常见方案反而不是最合适的？ 回答时要继续补充原因、反例、异常路径和验证手段。\n• 如何设计一个能覆盖边界问题的测试或监控指标？ 回答时要继续补充原因、反例、异常路径和验证手段。\n\n【常见误区】\n• 把发布理解成 flutter build 命令，不关注配置漂移、签名、符号表、灰度和回滚。\n• 只给 API 名称或固定结论，不解释触发条件、取舍和验证方式。\n\n【面试表达建议】\n先给结论，再按机制、边界、场景和验证展开。能说出排查工具、日志指标或测试用例，会比单纯背 API 更像真实项目经验。",
     "version": 101,
     "updatedAt": "2026-06-23T00:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-001",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "Flutter 为什么说没有传统意义上的全树 diff？Element 更新算法到底匹配什么？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Flutter 在每个父节点的子列表内按类型、key 和位置做线性 reconciliation，复用的是 Element 及其持有的 State/RenderObject，而不是对两棵 Widget 树做全局 diff。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nFlutter 在每个父节点的子列表内按类型、key 和位置做线性 reconciliation，复用的是 Element 及其持有的 State/RenderObject，而不是对两棵 Widget 树做全局 diff。\n\n【底层原理】\n• Flutter 在每个父节点的子列表内按类型、key 和位置做线性 reconciliation，复用的是 Element 及其持有的 State/RenderObject，而不是对两棵 Widget 树做全局 diff。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 201,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-002",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "runtimeType 和 key 在 Element.canUpdate 中分别解决什么问题？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "runtimeType 保证组件语义兼容，key 解决同级位置变化后的身份识别；二者同时匹配才会复用旧 Element。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nruntimeType 保证组件语义兼容，key 解决同级位置变化后的身份识别；二者同时匹配才会复用旧 Element。\n\n【底层原理】\n• runtimeType 保证组件语义兼容，key 解决同级位置变化后的身份识别；二者同时匹配才会复用旧 Element。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 202,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-003",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "列表头部插入一个无 key item，为什么后面的 Stateful item 可能状态串位？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "没有稳定 key 时同级匹配依赖位置，插入导致旧 Element 被错误复用到新数据，State 跟随位置而不是数据 id。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n没有稳定 key 时同级匹配依赖位置，插入导致旧 Element 被错误复用到新数据，State 跟随位置而不是数据 id。\n\n【底层原理】\n• 没有稳定 key 时同级匹配依赖位置，插入导致旧 Element 被错误复用到新数据，State 跟随位置而不是数据 id。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 203,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-004",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "GlobalKey reparenting 为什么能跨位置保留 State？代价是什么？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "GlobalKey 让框架能在非本地移动中找到旧 Element 并重新挂载，但会增加全局注册、树移动和生命周期复杂度。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nGlobalKey 让框架能在非本地移动中找到旧 Element 并重新挂载，但会增加全局注册、树移动和生命周期复杂度。\n\n【底层原理】\n• GlobalKey 让框架能在非本地移动中找到旧 Element 并重新挂载，但会增加全局注册、树移动和生命周期复杂度。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 204,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-005",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "Widget identical 优化和 const Widget 优化有什么关系？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "父节点传入同一个 Widget 实例时 Element 可快速跳过更新，const 让不可变配置更容易复用同一实例。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n父节点传入同一个 Widget 实例时 Element 可快速跳过更新，const 让不可变配置更容易复用同一实例。\n\n【底层原理】\n• 父节点传入同一个 Widget 实例时 Element 可快速跳过更新，const 让不可变配置更容易复用同一实例。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 205,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-006",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "为什么 Element 树持有 State，而 Widget 本身不能持有可变状态？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Widget 是不可变配置且会频繁重建，Element 是树上稳定身份，State 挂在 Element 上才能跨 Widget 配置更新保留。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nWidget 是不可变配置且会频繁重建，Element 是树上稳定身份，State 挂在 Element 上才能跨 Widget 配置更新保留。\n\n【底层原理】\n• Widget 是不可变配置且会频繁重建，Element 是树上稳定身份，State 挂在 Element 上才能跨 Widget 配置更新保留。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 206,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-007",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "deactivate 后的 Element 一定会 dispose 吗？为什么？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "deactivate 表示暂时从树上移除，GlobalKey 迁移等场景可能重新 activate，只有未被重新挂载才进入 unmount/dispose。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\ndeactivate 表示暂时从树上移除，GlobalKey 迁移等场景可能重新 activate，只有未被重新挂载才进入 unmount/dispose。\n\n【底层原理】\n• deactivate 表示暂时从树上移除，GlobalKey 迁移等场景可能重新 activate，只有未被重新挂载才进入 unmount/dispose。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 207,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-008",
+    "module": "Element 与 Reconciliation 原理",
+    "title": "条件渲染 if/else 切换不同 Widget 类型时，State 为什么会丢？如何保留？",
+    "tags": [
+      "Flutter",
+      "Element",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "同一位置 runtimeType 不同无法复用 Element，State 会销毁；可调整树结构、使用 key 或把状态上提。",
+      "这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。",
+      "项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n同一位置 runtimeType 不同无法复用 Element，State 会销毁；可调整树结构、使用 key 或把状态上提。\n\n【底层原理】\n• 同一位置 runtimeType 不同无法复用 Element，State 会销毁；可调整树结构、使用 key 或把状态上提。\n• 这道题的关键不是 API 用法，而是讲清楚：Widget 是配置、Element 是树上实例、RenderObject 是渲染节点；更新时 Flutter 不是全树 diff，而是在父节点 child list 内按 runtimeType、key 和位置做线性匹配。\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要把 key、组件拆分、State 所属层级和局部 rebuild 联系起来，能说明列表重排、条件插入、GlobalKey reparenting 为什么会保留或丢失状态。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 208,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-009",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "setState 到下一帧 build 中间经过哪些对象和队列？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "setState 执行回调后调用 markNeedsBuild，把 Element 加入 BuildOwner dirty list，并请求一帧，在 buildScope 中按深度重建。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nsetState 执行回调后调用 markNeedsBuild，把 Element 加入 BuildOwner dirty list，并请求一帧，在 buildScope 中按深度重建。\n\n【底层原理】\n• setState 执行回调后调用 markNeedsBuild，把 Element 加入 BuildOwner dirty list，并请求一帧，在 buildScope 中按深度重建。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 209,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-010",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "为什么 build 阶段不能让信息向父节点传播？这和性能有什么关系？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "build 信息单向向下让每个 Element 一帧最多访问一次，避免父子相互失效导致复杂度膨胀。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nbuild 信息单向向下让每个 Element 一帧最多访问一次，避免父子相互失效导致复杂度膨胀。\n\n【底层原理】\n• build 信息单向向下让每个 Element 一帧最多访问一次，避免父子相互失效导致复杂度膨胀。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 210,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-011",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "InheritedWidget 为什么不会每次 context 查找都沿父链 O(depth) 搜索？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Element 维护 InheritedElement 映射并在引入新 InheritedWidget 时共享/更新，读取和依赖登记不需要反复长链查找。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nElement 维护 InheritedElement 映射并在引入新 InheritedWidget 时共享/更新，读取和依赖登记不需要反复长链查找。\n\n【底层原理】\n• Element 维护 InheritedElement 映射并在引入新 InheritedWidget 时共享/更新，读取和依赖登记不需要反复长链查找。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 211,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-012",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "dependOnInheritedWidgetOfExactType 和 getElementForInheritedWidgetOfExactType 的差异是什么？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "前者登记依赖并在变化时重建，后者只获取 Element 不订阅，适合只读但要小心不自动更新。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n前者登记依赖并在变化时重建，后者只获取 Element 不订阅，适合只读但要小心不自动更新。\n\n【底层原理】\n• 前者登记依赖并在变化时重建，后者只获取 Element 不订阅，适合只读但要小心不自动更新。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 212,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-013",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "为什么 initState 里不能安全地依赖 context.watch 一类订阅？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "initState 阶段依赖关系尚不适合建立监听，Inherited 依赖变化应在 didChangeDependencies 或 build 中处理。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\ninitState 阶段依赖关系尚不适合建立监听，Inherited 依赖变化应在 didChangeDependencies 或 build 中处理。\n\n【底层原理】\n• initState 阶段依赖关系尚不适合建立监听，Inherited 依赖变化应在 didChangeDependencies 或 build 中处理。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 213,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-014",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "Provider 的 select 为什么能减少 rebuild？它底层依赖什么前提？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "select 只比较派生字段变化，减少无关字段触发的订阅者重建，前提是状态不可变或比较逻辑可靠。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nselect 只比较派生字段变化，减少无关字段触发的订阅者重建，前提是状态不可变或比较逻辑可靠。\n\n【底层原理】\n• select 只比较派生字段变化，减少无关字段触发的订阅者重建，前提是状态不可变或比较逻辑可靠。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 214,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-015",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "markNeedsBuild 在 build 过程中被调用会发生什么？为什么框架有限制？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "框架限制脏标记时机和祖先关系，避免一边遍历一边无限插入 dirty element 破坏 buildScope 稳定性。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n框架限制脏标记时机和祖先关系，避免一边遍历一边无限插入 dirty element 破坏 buildScope 稳定性。\n\n【底层原理】\n• 框架限制脏标记时机和祖先关系，避免一边遍历一边无限插入 dirty element 破坏 buildScope 稳定性。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 215,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-016",
+    "module": "BuildOwner 与依赖传播原理",
+    "title": "Notification 冒泡和 InheritedWidget 下发在数据流上有什么本质不同？",
+    "tags": [
+      "Flutter",
+      "BuildOwner",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Notification 从子到父冒泡适合事件通知，InheritedWidget 从父到子提供依赖适合配置/状态读取。",
+      "这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。",
+      "项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nNotification 从子到父冒泡适合事件通知，InheritedWidget 从父到子提供依赖适合配置/状态读取。\n\n【底层原理】\n• Notification 从子到父冒泡适合事件通知，InheritedWidget 从父到子提供依赖适合配置/状态读取。\n• 这道题的关键不是 API 用法，而是讲清楚：dirty element 列表、buildScope、InheritedElement 依赖登记、markNeedsBuild 的调度边界，以及 build 阶段信息只能向下传播。\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能定位 setState、Provider/Riverpod watch、InheritedWidget 更新导致的重建范围，并用 DevTools rebuild stats 或日志证明。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 216,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-017",
+    "module": "RenderObject 与布局管线原理",
+    "title": "Constraints down, sizes up, parent sets position 为什么能让 Flutter 布局接近线性？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "约束只向下、几何只向上、位置由父设置，避免多轮全局求解；同约束下干净子树可直接跳过。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n约束只向下、几何只向上、位置由父设置，避免多轮全局求解；同约束下干净子树可直接跳过。\n\n【底层原理】\n• 约束只向下、几何只向上、位置由父设置，避免多轮全局求解；同约束下干净子树可直接跳过。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 217,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-018",
+    "module": "RenderObject 与布局管线原理",
+    "title": "relayout boundary 是什么？它如何限制 markNeedsLayout 的传播范围？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "relayout boundary 是布局失效传播的截断点，满足父不依赖子尺寸或约束足够固定时，子布局变化不必让祖先全重算。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nrelayout boundary 是布局失效传播的截断点，满足父不依赖子尺寸或约束足够固定时，子布局变化不必让祖先全重算。\n\n【底层原理】\n• relayout boundary 是布局失效传播的截断点，满足父不依赖子尺寸或约束足够固定时，子布局变化不必让祖先全重算。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 218,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-019",
+    "module": "RenderObject 与布局管线原理",
+    "title": "RenderBox 和 RenderSliver 的布局协议有什么根本差异？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "RenderBox 返回 Size，适合二维盒模型；RenderSliver 接收滚动相关约束并返回 SliverGeometry，适合按 viewport 懒布局。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nRenderBox 返回 Size，适合二维盒模型；RenderSliver 接收滚动相关约束并返回 SliverGeometry，适合按 viewport 懒布局。\n\n【底层原理】\n• RenderBox 返回 Size，适合二维盒模型；RenderSliver 接收滚动相关约束并返回 SliverGeometry，适合按 viewport 懒布局。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 219,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-020",
+    "module": "RenderObject 与布局管线原理",
+    "title": "parentUsesSize 参数为什么重要？写自定义 RenderObject 时怎么用？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "它声明父布局是否依赖子尺寸，影响子 markNeedsLayout 时是否需要让父重新布局。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n它声明父布局是否依赖子尺寸，影响子 markNeedsLayout 时是否需要让父重新布局。\n\n【底层原理】\n• 它声明父布局是否依赖子尺寸，影响子 markNeedsLayout 时是否需要让父重新布局。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 220,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-021",
+    "module": "RenderObject 与布局管线原理",
+    "title": "为什么 child 的位置不能影响 child 自己的 layout？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "位置在 child layout 返回后由 parent 决定，若 child layout 依赖位置会破坏单趟布局和局部失效优化。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n位置在 child layout 返回后由 parent 决定，若 child layout 依赖位置会破坏单趟布局和局部失效优化。\n\n【底层原理】\n• 位置在 child layout 返回后由 parent 决定，若 child layout 依赖位置会破坏单趟布局和局部失效优化。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 221,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-022",
+    "module": "RenderObject 与布局管线原理",
+    "title": "IntrinsicWidth/IntrinsicHeight 为什么可能让布局复杂度暴涨？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "固有尺寸查询会让子树额外测量，复杂组合里可能重复访问多个节点，破坏常规单趟布局优势。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n固有尺寸查询会让子树额外测量，复杂组合里可能重复访问多个节点，破坏常规单趟布局优势。\n\n【底层原理】\n• 固有尺寸查询会让子树额外测量，复杂组合里可能重复访问多个节点，破坏常规单趟布局优势。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 222,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-023",
+    "module": "RenderObject 与布局管线原理",
+    "title": "markNeedsPaint 和 markNeedsLayout 的边界怎么区分？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "尺寸或位置变化需要 layout，视觉属性变化只需要 paint；错误选择会导致额外布局或画面不更新。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n尺寸或位置变化需要 layout，视觉属性变化只需要 paint；错误选择会导致额外布局或画面不更新。\n\n【底层原理】\n• 尺寸或位置变化需要 layout，视觉属性变化只需要 paint；错误选择会导致额外布局或画面不更新。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 223,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-024",
+    "module": "RenderObject 与布局管线原理",
+    "title": "PipelineOwner flushLayout、flushCompositingBits、flushPaint 的顺序为什么不能乱？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "布局先确定几何，合成位再决定哪些节点需要 layer，最后 paint 才能记录正确绘制命令和图层结构。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n布局先确定几何，合成位再决定哪些节点需要 layer，最后 paint 才能记录正确绘制命令和图层结构。\n\n【底层原理】\n• 布局先确定几何，合成位再决定哪些节点需要 layer，最后 paint 才能记录正确绘制命令和图层结构。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 224,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-025",
+    "module": "RenderObject 与布局管线原理",
+    "title": "为什么自定义 RenderObject 需要同时考虑 hitTest、paint、semantics？",
+    "tags": [
+      "Flutter",
+      "RenderObject",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "RenderObject 不只负责布局绘制，还决定交互命中和可访问性；只实现 paint 会造成可点区域或读屏语义缺失。",
+      "这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。",
+      "项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nRenderObject 不只负责布局绘制，还决定交互命中和可访问性；只实现 paint 会造成可点区域或读屏语义缺失。\n\n【底层原理】\n• RenderObject 不只负责布局绘制，还决定交互命中和可访问性；只实现 paint 会造成可点区域或读屏语义缺失。\n• 这道题的关键不是 API 用法，而是讲清楚：constraints down、geometry up、parent sets position 的单趟布局协议，以及 relayout boundary、markNeedsLayout、markNeedsPaint 的失效传播。\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能把 overflow、无界约束、Intrinsic 测量、CustomMultiChildLayout、RenderBox/RenderSliver 差异和具体性能问题关联起来。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 225,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-026",
+    "module": "Layer 与 Compositing 原理",
+    "title": "PictureLayer、TransformLayer、OpacityLayer 这类 Layer 和 RenderObject 是什么关系？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "RenderObject 在 paint 阶段生成或复用 Layer，Layer Tree 是交给 Engine 合成和光栅化的结构，不等同于 Widget 树。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nRenderObject 在 paint 阶段生成或复用 Layer，Layer Tree 是交给 Engine 合成和光栅化的结构，不等同于 Widget 树。\n\n【底层原理】\n• RenderObject 在 paint 阶段生成或复用 Layer，Layer Tree 是交给 Engine 合成和光栅化的结构，不等同于 Widget 树。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 226,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-027",
+    "module": "Layer 与 Compositing 原理",
+    "title": "needsCompositing bit 是怎么影响 Clip、Opacity 等效果实现的？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "当子树需要独立合成时，父节点要用 Layer 实现裁剪/透明等效果，否则可能直接记录绘制命令。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n当子树需要独立合成时，父节点要用 Layer 实现裁剪/透明等效果，否则可能直接记录绘制命令。\n\n【底层原理】\n• 当子树需要独立合成时，父节点要用 Layer 实现裁剪/透明等效果，否则可能直接记录绘制命令。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 227,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-028",
+    "module": "Layer 与 Compositing 原理",
+    "title": "Retained rendering 为什么能减少每帧工作量？哪些改动会让它失效？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "未变的 Layer 可复用，避免重复生成和栅格化；位置、裁剪、透明、图片或 repaint boundary 变化都可能扩大失效范围。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n未变的 Layer 可复用，避免重复生成和栅格化；位置、裁剪、透明、图片或 repaint boundary 变化都可能扩大失效范围。\n\n【底层原理】\n• 未变的 Layer 可复用，避免重复生成和栅格化；位置、裁剪、透明、图片或 repaint boundary 变化都可能扩大失效范围。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 228,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-029",
+    "module": "Layer 与 Compositing 原理",
+    "title": "saveLayer 为什么昂贵？面试中如何从 Opacity/BackdropFilter 讲到它？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "saveLayer 需要离屏缓冲和额外合成，半透明、模糊、复杂裁剪等效果容易触发，动画中尤其昂贵。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nsaveLayer 需要离屏缓冲和额外合成，半透明、模糊、复杂裁剪等效果容易触发，动画中尤其昂贵。\n\n【底层原理】\n• saveLayer 需要离屏缓冲和额外合成，半透明、模糊、复杂裁剪等效果容易触发，动画中尤其昂贵。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 229,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-030",
+    "module": "Layer 与 Compositing 原理",
+    "title": "RepaintBoundary 创建的是优化边界还是性能风险？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "它能隔离重绘和生成独立 layer，但过度使用会增加内存、合成和纹理上传成本，需要用工具验证。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n它能隔离重绘和生成独立 layer，但过度使用会增加内存、合成和纹理上传成本，需要用工具验证。\n\n【底层原理】\n• 它能隔离重绘和生成独立 layer，但过度使用会增加内存、合成和纹理上传成本，需要用工具验证。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 230,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-031",
+    "module": "Layer 与 Compositing 原理",
+    "title": "Raster 线程慢但 UI 线程正常，通常应该排查哪些 Flutter 写法？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "优先查大图解码/缩放、复杂阴影、模糊、saveLayer、过多 layer、Shader 首次编译和自定义绘制。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n优先查大图解码/缩放、复杂阴影、模糊、saveLayer、过多 layer、Shader 首次编译和自定义绘制。\n\n【底层原理】\n• 优先查大图解码/缩放、复杂阴影、模糊、saveLayer、过多 layer、Shader 首次编译和自定义绘制。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 231,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-032",
+    "module": "Layer 与 Compositing 原理",
+    "title": "Impeller 主要解决哪类渲染抖动？它不能解决什么？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Impeller 降低运行时 shader 编译卡顿，但不能替代业务侧减少 build、layout、图片解码和复杂合成成本。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nImpeller 降低运行时 shader 编译卡顿，但不能替代业务侧减少 build、layout、图片解码和复杂合成成本。\n\n【底层原理】\n• Impeller 降低运行时 shader 编译卡顿，但不能替代业务侧减少 build、layout、图片解码和复杂合成成本。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 232,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-033",
+    "module": "Layer 与 Compositing 原理",
+    "title": "为什么 Transform 可能改变命中测试和语义边界？",
+    "tags": [
+      "Flutter",
+      "Layer",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Transform 不只影响视觉，还可能改变 hitTest 坐标变换和语义矩形，复杂变换要验证交互与读屏。",
+      "这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。",
+      "项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nTransform 不只影响视觉，还可能改变 hitTest 坐标变换和语义矩形，复杂变换要验证交互与读屏。\n\n【底层原理】\n• Transform 不只影响视觉，还可能改变 hitTest 坐标变换和语义矩形，复杂变换要验证交互与读屏。\n• 这道题的关键不是 API 用法，而是讲清楚：paint 记录绘制命令、Layer Tree 承载合成边界、needsCompositing 决定是否需要 layer，以及 retained rendering 如何复用未变图层。\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能用 Performance Overlay、repaint rainbow、checkerboard、Timeline 判断是 Dart build 慢、layout 慢、paint 慢还是 raster/compositing 慢。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 233,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-034",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "SliverConstraints 和 SliverGeometry 分别携带哪些关键信息？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "SliverConstraints 描述滚动偏移、剩余绘制范围、交叉轴范围等输入，SliverGeometry 返回滚动占用、绘制范围、缓存范围等结果。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nSliverConstraints 描述滚动偏移、剩余绘制范围、交叉轴范围等输入，SliverGeometry 返回滚动占用、绘制范围、缓存范围等结果。\n\n【底层原理】\n• SliverConstraints 描述滚动偏移、剩余绘制范围、交叉轴范围等输入，SliverGeometry 返回滚动占用、绘制范围、缓存范围等结果。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 234,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-035",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "为什么 ListView.builder 能只构建可见 item？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Viewport 在布局阶段向 Sliver 请求当前可见和缓存范围内的子节点，SliverMultiBoxAdaptor 按需创建/回收 Element。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nViewport 在布局阶段向 Sliver 请求当前可见和缓存范围内的子节点，SliverMultiBoxAdaptor 按需创建/回收 Element。\n\n【底层原理】\n• Viewport 在布局阶段向 Sliver 请求当前可见和缓存范围内的子节点，SliverMultiBoxAdaptor 按需创建/回收 Element。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 235,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-036",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "keepAlive bucket 的作用是什么？为什么会增加内存？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "离屏但需保活的子节点会进入 keepAlive bucket，状态不丢但 Element/RenderObject 仍占内存。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n离屏但需保活的子节点会进入 keepAlive bucket，状态不丢但 Element/RenderObject 仍占内存。\n\n【底层原理】\n• 离屏但需保活的子节点会进入 keepAlive bucket，状态不丢但 Element/RenderObject 仍占内存。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 236,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-037",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "cacheExtent 调大为什么可能同时提升体验和制造卡顿？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "更大缓存范围提前构建/布局更多 item，减少滚动露白，但增加当前帧构建、内存和图片预取压力。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n更大缓存范围提前构建/布局更多 item，减少滚动露白，但增加当前帧构建、内存和图片预取压力。\n\n【底层原理】\n• 更大缓存范围提前构建/布局更多 item，减少滚动露白，但增加当前帧构建、内存和图片预取压力。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 237,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-038",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "SliverPersistentHeader 吸顶的原理和常见错位原因是什么？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Header 根据滚动约束计算自身 shrink/paint 范围，错位常来自 min/max extent、overlap、NestedScrollView 协调和 SafeArea。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nHeader 根据滚动约束计算自身 shrink/paint 范围，错位常来自 min/max extent、overlap、NestedScrollView 协调和 SafeArea。\n\n【底层原理】\n• Header 根据滚动约束计算自身 shrink/paint 范围，错位常来自 min/max extent、overlap、NestedScrollView 协调和 SafeArea。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 238,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-039",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "shrinkWrap=true 为什么会破坏长列表的懒加载收益？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "shrinkWrap 需要根据内容反推总尺寸，可能让列表构建/测量更多子项，适合小列表不适合长列表。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nshrinkWrap 需要根据内容反推总尺寸，可能让列表构建/测量更多子项，适合小列表不适合长列表。\n\n【底层原理】\n• shrinkWrap 需要根据内容反推总尺寸，可能让列表构建/测量更多子项，适合小列表不适合长列表。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 239,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-040",
+    "module": "Sliver 与 Viewport 原理",
+    "title": "CustomScrollView 中 SliverToBoxAdapter 滥用会有什么问题？",
+    "tags": [
+      "Flutter",
+      "Sliver",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "大量普通 box 被适配成 sliver 但不能按 item 级懒构建，复杂页面应拆成真正 sliver 或懒加载结构。",
+      "这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。",
+      "项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n大量普通 box 被适配成 sliver 但不能按 item 级懒构建，复杂页面应拆成真正 sliver 或懒加载结构。\n\n【底层原理】\n• 大量普通 box 被适配成 sliver 但不能按 item 级懒构建，复杂页面应拆成真正 sliver 或懒加载结构。\n• 这道题的关键不是 API 用法，而是讲清楚：Viewport 根据可见窗口向 Sliver 传 SliverConstraints，Sliver 返回 SliverGeometry，框架可在布局阶段按需构建可见子节点。\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析长列表、吸顶、多 tab、keepAlive、cacheExtent、shrinkWrap 和嵌套滚动对构建、布局、内存和滚动位置的影响。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 240,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-041",
+    "module": "手势与输入系统原理",
+    "title": "Pointer event、HitTest、GestureRecognizer、Gesture Arena 的链路如何串起来？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "pointer down 先做 hitTest，命中路径接收原始事件，相关 recognizer 加入 arena 竞争，赢家输出语义手势。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\npointer down 先做 hitTest，命中路径接收原始事件，相关 recognizer 加入 arena 竞争，赢家输出语义手势。\n\n【底层原理】\n• pointer down 先做 hitTest，命中路径接收原始事件，相关 recognizer 加入 arena 竞争，赢家输出语义手势。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 241,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-042",
+    "module": "手势与输入系统原理",
+    "title": "HitTestBehavior.deferToChild、opaque、translucent 的差异是什么？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "deferToChild 依赖子命中，opaque 自身矩形命中并阻挡后面，translucent 自身命中但允许后面也命中。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\ndeferToChild 依赖子命中，opaque 自身矩形命中并阻挡后面，translucent 自身命中但允许后面也命中。\n\n【底层原理】\n• deferToChild 依赖子命中，opaque 自身矩形命中并阻挡后面，translucent 自身命中但允许后面也命中。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 242,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-043",
+    "module": "手势与输入系统原理",
+    "title": "为什么父子 GestureDetector 都监听 onTap 时，子节点通常先赢？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "父子 recognizer 都进入 arena，命中路径内更具体的识别器往往先声明胜利，父节点收到 cancel。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n父子 recognizer 都进入 arena，命中路径内更具体的识别器往往先声明胜利，父节点收到 cancel。\n\n【底层原理】\n• 父子 recognizer 都进入 arena，命中路径内更具体的识别器往往先声明胜利，父节点收到 cancel。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 243,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-044",
+    "module": "手势与输入系统原理",
+    "title": "横向 PageView 嵌套纵向 ListView，手势冲突如何被判定？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "横向和纵向拖拽 recognizer 根据移动方向阈值在 arena 中竞争，方向明确后对应 recognizer 获胜。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n横向和纵向拖拽 recognizer 根据移动方向阈值在 arena 中竞争，方向明确后对应 recognizer 获胜。\n\n【底层原理】\n• 横向和纵向拖拽 recognizer 根据移动方向阈值在 arena 中竞争，方向明确后对应 recognizer 获胜。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 244,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-045",
+    "module": "手势与输入系统原理",
+    "title": "Listener 和 GestureDetector 的层级差异是什么？什么时候用 Listener？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Listener 接收原始 pointer 事件，GestureDetector 输出语义手势；需要底层坐标、按压轨迹或自定义识别时用 Listener。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nListener 接收原始 pointer 事件，GestureDetector 输出语义手势；需要底层坐标、按压轨迹或自定义识别时用 Listener。\n\n【底层原理】\n• Listener 接收原始 pointer 事件，GestureDetector 输出语义手势；需要底层坐标、按压轨迹或自定义识别时用 Listener。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 245,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-046",
+    "module": "手势与输入系统原理",
+    "title": "AbsorbPointer 和 IgnorePointer 对 hitTest 链路的影响有何不同？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "AbsorbPointer 自己吸收命中阻止子树，IgnorePointer 让自身和子树忽略命中，后方是否可点取决于树结构。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nAbsorbPointer 自己吸收命中阻止子树，IgnorePointer 让自身和子树忽略命中，后方是否可点取决于树结构。\n\n【底层原理】\n• AbsorbPointer 自己吸收命中阻止子树，IgnorePointer 让自身和子树忽略命中，后方是否可点取决于树结构。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 246,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-047",
+    "module": "手势与输入系统原理",
+    "title": "PlatformView 和 Flutter 手势系统协作为什么复杂？",
+    "tags": [
+      "Flutter",
+      "手势",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "原生 View 与 Flutter 各有输入分发，嵌入场景要处理 gesture recognizers、命中区域、合成方式和平台线程。",
+      "这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。",
+      "项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n原生 View 与 Flutter 各有输入分发，嵌入场景要处理 gesture recognizers、命中区域、合成方式和平台线程。\n\n【底层原理】\n• 原生 View 与 Flutter 各有输入分发，嵌入场景要处理 gesture recognizers、命中区域、合成方式和平台线程。\n• 这道题的关键不是 API 用法，而是讲清楚：pointer down 先 hitTest，事件沿命中路径分发，多个 GestureRecognizer 进入 gesture arena，由识别器接受或拒绝来完成手势消歧。\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能处理点击穿透、滚动冲突、拖拽嵌套、HitTestBehavior、AbsorbPointer/IgnorePointer、PlatformView 手势协商等问题。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 247,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-048",
+    "module": "Scheduler 与帧调度原理",
+    "title": "一帧从 vsync 到 GPU 呈现大致经历哪些阶段？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "vsync 触发 beginFrame，处理动画等 transient callbacks，再 drawFrame 执行 build/layout/paint/compositing/semantics，最后提交 Scene 给 Engine。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nvsync 触发 beginFrame，处理动画等 transient callbacks，再 drawFrame 执行 build/layout/paint/compositing/semantics，最后提交 Scene 给 Engine。\n\n【底层原理】\n• vsync 触发 beginFrame，处理动画等 transient callbacks，再 drawFrame 执行 build/layout/paint/compositing/semantics，最后提交 Scene 给 Engine。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 248,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-049",
+    "module": "Scheduler 与帧调度原理",
+    "title": "addPostFrameCallback 为什么拿得到布局尺寸？它有什么滥用风险？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "post-frame 在当前帧 layout/paint 后执行，可读取尺寸；滥用递归调度会导致每帧额外工作和状态竞争。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\npost-frame 在当前帧 layout/paint 后执行，可读取尺寸；滥用递归调度会导致每帧额外工作和状态竞争。\n\n【底层原理】\n• post-frame 在当前帧 layout/paint 后执行，可读取尺寸；滥用递归调度会导致每帧额外工作和状态竞争。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 249,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-050",
+    "module": "Scheduler 与帧调度原理",
+    "title": "microtask 过多为什么会影响 Flutter 首帧或动画？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "microtask 会在事件队列下一个事件前清空，过多会推迟 frame event，导致首帧延迟或动画掉帧。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nmicrotask 会在事件队列下一个事件前清空，过多会推迟 frame event，导致首帧延迟或动画掉帧。\n\n【底层原理】\n• microtask 会在事件队列下一个事件前清空，过多会推迟 frame event，导致首帧延迟或动画掉帧。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 250,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-051",
+    "module": "Scheduler 与帧调度原理",
+    "title": "Ticker、AnimationController 和 SchedulerBinding 的关系是什么？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Ticker 由 Scheduler 驱动在每帧回调，AnimationController 根据 elapsed time 推进动画值。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nTicker 由 Scheduler 驱动在每帧回调，AnimationController 根据 elapsed time 推进动画值。\n\n【底层原理】\n• Ticker 由 Scheduler 驱动在每帧回调，AnimationController 根据 elapsed time 推进动画值。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 251,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-052",
+    "module": "Scheduler 与帧调度原理",
+    "title": "为什么同步耗时 20ms 就可能造成 jank？高刷屏下更严苛在哪里？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "60Hz 单帧预算约 16.67ms，120Hz 约 8.33ms；主 isolate 同步耗时超过预算会错过绘制事件。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n60Hz 单帧预算约 16.67ms，120Hz 约 8.33ms；主 isolate 同步耗时超过预算会错过绘制事件。\n\n【底层原理】\n• 60Hz 单帧预算约 16.67ms，120Hz 约 8.33ms；主 isolate 同步耗时超过预算会错过绘制事件。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 252,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-053",
+    "module": "Scheduler 与帧调度原理",
+    "title": "scheduleWarmUpFrame 用来解决什么问题？为什么不能随便用？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "warm-up frame 可在首个 vsync 前预热渲染，但会改变调度节奏，滥用可能掩盖真实首帧耗时。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nwarm-up frame 可在首个 vsync 前预热渲染，但会改变调度节奏，滥用可能掩盖真实首帧耗时。\n\n【底层原理】\n• warm-up frame 可在首个 vsync 前预热渲染，但会改变调度节奏，滥用可能掩盖真实首帧耗时。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 253,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-054",
+    "module": "Scheduler 与帧调度原理",
+    "title": "首帧白屏应该从 Dart 初始化、首帧构建、图片和插件四条线怎么排查？",
+    "tags": [
+      "Flutter",
+      "帧调度",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "需要拆分 main 初始化、runApp 到 first frame、同步计算、asset 解码、插件初始化和首屏网络依赖。",
+      "这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。",
+      "项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n需要拆分 main 初始化、runApp 到 first frame、同步计算、asset 解码、插件初始化和首屏网络依赖。\n\n【底层原理】\n• 需要拆分 main 初始化、runApp 到 first frame、同步计算、asset 解码、插件初始化和首屏网络依赖。\n• 这道题的关键不是 API 用法，而是讲清楚：SchedulerBinding 从 vsync 触发 beginFrame/drawFrame，依次处理 transient callbacks、build/layout/paint、post-frame callbacks，以及 microtask/event queue 对首帧的影响。\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能解释 addPostFrameCallback、scheduleFrame、warm-up frame、首帧耗时、动画 ticker、同步计算阻塞和帧预算之间的关系。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 254,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-055",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "async/await 为什么不是多线程？它和 isolate 的边界在哪里？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "async/await 只是把异步结果接回事件循环，CPU 同步计算仍在当前 isolate；isolate 才能并行执行 Dart 代码。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nasync/await 只是把异步结果接回事件循环，CPU 同步计算仍在当前 isolate；isolate 才能并行执行 Dart 代码。\n\n【底层原理】\n• async/await 只是把异步结果接回事件循环，CPU 同步计算仍在当前 isolate；isolate 才能并行执行 Dart 代码。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 255,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-056",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "Isolate 为什么不能共享普通对象？这带来哪些架构影响？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "isolate 独立堆内存，消息传递需要可发送对象或拷贝/转移，缓存、单例、数据库连接都不能直接共享。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nisolate 独立堆内存，消息传递需要可发送对象或拷贝/转移，缓存、单例、数据库连接都不能直接共享。\n\n【底层原理】\n• isolate 独立堆内存，消息传递需要可发送对象或拷贝/转移，缓存、单例、数据库连接都不能直接共享。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 256,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-057",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "Isolate.run、compute、Isolate.spawn 的使用边界怎么区分？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "短任务可用 Isolate.run/compute，长期工作队列用 Isolate.spawn 加 ReceivePort/SendPort 管理。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n短任务可用 Isolate.run/compute，长期工作队列用 Isolate.spawn 加 ReceivePort/SendPort 管理。\n\n【底层原理】\n• 短任务可用 Isolate.run/compute，长期工作队列用 Isolate.spawn 加 ReceivePort/SendPort 管理。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 257,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-058",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "RootIsolateToken 和 BackgroundIsolateBinaryMessenger 解决什么问题？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "后台 isolate 要使用插件/通道时需要注册到 root isolate 的 binary messenger，RootIsolateToken 用于建立这层关联。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n后台 isolate 要使用插件/通道时需要注册到 root isolate 的 binary messenger，RootIsolateToken 用于建立这层关联。\n\n【底层原理】\n• 后台 isolate 要使用插件/通道时需要注册到 root isolate 的 binary messenger，RootIsolateToken 用于建立这层关联。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 258,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-059",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "为什么 rootBundle 和 dart:ui 在普通后台 isolate 中受限？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "很多 UI/资源能力绑定 root isolate 或 Engine 上下文，后台 isolate 只适合纯计算或明确支持的插件通信。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n很多 UI/资源能力绑定 root isolate 或 Engine 上下文，后台 isolate 只适合纯计算或明确支持的插件通信。\n\n【底层原理】\n• 很多 UI/资源能力绑定 root isolate 或 Engine 上下文，后台 isolate 只适合纯计算或明确支持的插件通信。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 259,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-060",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "Zone 在 Flutter 错误收集里扮演什么角色？它兜不住哪些错误？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Zone 能捕获其作用域内异步错误，但平台回调、Flutter framework 错误和 isolate 错误还需对应入口串联。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nZone 能捕获其作用域内异步错误，但平台回调、Flutter framework 错误和 isolate 错误还需对应入口串联。\n\n【底层原理】\n• Zone 能捕获其作用域内异步错误，但平台回调、Flutter framework 错误和 isolate 错误还需对应入口串联。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 260,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-061",
+    "module": "Dart Runtime 与 Isolate 原理",
+    "title": "AOT、JIT、Hot Reload 和 tree shaking 在运行时层面分别意味着什么？",
+    "tags": [
+      "Flutter",
+      "Dart",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "开发期 JIT 支持热重载，发布期 AOT 提升启动和执行稳定性，tree shaking 删除未引用代码。",
+      "这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。",
+      "项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n开发期 JIT 支持热重载，发布期 AOT 提升启动和执行稳定性，tree shaking 删除未引用代码。\n\n【底层原理】\n• 开发期 JIT 支持热重载，发布期 AOT 提升启动和执行稳定性，tree shaking 删除未引用代码。\n• 这道题的关键不是 API 用法，而是讲清楚：Dart isolate 拥有独立内存和事件循环，只能消息传递；async/await 是事件循环语法糖，不会自动创建线程。\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能判断 CPU 密集任务、JSON 解析、图片处理、插件调用和 Web 平台 compute 限制，设计可序列化消息和错误回传。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 261,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-062",
+    "module": "Engine 与平台集成原理",
+    "title": "Flutter Framework、dart:ui、Engine、Embedder 的职责边界是什么？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Framework 提供 Widget/RenderObject 等 Dart 抽象，dart:ui 暴露底层图形入口，Engine 光栅化场景，Embedder 对接平台窗口和事件。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nFramework 提供 Widget/RenderObject 等 Dart 抽象，dart:ui 暴露底层图形入口，Engine 光栅化场景，Embedder 对接平台窗口和事件。\n\n【底层原理】\n• Framework 提供 Widget/RenderObject 等 Dart 抽象，dart:ui 暴露底层图形入口，Engine 光栅化场景，Embedder 对接平台窗口和事件。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 262,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-063",
+    "module": "Engine 与平台集成原理",
+    "title": "Platform Channel 消息从 Dart 到 Android/iOS 经过哪些层？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Dart MethodChannel 经 BinaryMessenger 和 Codec 序列化到 Engine，再由平台侧 messenger 分发给原生 handler 并异步返回。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nDart MethodChannel 经 BinaryMessenger 和 Codec 序列化到 Engine，再由平台侧 messenger 分发给原生 handler 并异步返回。\n\n【底层原理】\n• Dart MethodChannel 经 BinaryMessenger 和 Codec 序列化到 Engine，再由平台侧 messenger 分发给原生 handler 并异步返回。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 263,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-064",
+    "module": "Engine 与平台集成原理",
+    "title": "Platform Channel 为什么要求平台侧主线程调用？TaskQueue 又解决什么？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "很多平台 API 与 UI 线程绑定，channel 调用需遵守主线程；TaskQueue 可让平台 handler 在后台线程执行重任务。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n很多平台 API 与 UI 线程绑定，channel 调用需遵守主线程；TaskQueue 可让平台 handler 在后台线程执行重任务。\n\n【底层原理】\n• 很多平台 API 与 UI 线程绑定，channel 调用需遵守主线程；TaskQueue 可让平台 handler 在后台线程执行重任务。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 264,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-065",
+    "module": "Engine 与平台集成原理",
+    "title": "FFI 和 Platform Channel 在调用模型与适用场景上有什么本质差异？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "FFI 直接调用 C ABI，适合计算库和底层能力；Platform Channel 面向平台 API、生命周期和异步消息。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nFFI 直接调用 C ABI，适合计算库和底层能力；Platform Channel 面向平台 API、生命周期和异步消息。\n\n【底层原理】\n• FFI 直接调用 C ABI，适合计算库和底层能力；Platform Channel 面向平台 API、生命周期和异步消息。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 265,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-066",
+    "module": "Engine 与平台集成原理",
+    "title": "PlatformView 的 hybrid composition 和 texture/virtual display 思路为什么影响性能？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "不同嵌入方式在合成、输入、无障碍、截图和滚动中成本不同，原生 View 打破纯 Flutter 渲染管线。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n不同嵌入方式在合成、输入、无障碍、截图和滚动中成本不同，原生 View 打破纯 Flutter 渲染管线。\n\n【底层原理】\n• 不同嵌入方式在合成、输入、无障碍、截图和滚动中成本不同，原生 View 打破纯 Flutter 渲染管线。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 266,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-067",
+    "module": "Engine 与平台集成原理",
+    "title": "Add-to-App 多 FlutterEngine 场景下，插件单例和路由状态会遇到什么问题？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "多个 Engine 有独立 Dart isolate/插件注册/路由栈，原生单例、channel name 和缓存状态需要明确隔离或共享策略。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n多个 Engine 有独立 Dart isolate/插件注册/路由栈，原生单例、channel name 和缓存状态需要明确隔离或共享策略。\n\n【底层原理】\n• 多个 Engine 有独立 Dart isolate/插件注册/路由栈，原生单例、channel name 和缓存状态需要明确隔离或共享策略。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 267,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-068",
+    "module": "Engine 与平台集成原理",
+    "title": "Flutter Web 的 CanvasKit/HTML renderer 与移动端 Engine 思路有什么差异？",
+    "tags": [
+      "Flutter",
+      "Engine",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "Web 受浏览器渲染、DOM/Canvas/Wasm、CORS 和 JS 事件模型影响，不能完全套用移动端线程和平台能力假设。",
+      "这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。",
+      "项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\nWeb 受浏览器渲染、DOM/Canvas/Wasm、CORS 和 JS 事件模型影响，不能完全套用移动端线程和平台能力假设。\n\n【底层原理】\n• Web 受浏览器渲染、DOM/Canvas/Wasm、CORS 和 JS 事件模型影响，不能完全套用移动端线程和平台能力假设。\n• 这道题的关键不是 API 用法，而是讲清楚：Flutter Framework、dart:ui、Engine、Embedder 的层次，Engine 负责场景光栅化、文本/图形基础能力和 Dart runtime，Embedder 对接平台窗口、输入和线程。\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能分析 Platform Channel、FFI、PlatformView、Add-to-App、多 Engine、后台 isolate 和原生生命周期的边界。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 268,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-069",
+    "module": "Semantics 与可访问性原理",
+    "title": "Semantics Tree 和 Render Tree 是什么关系？为什么自定义绘制容易漏语义？",
+    "tags": [
+      "Flutter",
+      "Semantics",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "语义树由渲染对象汇总生成，自定义绘制如果只画像素不提供 Semantics，读屏无法理解内容和操作。",
+      "这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。",
+      "项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n语义树由渲染对象汇总生成，自定义绘制如果只画像素不提供 Semantics，读屏无法理解内容和操作。\n\n【底层原理】\n• 语义树由渲染对象汇总生成，自定义绘制如果只画像素不提供 Semantics，读屏无法理解内容和操作。\n• 这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 269,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-070",
+    "module": "Semantics 与可访问性原理",
+    "title": "MergeSemantics、ExcludeSemantics、Semantics label 应该如何选择？",
+    "tags": [
+      "Flutter",
+      "Semantics",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "合并用于把多个视觉节点表达成一个语义单元，排除用于隐藏冗余语义，label 要描述用户动作和状态。",
+      "这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。",
+      "项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n合并用于把多个视觉节点表达成一个语义单元，排除用于隐藏冗余语义，label 要描述用户动作和状态。\n\n【底层原理】\n• 合并用于把多个视觉节点表达成一个语义单元，排除用于隐藏冗余语义，label 要描述用户动作和状态。\n• 这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 270,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-071",
+    "module": "Semantics 与可访问性原理",
+    "title": "文字缩放为什么可能暴露布局原理问题？",
+    "tags": [
+      "Flutter",
+      "Semantics",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "文字缩放改变文本固有尺寸，硬编码高度、绝对定位和未考虑 overflow 的布局会立即失效。",
+      "这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。",
+      "项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n文字缩放改变文本固有尺寸，硬编码高度、绝对定位和未考虑 overflow 的布局会立即失效。\n\n【底层原理】\n• 文字缩放改变文本固有尺寸，硬编码高度、绝对定位和未考虑 overflow 的布局会立即失效。\n• 这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 271,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "client-flutter-principle-072",
+    "module": "Semantics 与可访问性原理",
+    "title": "自定义手势控件如何让 TalkBack/VoiceOver 可操作？",
+    "tags": [
+      "Flutter",
+      "Semantics",
+      "原理",
+      "深入",
+      "面试"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "底层对象职责和调用链",
+      "失效传播、生命周期或线程边界",
+      "性能复杂度、异常场景和验证工具"
+    ],
+    "answerPoints": [
+      "需要提供 Semantics action、label、enabled/selected 状态和合适焦点边界，而不是只监听 GestureDetector。",
+      "这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。",
+      "项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。",
+      "深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。"
+    ],
+    "followUps": [
+      "如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？",
+      "这个机制在哪些边界场景会失效或带来额外成本？",
+      "如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？"
+    ],
+    "mistakes": [
+      "只停留在 API 使用方式，不解释框架内部对象如何协作。",
+      "把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。"
+    ],
+    "techCategory": "client",
+    "techLanguage": "flutter",
+    "standardAnswer": "【一句话回答】\n需要提供 Semantics action、label、enabled/selected 状态和合适焦点边界，而不是只监听 GestureDetector。\n\n【底层原理】\n• 需要提供 Semantics action、label、enabled/selected 状态和合适焦点边界，而不是只监听 GestureDetector。\n• 这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
+    "version": 272,
+    "updatedAt": "2026-06-23T08:00:00.000Z"
   }
 ]

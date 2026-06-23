@@ -126,10 +126,10 @@ void main() {
       const SelectedTechStack(categoryId: 'client', languageId: 'flutter'),
     );
 
-    expect(repository.all.length, 222);
+    expect(repository.all.length, 294);
     expect(uniqueIds.length, repository.all.length);
-    expect(repository.modules.length, 24);
-    expect(flutter.all.length, 100);
+    expect(repository.modules.length, 34);
+    expect(flutter.all.length, 172);
     expect(repository.filter(module: 'Java').length, greaterThanOrEqualTo(27));
     expect(
       repository.all.any(

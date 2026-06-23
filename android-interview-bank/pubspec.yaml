@@ -66,6 +66,7 @@ flutter:
     - assets/question_bank.json
     - assets/question_bank_extension_2026_06.json
     - assets/question_bank_flutter_2026_06.json
+    - assets/question_bank_flutter_principles_2026_06.json
     - assets/branding/app_icon_master.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
