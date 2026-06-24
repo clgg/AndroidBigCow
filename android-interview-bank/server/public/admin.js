@@ -23,10 +23,26 @@ const fields = [
   'mistakes',
 ];
 
+const requiredCatalogEntries = [
+  {
+    id: 'algorithm',
+    label: '算法',
+    description: '数据结构、算法题、复杂度与编码实现',
+    languages: [
+      {
+        id: 'general',
+        label: '通用算法',
+        description: 'Java / Python / C / C++ / JavaScript / Go 多语言解法',
+      },
+    ],
+  },
+];
+
 $('#refreshButton').addEventListener('click', loadAll);
 $('#newQuestionButton').addEventListener('click', () => selectQuestion(null));
 $('#generateAudioButton').addEventListener('click', generateStandardAnswerAudio);
 $('#downloadTemplateButton').addEventListener('click', downloadTemplate);
+$('#importBundledButton').addEventListener('click', importBundledQuestions);
 $('#importButton').addEventListener('click', () => $('#importFileInput').click());
 $('#importFileInput').addEventListener('change', importQuestions);
 $('#deleteButton').addEventListener('click', deleteSelected);
@@ -50,13 +66,13 @@ async function loadAll() {
     request('/api/admin/tts-config'),
   ]);
   state.questions = questions;
-  state.catalog = catalog;
+  state.catalog = withRequiredCatalogEntries(catalog);
   state.progress = progress;
   state.ttsConfig = ttsConfig;
   $('#questionCount').textContent = questions.length;
-  $('#categoryCount').textContent = catalog.length;
+  $('#categoryCount').textContent = state.catalog.length;
   $('#progressCount').textContent = progress.length;
-  $('#catalogEditor').value = JSON.stringify(catalog, null, 2);
+  $('#catalogEditor').value = JSON.stringify(state.catalog, null, 2);
   renderTtsConfig();
   renderCategoryFilter();
   renderQuestions();
@@ -87,7 +103,16 @@ async function request(path, options = {}) {
     credentials: 'same-origin',
     ...options,
   });
-  const payload = await response.json();
+  const raw = await response.text();
+  let payload;
+  try {
+    payload = raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    const preview = raw.trim().slice(0, 80).replace(/\s+/g, ' ');
+    throw new Error(
+      `接口 ${path} 返回的不是 JSON，而是 ${preview || '空内容'}。请确认后台服务已部署最新代码、登录未过期，且反向代理没有把接口转到 HTML 页面。`,
+    );
+  }
   if (!response.ok) {
     throw new Error(payload.error || response.statusText);
   }
@@ -218,7 +243,11 @@ async function importQuestions(event) {
 
   try {
     $('#importStatus').textContent = '导入中...';
-    const payload = JSON.parse(await file.text());
+    const content = await file.text();
+    if (content.trimStart().startsWith('<')) {
+      throw new Error('当前选择的是 HTML 页面，不是 JSON 文件。请导入 server/data/question_import_optimized_2026_06.json，或先把接口返回内容保存为 .json 文件。');
+    }
+    const payload = JSON.parse(content);
     const result = await request('/api/admin/questions/import', {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -228,6 +257,29 @@ async function importQuestions(event) {
     await loadAll();
   } catch (error) {
     $('#importStatus').textContent = `导入失败：${error.message}`;
+  }
+}
+
+async function importBundledQuestions() {
+  if (!confirm('将导入服务端内置题库文件，并按文件中的 scopes 替换对应技术栈题库。确认继续？')) {
+    return;
+  }
+
+  const button = $('#importBundledButton');
+  button.disabled = true;
+  try {
+    $('#importStatus').textContent = '正在导入服务端内置题库...';
+    const result = await request('/api/admin/questions/import-bundled', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+    $('#importStatus').textContent =
+      `导入完成：新增 ${result.created} 道，更新 ${result.updated} 道，删除 ${result.deleted || 0} 道，当前共 ${result.total} 道。`;
+    await loadAll();
+  } catch (error) {
+    $('#importStatus').textContent = `导入失败：${error.message}`;
+  } finally {
+    button.disabled = false;
   }
 }
 
@@ -341,12 +393,32 @@ async function saveTtsConfig(event) {
 
 async function saveCatalog() {
   const catalog = JSON.parse($('#catalogEditor').value);
-  state.catalog = await request('/api/admin/tech-catalog', {
+  state.catalog = withRequiredCatalogEntries(await request('/api/admin/tech-catalog', {
     method: 'PUT',
     body: JSON.stringify(catalog),
-  });
+  }));
   $('#categoryCount').textContent = state.catalog.length;
   renderCategoryFilter();
+}
+
+function withRequiredCatalogEntries(catalog) {
+  const normalized = Array.isArray(catalog) ? [...catalog] : [];
+  for (const required of requiredCatalogEntries) {
+    const existing = normalized.find((item) => item?.id === required.id);
+    if (!existing) {
+      normalized.push(required);
+      continue;
+    }
+    existing.languages = Array.isArray(existing.languages)
+      ? [...existing.languages]
+      : [];
+    for (const language of required.languages) {
+      if (!existing.languages.some((item) => item?.id === language.id)) {
+        existing.languages.push(language);
+      }
+    }
+  }
+  return normalized;
 }
 
 function escapeHtml(value) {

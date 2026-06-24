@@ -139,6 +139,18 @@ class TechStackCatalog {
             id: 'ai-infra', label: 'AI Infra', description: '向量库、推理服务与工程化'),
       ],
     ),
+    TechCategory(
+      id: 'algorithm',
+      label: '算法',
+      description: '数据结构、算法题、复杂度与编码实现',
+      languages: [
+        TechLanguage(
+          id: 'general',
+          label: '通用算法',
+          description: 'Java / Python / C / C++ / JavaScript / Go 多语言解法',
+        ),
+      ],
+    ),
   ];
 
   static TechCategory? categoryById(String id) {

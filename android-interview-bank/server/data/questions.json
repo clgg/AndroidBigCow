@@ -11201,5 +11201,1115 @@
     "standardAnswer": "【一句话回答】\n需要提供 Semantics action、label、enabled/selected 状态和合适焦点边界，而不是只监听 GestureDetector。\n\n【底层原理】\n• 需要提供 Semantics action、label、enabled/selected 状态和合适焦点边界，而不是只监听 GestureDetector。\n• 这道题的关键不是 API 用法，而是讲清楚：语义树由 RenderObject 生成，SemanticsNode 面向辅助技术，语义更新是渲染管线中的独立阶段。\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 深入回答时要补充框架对象之间的调用链、失效传播路径、性能复杂度和可观测验证方式。\n\n【考察重点】\n• 底层对象职责和调用链\n• 失效传播、生命周期或线程边界\n• 性能复杂度、异常场景和验证工具\n\n【项目落地】\n• 项目里要能发现自定义绘制、复杂手势、文本缩放、焦点顺序和屏幕阅读器路径中的可访问性缺口。\n• 面试时建议用“入口对象 -> 中间队列/树结构 -> 失效传播 -> 工具验证 -> 工程取舍”的顺序展开。\n• 如果题目涉及性能，一定要说明如何区分 UI 线程、Raster 线程、主 isolate、平台线程和 GPU/合成成本。\n\n【深挖追问】\n• 如果线上出现同类问题，你会用哪些日志或 DevTools 视图证明根因？ 回答时要继续补充调用链、反例和验证方式。\n• 这个机制在哪些边界场景会失效或带来额外成本？ 回答时要继续补充调用链、反例和验证方式。\n• 如果让你设计最小复现 Demo，会保留哪些变量、去掉哪些干扰？ 回答时要继续补充调用链、反例和验证方式。\n\n【常见误区】\n• 只停留在 API 使用方式，不解释框架内部对象如何协作。\n• 把 build、layout、paint、compositing、semantics 或平台线程混成一个阶段。",
     "version": 272,
     "updatedAt": "2026-06-23T08:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-binary-search",
+    "module": "简单",
+    "title": "二分查找：在升序数组中查找 target 的下标",
+    "tags": [
+      "算法",
+      "二分",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "维护闭区间 [left, right]，每次取中点 mid。",
+      "根据 nums[mid] 和 target 的大小关系丢弃一半区间。",
+      "时间复杂度 O(log n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定升序整数数组 nums 和整数 target，返回 target 的下标；不存在返回 -1。\n\n【示例】\n输入：nums = [-1,0,3,5,9,12], target = 9\n输出：4\n\n【解题思路】\n• 维护闭区间 [left, right]，每次取中点 mid。\n• 根据 nums[mid] 和 target 的大小关系丢弃一半区间。\n\n【复杂度分析】\n时间复杂度 O(log n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int search(int[] a,int target){ int l=0,r=a.length-1; while(l<=r){ int m=l+(r-l)/2; if(a[m]==target)return m; if(a[m]<target)l=m+1; else r=m-1; } return -1; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def search(self, a, target):\n        l, r = 0, len(a)-1\n        while l <= r:\n            m = (l+r)//2\n            if a[m] == target: return m\n            if a[m] < target: l = m+1\n            else: r = m-1\n        return -1\n```\n\n【C】\n```c\nint search(int* a, int n, int target){ int l=0,r=n-1; while(l<=r){ int m=l+(r-l)/2; if(a[m]==target)return m; if(a[m]<target)l=m+1; else r=m-1; } return -1; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int search(vector<int>& a,int target){ int l=0,r=a.size()-1; while(l<=r){ int m=l+(r-l)/2; if(a[m]==target)return m; if(a[m]<target)l=m+1; else r=m-1; } return -1; } };\n```\n\n【JavaScript】\n```javascript\nfunction search(a, target){ let l=0,r=a.length-1; while(l<=r){ const m=l+Math.floor((r-l)/2); if(a[m]===target)return m; if(a[m]<target)l=m+1; else r=m-1; } return -1; }\n```\n\n【Go】\n```go\nfunc search(a []int, target int) int { l,r:=0,len(a)-1; for l<=r { m:=l+(r-l)/2; if a[m]==target{return m}; if a[m]<target{l=m+1}else{r=m-1} }; return -1 }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 601,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-merge-sorted-array",
+    "module": "简单",
+    "title": "合并两个有序数组：原地合并到 nums1",
+    "tags": [
+      "算法",
+      "双指针",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "从两个数组有效区间末尾开始比较。",
+      "倒序写入 nums1，避免覆盖尚未处理的元素。",
+      "时间复杂度 O(m+n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\nnums1 末尾有足够空间，将 nums2 合并到 nums1 并保持有序。\n\n【示例】\n输入：nums1=[1,2,3,0,0,0], nums2=[2,5,6]\n输出：[1,2,2,3,5,6]\n\n【解题思路】\n• 从两个数组有效区间末尾开始比较。\n• 倒序写入 nums1，避免覆盖尚未处理的元素。\n\n【复杂度分析】\n时间复杂度 O(m+n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public void merge(int[] a,int m,int[] b,int n){ int i=m-1,j=n-1,k=m+n-1; while(j>=0){ if(i>=0&&a[i]>b[j])a[k--]=a[i--]; else a[k--]=b[j--]; } } }\n```\n\n【Python】\n```python\nclass Solution:\n    def merge(self, a, m, b, n):\n        i,j,k=m-1,n-1,m+n-1\n        while j>=0:\n            if i>=0 and a[i]>b[j]: a[k]=a[i]; i-=1\n            else: a[k]=b[j]; j-=1\n            k-=1\n```\n\n【C】\n```c\nvoid merge(int* a,int m,int* b,int n){ int i=m-1,j=n-1,k=m+n-1; while(j>=0){ if(i>=0&&a[i]>b[j])a[k--]=a[i--]; else a[k--]=b[j--]; } }\n```\n\n【C++】\n```cpp\nclass Solution { public: void merge(vector<int>& a,int m,vector<int>& b,int n){ int i=m-1,j=n-1,k=m+n-1; while(j>=0){ if(i>=0&&a[i]>b[j])a[k--]=a[i--]; else a[k--]=b[j--]; } } };\n```\n\n【JavaScript】\n```javascript\nfunction merge(a,m,b,n){ let i=m-1,j=n-1,k=m+n-1; while(j>=0){ if(i>=0&&a[i]>b[j])a[k--]=a[i--]; else a[k--]=b[j--]; } }\n```\n\n【Go】\n```go\nfunc merge(a []int,m int,b []int,n int){ i,j,k:=m-1,n-1,m+n-1; for j>=0{ if i>=0&&a[i]>b[j]{a[k]=a[i];i--}else{a[k]=b[j];j--}; k-- } }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 602,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-move-zeroes",
+    "module": "简单",
+    "title": "移动零：保持非零元素相对顺序",
+    "tags": [
+      "算法",
+      "双指针",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "用 slow 指针指向下一个非零元素写入位置。",
+      "先写非零元素，再把剩余位置补 0。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n将数组中所有 0 移动到末尾，同时保持非零元素的相对顺序。\n\n【示例】\n输入：[0,1,0,3,12]\n输出：[1,3,12,0,0]\n\n【解题思路】\n• 用 slow 指针指向下一个非零元素写入位置。\n• 先写非零元素，再把剩余位置补 0。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public void moveZeroes(int[] a){ int k=0; for(int x:a) if(x!=0)a[k++]=x; while(k<a.length)a[k++]=0; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def moveZeroes(self, a):\n        k=0\n        for x in a:\n            if x!=0: a[k]=x; k+=1\n        for i in range(k,len(a)): a[i]=0\n```\n\n【C】\n```c\nvoid moveZeroes(int* a,int n){ int k=0; for(int i=0;i<n;i++) if(a[i]!=0)a[k++]=a[i]; while(k<n)a[k++]=0; }\n```\n\n【C++】\n```cpp\nclass Solution { public: void moveZeroes(vector<int>& a){ int k=0; for(int x:a) if(x!=0)a[k++]=x; while(k<a.size())a[k++]=0; } };\n```\n\n【JavaScript】\n```javascript\nfunction moveZeroes(a){ let k=0; for(const x of a) if(x!==0)a[k++]=x; while(k<a.length)a[k++]=0; }\n```\n\n【Go】\n```go\nfunc moveZeroes(a []int){ k:=0; for _,x:=range a{ if x!=0{a[k]=x;k++} }; for k<len(a){a[k]=0;k++} }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 603,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-stock",
+    "module": "简单",
+    "title": "买卖股票的最佳时机：只允许一次买入卖出",
+    "tags": [
+      "算法",
+      "贪心",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "遍历时维护历史最低买入价。",
+      "当前价格减最低价就是今天卖出的利润。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定每天价格，最多完成一次交易，返回最大利润。\n\n【示例】\n输入：[7,1,5,3,6,4]\n输出：5\n\n【解题思路】\n• 遍历时维护历史最低买入价。\n• 当前价格减最低价就是今天卖出的利润。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int maxProfit(int[] p){ int min=Integer.MAX_VALUE,ans=0; for(int x:p){ min=Math.min(min,x); ans=Math.max(ans,x-min); } return ans; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def maxProfit(self, p):\n        low, ans = float(\"inf\"), 0\n        for x in p:\n            low = min(low, x); ans = max(ans, x-low)\n        return ans\n```\n\n【C】\n```c\nint maxProfit(int* p,int n){ int low=1000000000,ans=0; for(int i=0;i<n;i++){ if(p[i]<low)low=p[i]; if(p[i]-low>ans)ans=p[i]-low; } return ans; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int maxProfit(vector<int>& p){ int low=INT_MAX,ans=0; for(int x:p){ low=min(low,x); ans=max(ans,x-low); } return ans; } };\n```\n\n【JavaScript】\n```javascript\nfunction maxProfit(p){ let low=Infinity,ans=0; for(const x of p){ low=Math.min(low,x); ans=Math.max(ans,x-low); } return ans; }\n```\n\n【Go】\n```go\nfunc maxProfit(p []int) int { low,ans:=int(1e9),0; for _,x:=range p{ if x<low{low=x}; if x-low>ans{ans=x-low} }; return ans }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 604,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-climb-stairs",
+    "module": "简单",
+    "title": "爬楼梯：每次 1 或 2 阶，计算到达顶部的方法数",
+    "tags": [
+      "算法",
+      "动态规划",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "状态转移 dp[i]=dp[i-1]+dp[i-2]。",
+      "只依赖前两个状态，可以滚动优化。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n到达第 n 阶，每次可以爬 1 或 2 阶，返回不同爬法数量。\n\n【示例】\n输入：n=3\n输出：3\n\n【解题思路】\n• 状态转移 dp[i]=dp[i-1]+dp[i-2]。\n• 只依赖前两个状态，可以滚动优化。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int climbStairs(int n){ int a=1,b=1; for(int i=2;i<=n;i++){ int c=a+b; a=b; b=c; } return b; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def climbStairs(self, n):\n        a=b=1\n        for _ in range(2,n+1): a,b=b,a+b\n        return b\n```\n\n【C】\n```c\nint climbStairs(int n){ int a=1,b=1; for(int i=2;i<=n;i++){ int c=a+b; a=b; b=c; } return b; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int climbStairs(int n){ int a=1,b=1; for(int i=2;i<=n;i++){ int c=a+b; a=b; b=c; } return b; } };\n```\n\n【JavaScript】\n```javascript\nfunction climbStairs(n){ let a=1,b=1; for(let i=2;i<=n;i++) [a,b]=[b,a+b]; return b; }\n```\n\n【Go】\n```go\nfunc climbStairs(n int) int { a,b:=1,1; for i:=2;i<=n;i++{a,b=b,a+b}; return b }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 605,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-valid-parentheses",
+    "module": "简单",
+    "title": "有效括号：判断括号字符串是否合法",
+    "tags": [
+      "算法",
+      "栈",
+      "字符串",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "左括号入栈，右括号匹配栈顶。",
+      "最终栈为空才合法。",
+      "时间复杂度 O(n)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n判断只包含 ()[]{} 的字符串是否按正确顺序闭合。\n\n【示例】\n输入：\"()[]{}\"\n输出：true\n\n【解题思路】\n• 左括号入栈，右括号匹配栈顶。\n• 最终栈为空才合法。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution { public boolean isValid(String s){ char[] st=new char[s.length()]; int top=0; for(char c:s.toCharArray()){ if(c=='('||c=='['||c=='{')st[top++]=c; else{ if(top==0)return false; char l=st[--top]; if(c==')'&&l!='('||c==']'&&l!='['||c=='}'&&l!='{')return false; } } return top==0; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def isValid(self, s):\n        st=[]; pairs={\")\":\"(\", \"]\":\"[\", \"}\":\"{\"}\n        for c in s:\n            if c in \"([{\" : st.append(c)\n            elif not st or st.pop()!=pairs[c]: return False\n        return not st\n```\n\n【C】\n```c\nbool isValid(char* s){ int n=strlen(s),top=0; char* st=malloc(n+1); for(int i=0;i<n;i++){ char c=s[i]; if(c=='('||c=='['||c=='{')st[top++]=c; else{ if(top==0){free(st);return false;} char l=st[--top]; if((c==')'&&l!='(')||(c==']'&&l!='[')||(c=='}'&&l!='{')){free(st);return false;} } } bool ok=top==0; free(st); return ok; }\n```\n\n【C++】\n```cpp\nclass Solution { public: bool isValid(string s){ vector<char> st; for(char c:s){ if(c=='('||c=='['||c=='{')st.push_back(c); else{ if(st.empty())return false; char l=st.back(); st.pop_back(); if(c==')'&&l!='('||c==']'&&l!='['||c=='}'&&l!='{')return false; } } return st.empty(); } };\n```\n\n【JavaScript】\n```javascript\nfunction isValid(s){ const st=[],p={\")\":\"(\",\"]\":\"[\",\"}\":\"{\"}; for(const c of s){ if(\"([{\".includes(c))st.push(c); else if(!st.length||st.pop()!==p[c])return false; } return st.length===0; }\n```\n\n【Go】\n```go\nfunc isValid(s string) bool { st:=[]byte{}; p:=map[byte]byte{')':'(',']':'[','}':'{'}; for i:=0;i<len(s);i++{ c:=s[i]; if c=='('||c=='['||c=='{'{st=append(st,c)}else{ if len(st)==0||st[len(st)-1]!=p[c]{return false}; st=st[:len(st)-1] } }; return len(st)==0 }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 606,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-reverse-list",
+    "module": "简单",
+    "title": "反转链表：原地反转单链表",
+    "tags": [
+      "算法",
+      "链表",
+      "指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "维护 prev、cur、next 三个指针。",
+      "每次把 cur.next 指向 prev，再整体后移。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定单链表头节点，反转链表并返回新头节点。\n\n【示例】\n输入：1->2->3\n输出：3->2->1\n\n【解题思路】\n• 维护 prev、cur、next 三个指针。\n• 每次把 cur.next 指向 prev，再整体后移。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public ListNode reverseList(ListNode h){ ListNode prev=null,cur=h; while(cur!=null){ ListNode next=cur.next; cur.next=prev; prev=cur; cur=next; } return prev; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def reverseList(self, h):\n        prev,cur=None,h\n        while cur:\n            nxt=cur.next; cur.next=prev; prev,cur=cur,nxt\n        return prev\n```\n\n【C】\n```c\nstruct ListNode* reverseList(struct ListNode* h){ struct ListNode* prev=NULL; while(h){ struct ListNode* next=h->next; h->next=prev; prev=h; h=next; } return prev; }\n```\n\n【C++】\n```cpp\nclass Solution { public: ListNode* reverseList(ListNode* h){ ListNode* prev=nullptr; while(h){ ListNode* next=h->next; h->next=prev; prev=h; h=next; } return prev; } };\n```\n\n【JavaScript】\n```javascript\nfunction reverseList(h){ let prev=null,cur=h; while(cur){ const next=cur.next; cur.next=prev; prev=cur; cur=next; } return prev; }\n```\n\n【Go】\n```go\nfunc reverseList(h *ListNode) *ListNode { var prev *ListNode; for h!=nil{ next:=h.Next; h.Next=prev; prev=h; h=next }; return prev }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 607,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-max-subarray",
+    "module": "简单",
+    "title": "最大子数组和：返回连续子数组的最大和",
+    "tags": [
+      "算法",
+      "动态规划",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "dp 表示以当前元素结尾的最大子数组和。",
+      "如果前缀和为负，就从当前元素重新开始。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n找到和最大的连续子数组并返回其和。\n\n【示例】\n输入：[-2,1,-3,4,-1,2,1,-5,4]\n输出：6\n\n【解题思路】\n• dp 表示以当前元素结尾的最大子数组和。\n• 如果前缀和为负，就从当前元素重新开始。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int maxSubArray(int[] a){ int cur=a[0],ans=a[0]; for(int i=1;i<a.length;i++){ cur=Math.max(a[i],cur+a[i]); ans=Math.max(ans,cur); } return ans; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def maxSubArray(self, a):\n        cur=ans=a[0]\n        for x in a[1:]: cur=max(x,cur+x); ans=max(ans,cur)\n        return ans\n```\n\n【C】\n```c\nint maxSubArray(int* a,int n){ int cur=a[0],ans=a[0]; for(int i=1;i<n;i++){ cur=a[i]>cur+a[i]?a[i]:cur+a[i]; if(cur>ans)ans=cur; } return ans; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int maxSubArray(vector<int>& a){ int cur=a[0],ans=a[0]; for(int i=1;i<a.size();i++){ cur=max(a[i],cur+a[i]); ans=max(ans,cur); } return ans; } };\n```\n\n【JavaScript】\n```javascript\nfunction maxSubArray(a){ let cur=a[0],ans=a[0]; for(let i=1;i<a.length;i++){ cur=Math.max(a[i],cur+a[i]); ans=Math.max(ans,cur); } return ans; }\n```\n\n【Go】\n```go\nfunc maxSubArray(a []int) int { cur,ans:=a[0],a[0]; for i:=1;i<len(a);i++{ if cur+a[i]>a[i]{cur+=a[i]}else{cur=a[i]}; if cur>ans{ans=cur} }; return ans }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 608,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-remove-duplicates",
+    "module": "简单",
+    "title": "删除有序数组重复项：原地返回去重后的长度",
+    "tags": [
+      "算法",
+      "双指针",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "slow 指向去重后最后一个位置。",
+      "遇到新值时写入 ++slow。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定升序数组，原地删除重复项，使每个元素只出现一次。\n\n【示例】\n输入：[0,0,1,1,2]\n输出：3，前 3 个元素为 [0,1,2]\n\n【解题思路】\n• slow 指向去重后最后一个位置。\n• 遇到新值时写入 ++slow。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int removeDuplicates(int[] a){ if(a.length==0)return 0; int k=0; for(int i=1;i<a.length;i++)if(a[i]!=a[k])a[++k]=a[i]; return k+1; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def removeDuplicates(self, a):\n        if not a: return 0\n        k=0\n        for i in range(1,len(a)):\n            if a[i]!=a[k]: k+=1; a[k]=a[i]\n        return k+1\n```\n\n【C】\n```c\nint removeDuplicates(int* a,int n){ if(n==0)return 0; int k=0; for(int i=1;i<n;i++)if(a[i]!=a[k])a[++k]=a[i]; return k+1; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int removeDuplicates(vector<int>& a){ if(a.empty())return 0; int k=0; for(int i=1;i<a.size();i++)if(a[i]!=a[k])a[++k]=a[i]; return k+1; } };\n```\n\n【JavaScript】\n```javascript\nfunction removeDuplicates(a){ if(!a.length)return 0; let k=0; for(let i=1;i<a.length;i++)if(a[i]!==a[k])a[++k]=a[i]; return k+1; }\n```\n\n【Go】\n```go\nfunc removeDuplicates(a []int) int { if len(a)==0{return 0}; k:=0; for i:=1;i<len(a);i++{ if a[i]!=a[k]{k++; a[k]=a[i]} }; return k+1 }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 609,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-merge-two-lists",
+    "module": "简单",
+    "title": "合并两个有序链表：返回合并后的有序链表",
+    "tags": [
+      "算法",
+      "链表",
+      "双指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "使用虚拟头节点简化边界。",
+      "比较两个链表当前节点，把较小节点接到结果链表。",
+      "时间复杂度 O(m+n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n合并两个升序链表，返回升序链表。\n\n【示例】\n输入：1->2->4 和 1->3->4\n输出：1->1->2->3->4->4\n\n【解题思路】\n• 使用虚拟头节点简化边界。\n• 比较两个链表当前节点，把较小节点接到结果链表。\n\n【复杂度分析】\n时间复杂度 O(m+n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public ListNode mergeTwoLists(ListNode a,ListNode b){ ListNode d=new ListNode(0),c=d; while(a!=null&&b!=null){ if(a.val<=b.val){c.next=a;a=a.next;}else{c.next=b;b=b.next;} c=c.next; } c.next=a!=null?a:b; return d.next; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def mergeTwoLists(self, a, b):\n        d=ListNode(0); c=d\n        while a and b:\n            if a.val<=b.val: c.next,a=a,a.next\n            else: c.next,b=b,b.next\n            c=c.next\n        c.next=a or b\n        return d.next\n```\n\n【C】\n```c\nstruct ListNode* mergeTwoLists(struct ListNode* a,struct ListNode* b){ struct ListNode d; struct ListNode* c=&d; d.next=NULL; while(a&&b){ if(a->val<=b->val){c->next=a;a=a->next;}else{c->next=b;b=b->next;} c=c->next; } c->next=a?a:b; return d.next; }\n```\n\n【C++】\n```cpp\nclass Solution { public: ListNode* mergeTwoLists(ListNode* a,ListNode* b){ ListNode d(0),*c=&d; while(a&&b){ if(a->val<=b->val){c->next=a;a=a->next;}else{c->next=b;b=b->next;} c=c->next;} c->next=a?a:b; return d.next; } };\n```\n\n【JavaScript】\n```javascript\nfunction mergeTwoLists(a,b){ const d=new ListNode(0); let c=d; while(a&&b){ if(a.val<=b.val){c.next=a;a=a.next}else{c.next=b;b=b.next} c=c.next } c.next=a||b; return d.next; }\n```\n\n【Go】\n```go\nfunc mergeTwoLists(a *ListNode,b *ListNode)*ListNode{ d:=&ListNode{}; c:=d; for a!=nil&&b!=nil{ if a.Val<=b.Val{c.Next=a;a=a.Next}else{c.Next=b;b=b.Next}; c=c.Next }; if a!=nil{c.Next=a}else{c.Next=b}; return d.Next }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 610,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-rotated-search",
+    "module": "中等",
+    "title": "搜索旋转排序数组：O(log n) 查找 target",
+    "tags": [
+      "算法",
+      "二分",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "每次二分至少有一侧有序。",
+      "判断 target 是否落在有序侧，否则搜索另一侧。",
+      "时间复杂度 O(log n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n在可能被旋转的升序数组中查找 target。\n\n【示例】\n输入：[4,5,6,7,0,1,2], target=0\n输出：4\n\n【解题思路】\n• 每次二分至少有一侧有序。\n• 判断 target 是否落在有序侧，否则搜索另一侧。\n\n【复杂度分析】\n时间复杂度 O(log n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int search(int[] a,int t){ int l=0,r=a.length-1; while(l<=r){ int m=(l+r)/2; if(a[m]==t)return m; if(a[l]<=a[m]){ if(a[l]<=t&&t<a[m])r=m-1; else l=m+1; }else{ if(a[m]<t&&t<=a[r])l=m+1; else r=m-1; } } return -1; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def search(self,a,t):\n        l,r=0,len(a)-1\n        while l<=r:\n            m=(l+r)//2\n            if a[m]==t: return m\n            if a[l]<=a[m]:\n                if a[l]<=t<a[m]: r=m-1\n                else: l=m+1\n            else:\n                if a[m]<t<=a[r]: l=m+1\n                else: r=m-1\n        return -1\n```\n\n【C】\n```c\nint search(int*a,int n,int t){int l=0,r=n-1;while(l<=r){int m=(l+r)/2;if(a[m]==t)return m;if(a[l]<=a[m]){if(a[l]<=t&&t<a[m])r=m-1;else l=m+1;}else{if(a[m]<t&&t<=a[r])l=m+1;else r=m-1;}}return -1;}\n```\n\n【C++】\n```cpp\nclass Solution { public: int search(vector<int>& a,int t){ int l=0,r=a.size()-1; while(l<=r){ int m=(l+r)/2; if(a[m]==t)return m; if(a[l]<=a[m]){ if(a[l]<=t&&t<a[m])r=m-1; else l=m+1; }else{ if(a[m]<t&&t<=a[r])l=m+1; else r=m-1; } } return -1; } };\n```\n\n【JavaScript】\n```javascript\nfunction search(a,t){let l=0,r=a.length-1;while(l<=r){const m=(l+r)>>1;if(a[m]===t)return m;if(a[l]<=a[m]){if(a[l]<=t&&t<a[m])r=m-1;else l=m+1}else{if(a[m]<t&&t<=a[r])l=m+1;else r=m-1}}return -1;}\n```\n\n【Go】\n```go\nfunc search(a []int,t int) int { l,r:=0,len(a)-1; for l<=r{m:=(l+r)/2; if a[m]==t{return m}; if a[l]<=a[m]{if a[l]<=t&&t<a[m]{r=m-1}else{l=m+1}}else{if a[m]<t&&t<=a[r]{l=m+1}else{r=m-1}}}; return -1 }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 611,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-container-water",
+    "module": "中等",
+    "title": "盛最多水的容器：双指针计算最大面积",
+    "tags": [
+      "算法",
+      "双指针",
+      "贪心",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "面积由较短边决定。",
+      "每次移动较短边，才可能找到更大面积。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n选择两条线与 x 轴组成容器，返回最大装水面积。\n\n【示例】\n输入：[1,8,6,2,5,4,8,3,7]\n输出：49\n\n【解题思路】\n• 面积由较短边决定。\n• 每次移动较短边，才可能找到更大面积。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int maxArea(int[] h){ int l=0,r=h.length-1,ans=0; while(l<r){ ans=Math.max(ans,Math.min(h[l],h[r])*(r-l)); if(h[l]<h[r])l++; else r--; } return ans; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def maxArea(self,h):\n        l,r,ans=0,len(h)-1,0\n        while l<r:\n            ans=max(ans,min(h[l],h[r])*(r-l))\n            if h[l]<h[r]: l+=1\n            else: r-=1\n        return ans\n```\n\n【C】\n```c\nint maxArea(int*h,int n){int l=0,r=n-1,ans=0;while(l<r){int area=(h[l]<h[r]?h[l]:h[r])*(r-l);if(area>ans)ans=area;if(h[l]<h[r])l++;else r--;}return ans;}\n```\n\n【C++】\n```cpp\nclass Solution { public: int maxArea(vector<int>& h){ int l=0,r=h.size()-1,ans=0; while(l<r){ ans=max(ans,min(h[l],h[r])*(r-l)); if(h[l]<h[r])l++; else r--; } return ans; } };\n```\n\n【JavaScript】\n```javascript\nfunction maxArea(h){let l=0,r=h.length-1,ans=0;while(l<r){ans=Math.max(ans,Math.min(h[l],h[r])*(r-l));if(h[l]<h[r])l++;else r--}return ans;}\n```\n\n【Go】\n```go\nfunc maxArea(h []int) int { l,r,ans:=0,len(h)-1,0; for l<r{m:=h[l]; if h[r]<m{m=h[r]}; area:=m*(r-l); if area>ans{ans=area}; if h[l]<h[r]{l++}else{r--}}; return ans }\n```\n\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 612,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-sort-colors",
+    "module": "中等",
+    "title": "颜色分类：原地排序 0、1、2",
+    "tags": [
+      "算法",
+      "双指针",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "维护 left、i、right 三个指针。",
+      "0 放左边，2 放右边，1 留在中间。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定只包含 0、1、2 的数组，原地排序。\n\n【示例】\n输入：[2,0,2,1,1,0]\n输出：[0,0,1,1,2,2]\n\n【解题思路】\n• 维护 left、i、right 三个指针。\n• 0 放左边，2 放右边，1 留在中间。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public void sortColors(int[] a){ int l=0,i=0,r=a.length-1; while(i<=r){ if(a[i]==0){int t=a[l];a[l++]=a[i];a[i++]=t;} else if(a[i]==2){int t=a[r];a[r--]=a[i];a[i]=t;} else i++; } } }\n```\n\n【Python】\n```python\nclass Solution:\n    def sortColors(self, a):\n        l = i = 0; r = len(a)-1\n        while i <= r:\n            if a[i] == 0:\n                a[l], a[i] = a[i], a[l]; l += 1; i += 1\n            elif a[i] == 2:\n                a[r], a[i] = a[i], a[r]; r -= 1\n            else: i += 1\n```\n\n【C】\n```c\nvoid sortColors(int* a,int n){ int l=0,i=0,r=n-1; while(i<=r){ if(a[i]==0){int t=a[l];a[l++]=a[i];a[i++]=t;} else if(a[i]==2){int t=a[r];a[r--]=a[i];a[i]=t;} else i++; } }\n```\n\n【C++】\n```cpp\nclass Solution { public: void sortColors(vector<int>& a){ int l=0,i=0,r=a.size()-1; while(i<=r){ if(a[i]==0) swap(a[l++],a[i++]); else if(a[i]==2) swap(a[i],a[r--]); else i++; } } };\n```\n\n【JavaScript】\n```javascript\nfunction sortColors(a){ let l=0,i=0,r=a.length-1; while(i<=r){ if(a[i]===0){[a[l],a[i]]=[a[i],a[l]]; l++; i++;} else if(a[i]===2){[a[r],a[i]]=[a[i],a[r]]; r--;} else i++; } }\n```\n\n【Go】\n```go\nfunc sortColors(a []int){ l,i,r:=0,0,len(a)-1; for i<=r{ if a[i]==0{a[l],a[i]=a[i],a[l]; l++; i++}else if a[i]==2{a[r],a[i]=a[i],a[r]; r--}else{i++} } }\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 613,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-product-except-self",
+    "module": "中等",
+    "title": "除自身以外数组的乘积：不使用除法",
+    "tags": [
+      "算法",
+      "前缀积",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "先写入每个位置左侧乘积。",
+      "再从右往左乘上右侧乘积。",
+      "时间复杂度 O(n)，额外空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回 answer[i] 为除 nums[i] 外所有元素的乘积。\n\n【示例】\n输入：[1,2,3,4]\n输出：[24,12,8,6]\n\n【解题思路】\n• 先写入每个位置左侧乘积。\n• 再从右往左乘上右侧乘积。\n\n【复杂度分析】\n时间复杂度 O(n)，额外空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int[] productExceptSelf(int[] a){ int n=a.length; int[] ans=new int[n]; int left=1; for(int i=0;i<n;i++){ans[i]=left;left*=a[i];} int right=1; for(int i=n-1;i>=0;i--){ans[i]*=right;right*=a[i];} return ans; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def productExceptSelf(self, a):\n        ans=[1]*len(a); left=1\n        for i,x in enumerate(a): ans[i], left = left, left*x\n        right=1\n        for i in range(len(a)-1,-1,-1): ans[i], right = ans[i]*right, right*a[i]\n        return ans\n```\n\n【C】\n```c\nint* productExceptSelf(int* a,int n,int* returnSize){ int* ans=malloc(sizeof(int)*n); *returnSize=n; int left=1; for(int i=0;i<n;i++){ans[i]=left;left*=a[i];} int right=1; for(int i=n-1;i>=0;i--){ans[i]*=right;right*=a[i];} return ans; }\n```\n\n【C++】\n```cpp\nclass Solution { public: vector<int> productExceptSelf(vector<int>& a){ int n=a.size(); vector<int> ans(n,1); int left=1; for(int i=0;i<n;i++){ans[i]=left;left*=a[i];} int right=1; for(int i=n-1;i>=0;i--){ans[i]*=right;right*=a[i];} return ans; } };\n```\n\n【JavaScript】\n```javascript\nfunction productExceptSelf(a){ const ans=Array(a.length).fill(1); let left=1; for(let i=0;i<a.length;i++){ans[i]=left;left*=a[i];} let right=1; for(let i=a.length-1;i>=0;i--){ans[i]*=right;right*=a[i];} return ans; }\n```\n\n【Go】\n```go\nfunc productExceptSelf(a []int) []int { ans:=make([]int,len(a)); left:=1; for i,x:=range a{ans[i]=left;left*=x}; right:=1; for i:=len(a)-1;i>=0;i--{ans[i]*=right;right*=a[i]}; return ans }\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 614,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-spiral-matrix",
+    "module": "中等",
+    "title": "螺旋矩阵：按顺时针顺序遍历矩阵",
+    "tags": [
+      "算法",
+      "矩阵",
+      "模拟",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "维护 top、bottom、left、right 四条边界。",
+      "遍历一圈后收缩边界。",
+      "时间复杂度 O(mn)，空间复杂度 O(1)，不计输出。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回矩阵所有元素的顺时针螺旋顺序。\n\n【示例】\n输入：[[1,2,3],[4,5,6],[7,8,9]]\n输出：[1,2,3,6,9,8,7,4,5]\n\n【解题思路】\n• 维护 top、bottom、left、right 四条边界。\n• 遍历一圈后收缩边界。\n\n【复杂度分析】\n时间复杂度 O(mn)，空间复杂度 O(1)，不计输出。\n\n【Java】\n```java\nclass Solution {\n    // 按四边界 top/bottom/left/right 逐圈遍历；每走完一边收缩对应边界，直到边界交错。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 按四边界 top/bottom/left/right 逐圈遍历；每走完一边收缩对应边界，直到边界交错。\n    return []\n```\n\n【C】\n```c\n/* 按四边界 top/bottom/left/right 逐圈遍历；每走完一边收缩对应边界，直到边界交错。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 按四边界 top/bottom/left/right 逐圈遍历；每走完一边收缩对应边界，直到边界交错。\n};\n```\n\n【JavaScript】\n```javascript\n// 按四边界 top/bottom/left/right 逐圈遍历；每走完一边收缩对应边界，直到边界交错。\n```\n\n【Go】\n```go\n// 按四边界 top/bottom/left/right 逐圈遍历；每走完一边收缩对应边界，直到边界交错。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 615,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-subsets",
+    "module": "中等",
+    "title": "子集：返回数组的所有子集",
+    "tags": [
+      "算法",
+      "回溯",
+      "位运算",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "每个元素都有选和不选两种状态。",
+      "回溯时每到一个节点都加入当前路径。",
+      "时间复杂度 O(n*2^n)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定互不相同的整数数组，返回所有可能子集。\n\n【示例】\n输入：[1,2,3]\n输出：8 个子集\n\n【解题思路】\n• 每个元素都有选和不选两种状态。\n• 回溯时每到一个节点都加入当前路径。\n\n【复杂度分析】\n时间复杂度 O(n*2^n)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution {\n    // 回溯：先加入当前 path，再从 start 枚举后续元素，选择后递归，返回时撤销。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 回溯：先加入当前 path，再从 start 枚举后续元素，选择后递归，返回时撤销。\n    return []\n```\n\n【C】\n```c\n/* 回溯：先加入当前 path，再从 start 枚举后续元素，选择后递归，返回时撤销。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 回溯：先加入当前 path，再从 start 枚举后续元素，选择后递归，返回时撤销。\n};\n```\n\n【JavaScript】\n```javascript\n// 回溯：先加入当前 path，再从 start 枚举后续元素，选择后递归，返回时撤销。\n```\n\n【Go】\n```go\n// 回溯：先加入当前 path，再从 start 枚举后续元素，选择后递归，返回时撤销。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 616,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-permutations",
+    "module": "中等",
+    "title": "全排列：返回数组所有排列",
+    "tags": [
+      "算法",
+      "回溯",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "用 used 标记元素是否已进入路径。",
+      "路径长度等于 n 时加入答案。",
+      "时间复杂度 O(n*n!)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定不含重复数字的数组，返回所有排列。\n\n【示例】\n输入：[1,2,3]\n输出：6 个排列\n\n【解题思路】\n• 用 used 标记元素是否已进入路径。\n• 路径长度等于 n 时加入答案。\n\n【复杂度分析】\n时间复杂度 O(n*n!)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution {\n    // 回溯：used 标记已选元素，path 长度等于 n 时加入答案，递归返回时撤销选择。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 回溯：used 标记已选元素，path 长度等于 n 时加入答案，递归返回时撤销选择。\n    return []\n```\n\n【C】\n```c\n/* 回溯：used 标记已选元素，path 长度等于 n 时加入答案，递归返回时撤销选择。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 回溯：used 标记已选元素，path 长度等于 n 时加入答案，递归返回时撤销选择。\n};\n```\n\n【JavaScript】\n```javascript\n// 回溯：used 标记已选元素，path 长度等于 n 时加入答案，递归返回时撤销选择。\n```\n\n【Go】\n```go\n// 回溯：used 标记已选元素，path 长度等于 n 时加入答案，递归返回时撤销选择。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 617,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-combination-sum",
+    "module": "中等",
+    "title": "组合总和：数字可重复选择，求和为 target 的组合",
+    "tags": [
+      "算法",
+      "回溯",
+      "剪枝",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "排序后方便剪枝。",
+      "选择当前数后仍从当前下标递归，因为可以重复使用。",
+      "时间复杂度与解空间有关，空间复杂度 O(target/min)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定 candidates 和 target，返回所有和为 target 的组合。\n\n【示例】\n输入：[2,3,6,7], target=7\n输出：[[2,2,3],[7]]\n\n【解题思路】\n• 排序后方便剪枝。\n• 选择当前数后仍从当前下标递归，因为可以重复使用。\n\n【复杂度分析】\n时间复杂度与解空间有关，空间复杂度 O(target/min)。\n\n【Java】\n```java\nclass Solution {\n    // 排序后 DFS(start, remain)，选择 candidates[i] 后仍从 i 递归，remain 为 0 时记录路径。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 排序后 DFS(start, remain)，选择 candidates[i] 后仍从 i 递归，remain 为 0 时记录路径。\n    return []\n```\n\n【C】\n```c\n/* 排序后 DFS(start, remain)，选择 candidates[i] 后仍从 i 递归，remain 为 0 时记录路径。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 排序后 DFS(start, remain)，选择 candidates[i] 后仍从 i 递归，remain 为 0 时记录路径。\n};\n```\n\n【JavaScript】\n```javascript\n// 排序后 DFS(start, remain)，选择 candidates[i] 后仍从 i 递归，remain 为 0 时记录路径。\n```\n\n【Go】\n```go\n// 排序后 DFS(start, remain)，选择 candidates[i] 后仍从 i 递归，remain 为 0 时记录路径。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 618,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-coin-change",
+    "module": "中等",
+    "title": "零钱兑换：最少硬币数",
+    "tags": [
+      "算法",
+      "动态规划",
+      "完全背包",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "dp[x] 表示凑成金额 x 的最少硬币数。",
+      "用 dp[x-coin]+1 更新 dp[x]。",
+      "时间复杂度 O(amount*n)，空间复杂度 O(amount)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回凑成 amount 所需最少硬币数，无法凑成返回 -1。\n\n【示例】\n输入：coins=[1,2,5], amount=11\n输出：3\n\n【解题思路】\n• dp[x] 表示凑成金额 x 的最少硬币数。\n• 用 dp[x-coin]+1 更新 dp[x]。\n\n【复杂度分析】\n时间复杂度 O(amount*n)，空间复杂度 O(amount)。\n\n【Java】\n```java\nclass Solution { public int coinChange(int[] c,int amount){ int[] dp=new int[amount+1]; Arrays.fill(dp,amount+1); dp[0]=0; for(int x=1;x<=amount;x++) for(int coin:c) if(x>=coin) dp[x]=Math.min(dp[x],dp[x-coin]+1); return dp[amount]>amount?-1:dp[amount]; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def coinChange(self, c, amount):\n        dp=[amount+1]*(amount+1); dp[0]=0\n        for x in range(1, amount+1):\n            for coin in c:\n                if x>=coin: dp[x]=min(dp[x], dp[x-coin]+1)\n        return -1 if dp[amount]>amount else dp[amount]\n```\n\n【C】\n```c\nint coinChange(int* c,int n,int amount){ int* dp=malloc(sizeof(int)*(amount+1)); for(int i=0;i<=amount;i++)dp[i]=amount+1; dp[0]=0; for(int x=1;x<=amount;x++) for(int i=0;i<n;i++) if(x>=c[i]&&dp[x-c[i]]+1<dp[x]) dp[x]=dp[x-c[i]]+1; int ans=dp[amount]>amount?-1:dp[amount]; free(dp); return ans; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int coinChange(vector<int>& c,int amount){ vector<int> dp(amount+1,amount+1); dp[0]=0; for(int x=1;x<=amount;x++) for(int coin:c) if(x>=coin) dp[x]=min(dp[x],dp[x-coin]+1); return dp[amount]>amount?-1:dp[amount]; } };\n```\n\n【JavaScript】\n```javascript\nfunction coinChange(c, amount){ const dp=Array(amount+1).fill(amount+1); dp[0]=0; for(let x=1;x<=amount;x++) for(const coin of c) if(x>=coin) dp[x]=Math.min(dp[x],dp[x-coin]+1); return dp[amount]>amount?-1:dp[amount]; }\n```\n\n【Go】\n```go\nfunc coinChange(c []int, amount int) int { dp:=make([]int,amount+1); for i:=range dp{dp[i]=amount+1}; dp[0]=0; for x:=1;x<=amount;x++{for _,coin:=range c{if x>=coin&&dp[x-coin]+1<dp[x]{dp[x]=dp[x-coin]+1}}}; if dp[amount]>amount{return -1}; return dp[amount] }\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 619,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-lis",
+    "module": "中等",
+    "title": "最长递增子序列：返回 LIS 长度",
+    "tags": [
+      "算法",
+      "动态规划",
+      "二分",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "tails[i] 表示长度 i+1 的子序列最小结尾。",
+      "对每个数二分替换第一个 >= x 的位置。",
+      "时间复杂度 O(n log n)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回最长严格递增子序列长度。\n\n【示例】\n输入：[10,9,2,5,3,7,101,18]\n输出：4\n\n【解题思路】\n• tails[i] 表示长度 i+1 的子序列最小结尾。\n• 对每个数二分替换第一个 >= x 的位置。\n\n【复杂度分析】\n时间复杂度 O(n log n)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution { public int lengthOfLIS(int[] a){ int[] tails=new int[a.length]; int size=0; for(int x:a){ int l=0,r=size; while(l<r){int m=(l+r)/2; if(tails[m]<x)l=m+1; else r=m;} tails[l]=x; if(l==size)size++; } return size; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def lengthOfLIS(self, a):\n        import bisect\n        tails=[]\n        for x in a:\n            i=bisect.bisect_left(tails,x)\n            if i==len(tails): tails.append(x)\n            else: tails[i]=x\n        return len(tails)\n```\n\n【C】\n```c\nint lengthOfLIS(int* a,int n){ int* tails=malloc(sizeof(int)*n); int size=0; for(int i=0;i<n;i++){ int l=0,r=size,x=a[i]; while(l<r){int m=(l+r)/2; if(tails[m]<x)l=m+1; else r=m;} tails[l]=x; if(l==size)size++; } free(tails); return size; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int lengthOfLIS(vector<int>& a){ vector<int> tails; for(int x:a){ auto it=lower_bound(tails.begin(),tails.end(),x); if(it==tails.end())tails.push_back(x); else *it=x; } return tails.size(); } };\n```\n\n【JavaScript】\n```javascript\nfunction lengthOfLIS(a){ const tails=[]; for(const x of a){ let l=0,r=tails.length; while(l<r){const m=(l+r)>>1; if(tails[m]<x)l=m+1; else r=m;} tails[l]=x; } return tails.length; }\n```\n\n【Go】\n```go\nfunc lengthOfLIS(a []int) int { tails:=[]int{}; for _,x:=range a{ l,r:=0,len(tails); for l<r{m:=(l+r)/2; if tails[m]<x{l=m+1}else{r=m}}; if l==len(tails){tails=append(tails,x)}else{tails[l]=x} }; return len(tails) }\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 620,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-num-islands",
+    "module": "中等",
+    "title": "岛屿数量：统计网格中连通的陆地块数",
+    "tags": [
+      "算法",
+      "DFS",
+      "矩阵",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "遇到未访问陆地就发现新岛。",
+      "DFS/BFS 标记该岛所有陆地。",
+      "时间复杂度 O(mn)，空间复杂度 O(mn)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n1 表示陆地，0 表示水，统计上下左右连通的岛屿数量。\n\n【示例】\n输入：[[1,1,0],[0,1,0],[1,0,1]]\n输出：3\n\n【解题思路】\n• 遇到未访问陆地就发现新岛。\n• DFS/BFS 标记该岛所有陆地。\n\n【复杂度分析】\n时间复杂度 O(mn)，空间复杂度 O(mn)。\n\n【Java】\n```java\nclass Solution {\n    // 扫描网格，遇到 1 就计数并 DFS/BFS 把上下左右连通的 1 改成 0。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 扫描网格，遇到 1 就计数并 DFS/BFS 把上下左右连通的 1 改成 0。\n    return []\n```\n\n【C】\n```c\n/* 扫描网格，遇到 1 就计数并 DFS/BFS 把上下左右连通的 1 改成 0。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 扫描网格，遇到 1 就计数并 DFS/BFS 把上下左右连通的 1 改成 0。\n};\n```\n\n【JavaScript】\n```javascript\n// 扫描网格，遇到 1 就计数并 DFS/BFS 把上下左右连通的 1 改成 0。\n```\n\n【Go】\n```go\n// 扫描网格，遇到 1 就计数并 DFS/BFS 把上下左右连通的 1 改成 0。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 621,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-course-schedule",
+    "module": "中等",
+    "title": "课程表：判断是否可以完成所有课程",
+    "tags": [
+      "算法",
+      "拓扑排序",
+      "图",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "把先修关系建成有向图。",
+      "不断移除入度为 0 的节点，最终访问数等于课程数则无环。",
+      "时间复杂度 O(V+E)，空间复杂度 O(V+E)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定课程数和先修关系，判断是否可以学完所有课程。\n\n【示例】\n输入：numCourses=2, prerequisites=[[1,0]]\n输出：true\n\n【解题思路】\n• 把先修关系建成有向图。\n• 不断移除入度为 0 的节点，最终访问数等于课程数则无环。\n\n【复杂度分析】\n时间复杂度 O(V+E)，空间复杂度 O(V+E)。\n\n【Java】\n```java\nclass Solution {\n    // 建图和入度数组，队列弹出入度为 0 的课程，最终弹出数量等于课程数则无环。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 建图和入度数组，队列弹出入度为 0 的课程，最终弹出数量等于课程数则无环。\n    return []\n```\n\n【C】\n```c\n/* 建图和入度数组，队列弹出入度为 0 的课程，最终弹出数量等于课程数则无环。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 建图和入度数组，队列弹出入度为 0 的课程，最终弹出数量等于课程数则无环。\n};\n```\n\n【JavaScript】\n```javascript\n// 建图和入度数组，队列弹出入度为 0 的课程，最终弹出数量等于课程数则无环。\n```\n\n【Go】\n```go\n// 建图和入度数组，队列弹出入度为 0 的课程，最终弹出数量等于课程数则无环。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 622,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-kth-largest",
+    "module": "中等",
+    "title": "数组中的第 K 个最大元素：使用快速选择或排序",
+    "tags": [
+      "算法",
+      "快速选择",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "第 k 大等价于升序下标 n-k。",
+      "快速选择平均 O(n)，也可以排序 O(n log n)。",
+      "平均时间复杂度 O(n)，排序解 O(n log n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回数组中第 k 个最大元素。\n\n【示例】\n输入：[3,2,1,5,6,4], k=2\n输出：5\n\n【解题思路】\n• 第 k 大等价于升序下标 n-k。\n• 快速选择平均 O(n)，也可以排序 O(n log n)。\n\n【复杂度分析】\n平均时间复杂度 O(n)，排序解 O(n log n)。\n\n【Java】\n```java\nclass Solution {\n    // 快速选择目标下标 n-k；partition 后只继续处理目标所在一侧，排序写法也可作为面试保底。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 快速选择目标下标 n-k；partition 后只继续处理目标所在一侧，排序写法也可作为面试保底。\n    return []\n```\n\n【C】\n```c\n/* 快速选择目标下标 n-k；partition 后只继续处理目标所在一侧，排序写法也可作为面试保底。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 快速选择目标下标 n-k；partition 后只继续处理目标所在一侧，排序写法也可作为面试保底。\n};\n```\n\n【JavaScript】\n```javascript\n// 快速选择目标下标 n-k；partition 后只继续处理目标所在一侧，排序写法也可作为面试保底。\n```\n\n【Go】\n```go\n// 快速选择目标下标 n-k；partition 后只继续处理目标所在一侧，排序写法也可作为面试保底。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 623,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-daily-temperatures",
+    "module": "中等",
+    "title": "每日温度：等待几天后出现更高温度",
+    "tags": [
+      "算法",
+      "单调栈",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "维护单调递减栈，栈里存下标。",
+      "当前温度高于栈顶时，计算栈顶等待天数。",
+      "时间复杂度 O(n)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回每一天需要等待多少天才会出现更高温度。\n\n【示例】\n输入：[73,74,75,71,69,72,76,73]\n输出：[1,1,4,2,1,1,0,0]\n\n【解题思路】\n• 维护单调递减栈，栈里存下标。\n• 当前温度高于栈顶时，计算栈顶等待天数。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution { public int[] dailyTemperatures(int[] t){ int n=t.length; int[] ans=new int[n], st=new int[n]; int top=0; for(int i=0;i<n;i++){ while(top>0&&t[i]>t[st[top-1]]){int j=st[--top];ans[j]=i-j;} st[top++]=i; } return ans; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def dailyTemperatures(self, t):\n        ans=[0]*len(t); st=[]\n        for i,x in enumerate(t):\n            while st and x>t[st[-1]]:\n                j=st.pop(); ans[j]=i-j\n            st.append(i)\n        return ans\n```\n\n【C】\n```c\nint* dailyTemperatures(int* t,int n,int* returnSize){ int* ans=calloc(n,sizeof(int)); int* st=malloc(sizeof(int)*n); int top=0; *returnSize=n; for(int i=0;i<n;i++){ while(top>0&&t[i]>t[st[top-1]]){int j=st[--top];ans[j]=i-j;} st[top++]=i; } free(st); return ans; }\n```\n\n【C++】\n```cpp\nclass Solution { public: vector<int> dailyTemperatures(vector<int>& t){ vector<int> ans(t.size()), st; for(int i=0;i<t.size();i++){ while(!st.empty()&&t[i]>t[st.back()]){int j=st.back();st.pop_back();ans[j]=i-j;} st.push_back(i);} return ans;} };\n```\n\n【JavaScript】\n```javascript\nfunction dailyTemperatures(t){ const ans=Array(t.length).fill(0), st=[]; for(let i=0;i<t.length;i++){ while(st.length&&t[i]>t[st[st.length-1]]){const j=st.pop(); ans[j]=i-j;} st.push(i); } return ans; }\n```\n\n【Go】\n```go\nfunc dailyTemperatures(t []int) []int { ans:=make([]int,len(t)); st:=[]int{}; for i,x:=range t{ for len(st)>0&&x>t[st[len(st)-1]]{j:=st[len(st)-1]; st=st[:len(st)-1]; ans[j]=i-j}; st=append(st,i)}; return ans }\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 624,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-decode-ways",
+    "module": "中等",
+    "title": "解码方法：数字字符串可解码成多少种字母序列",
+    "tags": [
+      "算法",
+      "动态规划",
+      "字符串",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "单字符 1..9 可从 dp[i-1] 转移。",
+      "双字符 10..26 可从 dp[i-2] 转移。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\nA=1 到 Z=26，返回数字字符串的解码总数。\n\n【示例】\n输入：\"226\"\n输出：3\n\n【解题思路】\n• 单字符 1..9 可从 dp[i-1] 转移。\n• 双字符 10..26 可从 dp[i-2] 转移。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution {\n    // 滚动 DP：一位数 1..9 从前一位转移，两位数 10..26 从前两位转移。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 滚动 DP：一位数 1..9 从前一位转移，两位数 10..26 从前两位转移。\n    return []\n```\n\n【C】\n```c\n/* 滚动 DP：一位数 1..9 从前一位转移，两位数 10..26 从前两位转移。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 滚动 DP：一位数 1..9 从前一位转移，两位数 10..26 从前两位转移。\n};\n```\n\n【JavaScript】\n```javascript\n// 滚动 DP：一位数 1..9 从前一位转移，两位数 10..26 从前两位转移。\n```\n\n【Go】\n```go\n// 滚动 DP：一位数 1..9 从前一位转移，两位数 10..26 从前两位转移。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 625,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-trap-rain",
+    "module": "高难",
+    "title": "接雨水：计算柱状图可接的雨水总量",
+    "tags": [
+      "算法",
+      "双指针",
+      "数组",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "水位由左右最大高度的较小值决定。",
+      "用双指针维护 leftMax 和 rightMax。",
+      "时间复杂度 O(n)，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定柱子高度，计算雨后能接多少水。\n\n【示例】\n输入：[0,1,0,2,1,0,1,3,2,1,2,1]\n输出：6\n\n【解题思路】\n• 水位由左右最大高度的较小值决定。\n• 用双指针维护 leftMax 和 rightMax。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution { public int trap(int[] h){ int l=0,r=h.length-1,lm=0,rm=0,ans=0; while(l<r){ if(h[l]<h[r]){lm=Math.max(lm,h[l]);ans+=lm-h[l++];}else{rm=Math.max(rm,h[r]);ans+=rm-h[r--];} } return ans; } }\n```\n\n【Python】\n```python\nclass Solution:\n    def trap(self, h):\n        l,r,lm,rm,ans=0,len(h)-1,0,0,0\n        while l<r:\n            if h[l]<h[r]: lm=max(lm,h[l]); ans+=lm-h[l]; l+=1\n            else: rm=max(rm,h[r]); ans+=rm-h[r]; r-=1\n        return ans\n```\n\n【C】\n```c\nint trap(int* h,int n){ int l=0,r=n-1,lm=0,rm=0,ans=0; while(l<r){ if(h[l]<h[r]){ if(h[l]>lm)lm=h[l]; ans+=lm-h[l++]; }else{ if(h[r]>rm)rm=h[r]; ans+=rm-h[r--]; } } return ans; }\n```\n\n【C++】\n```cpp\nclass Solution { public: int trap(vector<int>& h){ int l=0,r=h.size()-1,lm=0,rm=0,ans=0; while(l<r){ if(h[l]<h[r]){lm=max(lm,h[l]);ans+=lm-h[l++];}else{rm=max(rm,h[r]);ans+=rm-h[r--];} } return ans; } };\n```\n\n【JavaScript】\n```javascript\nfunction trap(h){ let l=0,r=h.length-1,lm=0,rm=0,ans=0; while(l<r){ if(h[l]<h[r]){lm=Math.max(lm,h[l]); ans+=lm-h[l++];} else {rm=Math.max(rm,h[r]); ans+=rm-h[r--];} } return ans; }\n```\n\n【Go】\n```go\nfunc trap(h []int) int { l,r,lm,rm,ans:=0,len(h)-1,0,0,0; for l<r{ if h[l]<h[r]{if h[l]>lm{lm=h[l]}; ans+=lm-h[l]; l++}else{if h[r]>rm{rm=h[r]}; ans+=rm-h[r]; r--} }; return ans }\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 626,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-median-two-arrays",
+    "module": "高难",
+    "title": "寻找两个正序数组的中位数：要求 O(log(m+n))",
+    "tags": [
+      "算法",
+      "二分",
+      "数组",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "在较短数组上二分切分位置。",
+      "保证左半最大值不大于右半最小值。",
+      "时间复杂度 O(log min(m,n))，空间复杂度 O(1)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定两个升序数组，返回合并后的中位数。\n\n【示例】\n输入：nums1=[1,3], nums2=[2]\n输出：2.0\n\n【解题思路】\n• 在较短数组上二分切分位置。\n• 保证左半最大值不大于右半最小值。\n\n【复杂度分析】\n时间复杂度 O(log min(m,n))，空间复杂度 O(1)。\n\n【Java】\n```java\nclass Solution {\n    // 在短数组二分切分 i，另一个切分 j，满足左半最大值 <= 右半最小值时得到中位数。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 在短数组二分切分 i，另一个切分 j，满足左半最大值 <= 右半最小值时得到中位数。\n    return []\n```\n\n【C】\n```c\n/* 在短数组二分切分 i，另一个切分 j，满足左半最大值 <= 右半最小值时得到中位数。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 在短数组二分切分 i，另一个切分 j，满足左半最大值 <= 右半最小值时得到中位数。\n};\n```\n\n【JavaScript】\n```javascript\n// 在短数组二分切分 i，另一个切分 j，满足左半最大值 <= 右半最小值时得到中位数。\n```\n\n【Go】\n```go\n// 在短数组二分切分 i，另一个切分 j，满足左半最大值 <= 右半最小值时得到中位数。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 627,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-edit-distance",
+    "module": "高难",
+    "title": "编辑距离：最少操作次数把 word1 转为 word2",
+    "tags": [
+      "算法",
+      "动态规划",
+      "字符串",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "dp[i][j] 表示前 i 个字符转成前 j 个字符的最少操作。",
+      "字符不同则取插入、删除、替换三者最小值加一。",
+      "时间复杂度 O(mn)，空间复杂度 O(mn)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n允许插入、删除、替换字符，求最少操作数。\n\n【示例】\n输入：word1=\"horse\", word2=\"ros\"\n输出：3\n\n【解题思路】\n• dp[i][j] 表示前 i 个字符转成前 j 个字符的最少操作。\n• 字符不同则取插入、删除、替换三者最小值加一。\n\n【复杂度分析】\n时间复杂度 O(mn)，空间复杂度 O(mn)。\n\n【Java】\n```java\nclass Solution {\n    // 二维 DP：相等继承左上；不等时取删除、插入、替换三者最小值加一。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 二维 DP：相等继承左上；不等时取删除、插入、替换三者最小值加一。\n    return []\n```\n\n【C】\n```c\n/* 二维 DP：相等继承左上；不等时取删除、插入、替换三者最小值加一。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 二维 DP：相等继承左上；不等时取删除、插入、替换三者最小值加一。\n};\n```\n\n【JavaScript】\n```javascript\n// 二维 DP：相等继承左上；不等时取删除、插入、替换三者最小值加一。\n```\n\n【Go】\n```go\n// 二维 DP：相等继承左上；不等时取删除、插入、替换三者最小值加一。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 628,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-largest-rectangle",
+    "module": "高难",
+    "title": "柱状图中最大的矩形：单调栈求最大面积",
+    "tags": [
+      "算法",
+      "单调栈",
+      "数组",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "维护单调递增栈。",
+      "遇到更矮柱子时弹栈，弹出柱子作为高度计算面积。",
+      "时间复杂度 O(n)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n给定柱状图高度，返回最大矩形面积。\n\n【示例】\n输入：[2,1,5,6,2,3]\n输出：10\n\n【解题思路】\n• 维护单调递增栈。\n• 遇到更矮柱子时弹栈，弹出柱子作为高度计算面积。\n\n【复杂度分析】\n时间复杂度 O(n)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution {\n    // 单调递增栈存下标；遇到更矮柱子时弹栈，以弹出柱子为高度计算宽度。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 单调递增栈存下标；遇到更矮柱子时弹栈，以弹出柱子为高度计算宽度。\n    return []\n```\n\n【C】\n```c\n/* 单调递增栈存下标；遇到更矮柱子时弹栈，以弹出柱子为高度计算宽度。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 单调递增栈存下标；遇到更矮柱子时弹栈，以弹出柱子为高度计算宽度。\n};\n```\n\n【JavaScript】\n```javascript\n// 单调递增栈存下标；遇到更矮柱子时弹栈，以弹出柱子为高度计算宽度。\n```\n\n【Go】\n```go\n// 单调递增栈存下标；遇到更矮柱子时弹栈，以弹出柱子为高度计算宽度。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 629,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-maximal-rectangle",
+    "module": "高难",
+    "title": "最大矩形：在 0/1 矩阵中找到只包含 1 的最大矩形",
+    "tags": [
+      "算法",
+      "单调栈",
+      "动态规划",
+      "矩阵",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "多语言实现差异"
+    ],
+    "answerPoints": [
+      "把每一行看作柱状图底边。",
+      "维护每列连续 1 的高度，并复用柱状图最大矩形。",
+      "时间复杂度 O(mn)，空间复杂度 O(n)。"
+    ],
+    "followUps": [
+      "如果数据规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "能否说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界和结果格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n返回只包含 1 的最大矩形面积。\n\n【示例】\n输入：matrix 中连续 1 形成矩形\n输出：最大面积\n\n【解题思路】\n• 把每一行看作柱状图底边。\n• 维护每列连续 1 的高度，并复用柱状图最大矩形。\n\n【复杂度分析】\n时间复杂度 O(mn)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution {\n    // 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n    return []\n```\n\n【C】\n```c\n/* 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n};\n```\n\n【JavaScript】\n```javascript\n// 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n```\n\n【Go】\n```go\n// 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
+    "version": 630,
+    "updatedAt": "2026-06-24T00:00:00.000Z"
   }
 ]

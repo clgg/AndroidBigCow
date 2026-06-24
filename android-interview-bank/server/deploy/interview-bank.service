@@ -5,10 +5,10 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/opt/interview-bank-server
-Environment=PORT=8080
+Environment=PORT=8090
 Environment=ADMIN_USERNAME=admin
 Environment=ADMIN_PASSWORD=change-me-now
-Environment=PUBLIC_BASE_URL=http://localhost:8080
+Environment=PUBLIC_BASE_URL=http://localhost:8090
 EnvironmentFile=-/etc/interview-bank.env
 ExecStart=/usr/bin/node /opt/interview-bank-server/src/server.js
 Restart=always

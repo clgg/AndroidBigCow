@@ -4,6 +4,7 @@ import 'package:android_interview_bank/models/tech_stack.dart';
 import 'package:android_interview_bank/state/app_controller.dart';
 import 'package:android_interview_bank/theme/app_theme.dart';
 import 'package:android_interview_bank/widgets/app_shell.dart';
+import 'package:android_interview_bank/widgets/standard_answer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +36,54 @@ void main() {
     expect(find.text('标准答案'), findsOneWidget);
     expect(find.text('一句话回答'), findsOneWidget);
     expect(find.textContaining('作答时先给出核心结论'), findsNothing);
+  });
+
+  testWidgets('shows code answers as switchable language tabs', (tester) async {
+    const answer = '''
+【题目描述】
+示例算法题。
+
+【Java】
+```java
+class JavaSolution {}
+```
+
+【Python】
+```python
+class PythonSolution:
+    pass
+```
+
+【C】
+```c
+int c_solution(void) { return 1; }
+```
+''';
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.data(AppThemeStyle.blue),
+        home: const Scaffold(
+          body: Padding(
+            padding: EdgeInsets.all(16),
+            child: StandardAnswerView(text: answer),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('代码实现'), findsOneWidget);
+    expect(find.text('Java'), findsOneWidget);
+    expect(find.text('Python'), findsOneWidget);
+    expect(find.text('C'), findsOneWidget);
+    expect(find.textContaining('class JavaSolution'), findsOneWidget);
+    expect(find.textContaining('class PythonSolution'), findsNothing);
+
+    await tester.tap(find.text('Python'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('class JavaSolution'), findsNothing);
+    expect(find.textContaining('class PythonSolution'), findsOneWidget);
   });
 }
 

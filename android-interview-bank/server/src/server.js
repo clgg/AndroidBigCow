@@ -15,6 +15,7 @@ const publicDir = join(rootDir, 'public');
 const audioDir = process.env.AUDIO_DIR || join(dataDir, 'audio');
 const questionsPath = join(dataDir, 'questions.json');
 const questionsDbPath = join(dataDir, 'questions.db');
+const bundledQuestionImportPath = join(dataDir, 'question_import_optimized_2026_06.json');
 const catalogPath = join(dataDir, 'tech-catalog.json');
 const progressPath = join(dataDir, 'progress-sync.json');
 const ttsConfigPath = join(dataDir, 'tts-config.json');
@@ -32,6 +33,20 @@ const xfyunSpeed = Number(process.env.XFYUN_TTS_SPEED || 50);
 const xfyunPitch = Number(process.env.XFYUN_TTS_PITCH || 50);
 const xfyunVolume = Number(process.env.XFYUN_TTS_VOLUME || 50);
 const audioJobs = new Map();
+const requiredCatalogEntries = [
+  {
+    id: 'algorithm',
+    label: '算法',
+    description: '数据结构、算法题、复杂度与编码实现',
+    languages: [
+      {
+        id: 'general',
+        label: '通用算法',
+        description: 'Java / Python / C / C++ / JavaScript / Go 多语言解法',
+      },
+    ],
+  },
+];
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -83,7 +98,7 @@ createServer(async (request, response) => {
       return sendJson(response, demoAuthResponse(body, 'login'));
     }
     if (pathname === '/api/tech/categories' && request.method === 'GET') {
-      return sendJson(response, await readJson(catalogPath, []));
+      return sendJson(response, await readCatalog());
     }
     if (pathname === '/api/questions' && request.method === 'GET') {
       return sendJson(response, await queryQuestions(url.searchParams));
@@ -110,6 +125,9 @@ createServer(async (request, response) => {
     if (pathname === '/api/admin/questions/import' && request.method === 'POST') {
       const body = await readBody(request);
       return sendJson(response, await importQuestions(body));
+    }
+    if (pathname === '/api/admin/questions/import-bundled' && request.method === 'POST') {
+      return sendJson(response, await importBundledQuestions());
     }
     if (pathname === '/api/admin/questions/template' && request.method === 'GET') {
       return sendJson(response, questionImportTemplate());
@@ -138,7 +156,7 @@ createServer(async (request, response) => {
       return sendJson(response, await deleteQuestion(id));
     }
     if (pathname === '/api/admin/tech-catalog' && request.method === 'GET') {
-      return sendJson(response, await readJson(catalogPath, []));
+      return sendJson(response, await readCatalog());
     }
     if (pathname === '/api/admin/tech-catalog' && request.method === 'PUT') {
       const body = await readBody(request);
@@ -146,7 +164,7 @@ createServer(async (request, response) => {
         return sendJson(response, { error: 'tech catalog must be an array' }, 400);
       }
       await writeJson(catalogPath, body);
-      return sendJson(response, body);
+      return sendJson(response, await readCatalog());
     }
     if (pathname === '/api/admin/progress' && request.method === 'GET') {
       return sendJson(response, await readJson(progressPath, []));
@@ -213,6 +231,7 @@ async function ensureDataFiles() {
   if (!existsSync(catalogPath)) {
     await writeJson(catalogPath, []);
   }
+  await ensureRequiredCatalogEntries();
   if (!existsSync(progressPath)) {
     await writeJson(progressPath, []);
   }
@@ -220,6 +239,44 @@ async function ensureDataFiles() {
     await writeJson(ttsConfigPath, {});
   }
   await ensureQuestionDatabase();
+}
+
+async function readCatalog() {
+  await ensureRequiredCatalogEntries();
+  return readJson(catalogPath, []);
+}
+
+async function ensureRequiredCatalogEntries() {
+  const catalog = await readJson(catalogPath, []);
+  if (!Array.isArray(catalog)) {
+    await writeJson(catalogPath, requiredCatalogEntries);
+    return;
+  }
+
+  let changed = false;
+  for (const required of requiredCatalogEntries) {
+    const existing = catalog.find((item) => item?.id === required.id);
+    if (!existing) {
+      catalog.push(required);
+      changed = true;
+      continue;
+    }
+
+    if (!Array.isArray(existing.languages)) {
+      existing.languages = [];
+      changed = true;
+    }
+    for (const language of required.languages) {
+      if (!existing.languages.some((item) => item?.id === language.id)) {
+        existing.languages.push(language);
+        changed = true;
+      }
+    }
+  }
+
+  if (changed) {
+    await writeJson(catalogPath, catalog);
+  }
 }
 
 async function readQuestions() {
@@ -383,7 +440,7 @@ async function importQuestions(body, options = {}) {
     (body.replace === true || body.mode === 'replace');
   const normalizedQuestions = importedQuestions.map(normalizeQuestion);
   const replaceScopes = replaceMode
-    ? normalizeReplaceScopes(body.scopes, normalizedQuestions)
+    ? normalizeReplaceScopes(body.scopes || body.replaceScopes, normalizedQuestions)
     : [];
   const now = new Date().toISOString();
   let created = 0;
@@ -417,6 +474,23 @@ async function importQuestions(body, options = {}) {
     deleted,
     total: Number((await getSql('SELECT COUNT(*) AS count FROM questions WHERE deleted_at IS NULL;'))?.count || 0),
   };
+}
+
+async function importBundledQuestions() {
+  if (!existsSync(bundledQuestionImportPath)) {
+    throw new Error('内置题库文件不存在：server/data/question_import_optimized_2026_06.json');
+  }
+  const payload = await readJson(bundledQuestionImportPath, null);
+  if (!payload) {
+    throw new Error('内置题库文件为空或格式错误');
+  }
+  return importQuestions({
+    ...payload,
+    replace: false,
+    mode: undefined,
+    scopes: [],
+    replaceScopes: [],
+  });
 }
 
 function normalizeReplaceScopes(scopes, questions) {
