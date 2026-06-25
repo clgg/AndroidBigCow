@@ -1108,5 +1108,3405 @@
     "standardAnswer": "【题目描述】\n返回只包含 1 的最大矩形面积。\n\n【示例】\n输入：matrix 中连续 1 形成矩形\n输出：最大面积\n\n【解题思路】\n• 把每一行看作柱状图底边。\n• 维护每列连续 1 的高度，并复用柱状图最大矩形。\n\n【复杂度分析】\n时间复杂度 O(mn)，空间复杂度 O(n)。\n\n【Java】\n```java\nclass Solution {\n    // 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n}\n```\n\n【Python】\n```python\nclass Solution:\n    # 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n    return []\n```\n\n【C】\n```c\n/* 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。 */\n```\n\n【C++】\n```cpp\nclass Solution {\npublic:\n    // 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n};\n```\n\n【JavaScript】\n```javascript\n// 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n```\n\n【Go】\n```go\n// 逐行累计每列连续 1 的高度，把每一行高度数组当柱状图求最大矩形。\n```\n【易错点】\n• 先确认题目要求返回的是下标、值、长度、链表节点还是二维数组。\n• 注意空输入、单元素、重复值、边界指针越界和整数溢出。\n• 面试表达要说明暴力解、优化点、复杂度和关键不变量。",
     "version": 630,
     "updatedAt": "2026-06-24T00:00:00.000Z"
+  },
+  {
+    "id": "algorithm-general-extra-001-数组中重复的数字",
+    "module": "简单",
+    "title": "数组中重复的数字",
+    "tags": [
+      "算法",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「数组中重复的数字」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「数组中重复的数字」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「数组中重复的数字」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int findRepeatNumber(int[] nums) {\n    boolean[] seen = new boolean[nums.length];\n    for (int x : nums) {\n      if (seen[x]) return x;\n      seen[x] = true;\n    }\n    return -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-002-缺失的第一个正数",
+    "module": "简单",
+    "title": "缺失的第一个正数",
+    "tags": [
+      "算法",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「缺失的第一个正数」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「缺失的第一个正数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「缺失的第一个正数」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int firstMissingPositive(int[] nums) {\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n      while (nums[i] >= 1 && nums[i] <= n && nums[nums[i] - 1] != nums[i]) {\n        int j = nums[i] - 1, t = nums[i];\n        nums[i] = nums[j];\n        nums[j] = t;\n      }\n    }\n    for (int i = 0; i < n; i++) if (nums[i] != i + 1) return i + 1;\n    return n + 1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-003-寻找数组中心下标",
+    "module": "简单",
+    "title": "寻找数组中心下标",
+    "tags": [
+      "算法",
+      "前缀和",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「寻找数组中心下标」建模为 前缀和 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「寻找数组中心下标」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「寻找数组中心下标」建模为 前缀和 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int pivotIndex(int[] nums) {\n    int total = 0, left = 0;\n    for (int x : nums) total += x;\n    for (int i = 0; i < nums.length; i++) {\n      if (left == total - left - nums[i]) return i;\n      left += nums[i];\n    }\n    return -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-004-加一",
+    "module": "简单",
+    "title": "加一",
+    "tags": [
+      "算法",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「加一」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「加一」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「加一」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int[] plusOne(int[] digits) {\n    for (int i = digits.length - 1; i >= 0; i--) {\n      if (digits[i] < 9) { digits[i]++; return digits; }\n      digits[i] = 0;\n    }\n    int[] ans = new int[digits.length + 1];\n    ans[0] = 1;\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-005-验证回文串",
+    "module": "简单",
+    "title": "验证回文串",
+    "tags": [
+      "算法",
+      "双指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「验证回文串」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「验证回文串」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「验证回文串」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public boolean isPalindrome(String s) {\n    int l = 0, r = s.length() - 1;\n    while (l < r) {\n      while (l < r && !Character.isLetterOrDigit(s.charAt(l))) l++;\n      while (l < r && !Character.isLetterOrDigit(s.charAt(r))) r--;\n      if (Character.toLowerCase(s.charAt(l++)) != Character.toLowerCase(s.charAt(r--))) return false;\n    }\n    return true;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-006-最长公共前缀",
+    "module": "简单",
+    "title": "最长公共前缀",
+    "tags": [
+      "算法",
+      "字符串",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最长公共前缀」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最长公共前缀」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最长公共前缀」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public String longestCommonPrefix(String[] strs) {\n    if (strs.length == 0) return \"\";\n    String prefix = strs[0];\n    for (int i = 1; i < strs.length; i++) {\n      while (!strs[i].startsWith(prefix)) {\n        prefix = prefix.substring(0, prefix.length() - 1);\n        if (prefix.isEmpty()) return \"\";\n      }\n    }\n    return prefix;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-007-反转字符串中的元音字母",
+    "module": "简单",
+    "title": "反转字符串中的元音字母",
+    "tags": [
+      "算法",
+      "双指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「反转字符串中的元音字母」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「反转字符串中的元音字母」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「反转字符串中的元音字母」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public String reverseVowels(String s) {\n    char[] a = s.toCharArray();\n    int l = 0, r = a.length - 1;\n    while (l < r) {\n      while (l < r && !isVowel(a[l])) l++;\n      while (l < r && !isVowel(a[r])) r--;\n      char t = a[l]; a[l++] = a[r]; a[r--] = t;\n    }\n    return new String(a);\n  }\n  private boolean isVowel(char c) { return \"aeiouAEIOU\".indexOf(c) >= 0; }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-008-两个数组的交集",
+    "module": "简单",
+    "title": "两个数组的交集",
+    "tags": [
+      "算法",
+      "哈希表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「两个数组的交集」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「两个数组的交集」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「两个数组的交集」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int[] intersection(int[] a, int[] b) {\n    Set<Integer> set = new HashSet<>(), ans = new HashSet<>();\n    for (int x : a) set.add(x);\n    for (int x : b) if (set.contains(x)) ans.add(x);\n    int[] res = new int[ans.size()]; int i = 0;\n    for (int x : ans) res[i++] = x;\n    return res;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-009-有效的字母异位词",
+    "module": "简单",
+    "title": "有效的字母异位词",
+    "tags": [
+      "算法",
+      "哈希表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「有效的字母异位词」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「有效的字母异位词」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「有效的字母异位词」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public boolean isAnagram(String s, String t) {\n    if (s.length() != t.length()) return false;\n    int[] cnt = new int[26];\n    for (int i = 0; i < s.length(); i++) { cnt[s.charAt(i)-'a']++; cnt[t.charAt(i)-'a']--; }\n    for (int x : cnt) if (x != 0) return false;\n    return true;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-010-删除链表中的指定值节点",
+    "module": "简单",
+    "title": "删除链表中的指定值节点",
+    "tags": [
+      "算法",
+      "链表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「删除链表中的指定值节点」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「删除链表中的指定值节点」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「删除链表中的指定值节点」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public ListNode removeElements(ListNode head, int val) {\n    ListNode dummy = new ListNode(0, head), cur = dummy;\n    while (cur.next != null) {\n      if (cur.next.val == val) cur.next = cur.next.next;\n      else cur = cur.next;\n    }\n    return dummy.next;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-011-合并两个有序链表",
+    "module": "简单",
+    "title": "合并两个有序链表",
+    "tags": [
+      "算法",
+      "链表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「合并两个有序链表」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「合并两个有序链表」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「合并两个有序链表」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public ListNode mergeTwoLists(ListNode a, ListNode b) {\n    ListNode dummy = new ListNode(0), tail = dummy;\n    while (a != null && b != null) {\n      if (a.val <= b.val) { tail.next = a; a = a.next; }\n      else { tail.next = b; b = b.next; }\n      tail = tail.next;\n    }\n    tail.next = a != null ? a : b;\n    return dummy.next;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-012-用栈实现队列",
+    "module": "简单",
+    "title": "用栈实现队列",
+    "tags": [
+      "算法",
+      "栈",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「用栈实现队列」建模为 栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「用栈实现队列」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「用栈实现队列」建模为 栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nimport java.util.*;\nclass MyQueue {\n  private final Deque<Integer> in = new ArrayDeque<>(), out = new ArrayDeque<>();\n  public void push(int x) { in.push(x); }\n  public int pop() { move(); return out.pop(); }\n  public int peek() { move(); return out.peek(); }\n  public boolean empty() { return in.isEmpty() && out.isEmpty(); }\n  private void move() { while (out.isEmpty() && !in.isEmpty()) out.push(in.pop()); }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-013-最近请求次数",
+    "module": "简单",
+    "title": "最近请求次数",
+    "tags": [
+      "算法",
+      "队列",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最近请求次数」建模为 队列 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最近请求次数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最近请求次数」建模为 队列 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nimport java.util.*;\nclass RecentCounter {\n  private final Queue<Integer> q = new ArrayDeque<>();\n  public int ping(int t) {\n    q.offer(t);\n    while (q.peek() < t - 3000) q.poll();\n    return q.size();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-014-二叉树最大深度",
+    "module": "简单",
+    "title": "二叉树最大深度",
+    "tags": [
+      "算法",
+      "树",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「二叉树最大深度」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「二叉树最大深度」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「二叉树最大深度」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int maxDepth(TreeNode root) {\n    if (root == null) return 0;\n    return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-015-判断二叉树是否对称",
+    "module": "简单",
+    "title": "判断二叉树是否对称",
+    "tags": [
+      "算法",
+      "树",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「判断二叉树是否对称」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「判断二叉树是否对称」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「判断二叉树是否对称」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public boolean isSymmetric(TreeNode root) { return root == null || mirror(root.left, root.right); }\n  private boolean mirror(TreeNode a, TreeNode b) {\n    if (a == null || b == null) return a == b;\n    return a.val == b.val && mirror(a.left, b.right) && mirror(a.right, b.left);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-016-二叉树路径和",
+    "module": "简单",
+    "title": "二叉树路径和",
+    "tags": [
+      "算法",
+      "树",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「二叉树路径和」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「二叉树路径和」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「二叉树路径和」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public boolean hasPathSum(TreeNode root, int target) {\n    if (root == null) return false;\n    if (root.left == null && root.right == null) return target == root.val;\n    return hasPathSum(root.left, target - root.val) || hasPathSum(root.right, target - root.val);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-017-只出现一次的数字",
+    "module": "简单",
+    "title": "只出现一次的数字",
+    "tags": [
+      "算法",
+      "位运算",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「只出现一次的数字」建模为 位运算 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「只出现一次的数字」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「只出现一次的数字」建模为 位运算 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int singleNumber(int[] nums) {\n    int ans = 0;\n    for (int x : nums) ans ^= x;\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-018-多数元素",
+    "module": "简单",
+    "title": "多数元素",
+    "tags": [
+      "算法",
+      "数学",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「多数元素」建模为 数学 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「多数元素」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「多数元素」建模为 数学 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int majorityElement(int[] nums) {\n    int cand = 0, count = 0;\n    for (int x : nums) {\n      if (count == 0) cand = x;\n      count += x == cand ? 1 : -1;\n    }\n    return cand;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-019-按奇偶排序数组",
+    "module": "简单",
+    "title": "按奇偶排序数组",
+    "tags": [
+      "算法",
+      "双指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「按奇偶排序数组」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「按奇偶排序数组」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「按奇偶排序数组」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int[] sortArrayByParity(int[] nums) {\n    int l = 0, r = nums.length - 1;\n    while (l < r) {\n      while (l < r && nums[l] % 2 == 0) l++;\n      while (l < r && nums[r] % 2 == 1) r--;\n      int t = nums[l]; nums[l] = nums[r]; nums[r] = t;\n    }\n    return nums;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-020-删除有序数组重复项",
+    "module": "简单",
+    "title": "删除有序数组重复项",
+    "tags": [
+      "算法",
+      "双指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「删除有序数组重复项」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「删除有序数组重复项」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「删除有序数组重复项」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int removeDuplicates(int[] nums) {\n    if (nums.length == 0) return 0;\n    int slow = 0;\n    for (int fast = 1; fast < nums.length; fast++) if (nums[fast] != nums[slow]) nums[++slow] = nums[fast];\n    return slow + 1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-021-长度最小的子数组",
+    "module": "简单",
+    "title": "长度最小的子数组",
+    "tags": [
+      "算法",
+      "滑动窗口",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「长度最小的子数组」建模为 滑动窗口 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「长度最小的子数组」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「长度最小的子数组」建模为 滑动窗口 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int minSubArrayLen(int target, int[] nums) {\n    int left = 0, sum = 0, ans = Integer.MAX_VALUE;\n    for (int right = 0; right < nums.length; right++) {\n      sum += nums[right];\n      while (sum >= target) { ans = Math.min(ans, right - left + 1); sum -= nums[left++]; }\n    }\n    return ans == Integer.MAX_VALUE ? 0 : ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-022-矩阵对角线和",
+    "module": "简单",
+    "title": "矩阵对角线和",
+    "tags": [
+      "算法",
+      "矩阵",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「矩阵对角线和」建模为 矩阵 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「矩阵对角线和」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「矩阵对角线和」建模为 矩阵 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int diagonalSum(int[][] mat) {\n    int n = mat.length, sum = 0;\n    for (int i = 0; i < n; i++) sum += mat[i][i] + mat[i][n - 1 - i];\n    if (n % 2 == 1) sum -= mat[n/2][n/2];\n    return sum;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-023-判断子序列",
+    "module": "简单",
+    "title": "判断子序列",
+    "tags": [
+      "算法",
+      "双指针",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「判断子序列」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「判断子序列」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「判断子序列」建模为 双指针 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public boolean isSubsequence(String s, String t) {\n    int i = 0;\n    for (int j = 0; i < s.length() && j < t.length(); j++) if (s.charAt(i) == t.charAt(j)) i++;\n    return i == s.length();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-024-第一个唯一字符",
+    "module": "简单",
+    "title": "第一个唯一字符",
+    "tags": [
+      "算法",
+      "哈希表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「第一个唯一字符」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「第一个唯一字符」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「第一个唯一字符」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int firstUniqChar(String s) {\n    int[] cnt = new int[26];\n    for (char c : s.toCharArray()) cnt[c - 'a']++;\n    for (int i = 0; i < s.length(); i++) if (cnt[s.charAt(i) - 'a'] == 1) return i;\n    return -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-025-第三大的数",
+    "module": "简单",
+    "title": "第三大的数",
+    "tags": [
+      "算法",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「第三大的数」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「第三大的数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「第三大的数」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int thirdMax(int[] nums) {\n    Long a = null, b = null, c = null;\n    for (int x : nums) {\n      long v = x; if ((a != null && a == v) || (b != null && b == v) || (c != null && c == v)) continue;\n      if (a == null || v > a) { c = b; b = a; a = v; }\n      else if (b == null || v > b) { c = b; b = v; }\n      else if (c == null || v > c) c = v;\n    }\n    return c == null ? a.intValue() : c.intValue();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-026-最大连续-1-的个数",
+    "module": "简单",
+    "title": "最大连续 1 的个数",
+    "tags": [
+      "算法",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最大连续 1 的个数」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最大连续 1 的个数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最大连续 1 的个数」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int findMaxConsecutiveOnes(int[] nums) {\n    int cur = 0, ans = 0;\n    for (int x : nums) { cur = x == 1 ? cur + 1 : 0; ans = Math.max(ans, cur); }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-027-翻转二叉树",
+    "module": "简单",
+    "title": "翻转二叉树",
+    "tags": [
+      "算法",
+      "树",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「翻转二叉树」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「翻转二叉树」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「翻转二叉树」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public TreeNode invertTree(TreeNode root) {\n    if (root == null) return null;\n    TreeNode left = invertTree(root.left);\n    root.left = invertTree(root.right);\n    root.right = left;\n    return root;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-028-bst-最近公共祖先",
+    "module": "简单",
+    "title": "BST 最近公共祖先",
+    "tags": [
+      "算法",
+      "树",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「BST 最近公共祖先」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「BST 最近公共祖先」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「BST 最近公共祖先」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n    while (root != null) {\n      if (p.val < root.val && q.val < root.val) root = root.left;\n      else if (p.val > root.val && q.val > root.val) root = root.right;\n      else return root;\n    }\n    return null;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-029-一维数组动态求和",
+    "module": "简单",
+    "title": "一维数组动态求和",
+    "tags": [
+      "算法",
+      "前缀和",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「一维数组动态求和」建模为 前缀和 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「一维数组动态求和」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「一维数组动态求和」建模为 前缀和 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass NumArray {\n  private final int[] pre;\n  public NumArray(int[] nums) {\n    pre = new int[nums.length + 1];\n    for (int i = 0; i < nums.length; i++) pre[i + 1] = pre[i] + nums[i];\n  }\n  public int sumRange(int left, int right) { return pre[right + 1] - pre[left]; }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-030-快乐数",
+    "module": "简单",
+    "title": "快乐数",
+    "tags": [
+      "算法",
+      "哈希表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「快乐数」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「快乐数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「快乐数」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public boolean isHappy(int n) {\n    Set<Integer> seen = new HashSet<>();\n    while (n != 1 && seen.add(n)) n = next(n);\n    return n == 1;\n  }\n  private int next(int n) { int s = 0; while (n > 0) { int d = n % 10; s += d * d; n /= 10; } return s; }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-031-罗马数字转整数",
+    "module": "简单",
+    "title": "罗马数字转整数",
+    "tags": [
+      "算法",
+      "字符串",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「罗马数字转整数」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「罗马数字转整数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「罗马数字转整数」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public int romanToInt(String s) {\n    int ans = 0;\n    for (int i = 0; i < s.length(); i++) {\n      int v = val(s.charAt(i));\n      if (i + 1 < s.length() && v < val(s.charAt(i + 1))) ans -= v; else ans += v;\n    }\n    return ans;\n  }\n  private int val(char c) { return switch(c){ case 'I'->1; case 'V'->5; case 'X'->10; case 'L'->50; case 'C'->100; case 'D'->500; default->1000; }; }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-032-找出数组中的消失数字",
+    "module": "简单",
+    "title": "找出数组中的消失数字",
+    "tags": [
+      "算法",
+      "数组",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「找出数组中的消失数字」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「找出数组中的消失数字」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「找出数组中的消失数字」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<Integer> findDisappearedNumbers(int[] nums) {\n    for (int x : nums) { int i = Math.abs(x) - 1; nums[i] = -Math.abs(nums[i]); }\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < nums.length; i++) if (nums[i] > 0) ans.add(i + 1);\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-033-反转字符串里的单词-iii",
+    "module": "简单",
+    "title": "反转字符串里的单词 III",
+    "tags": [
+      "算法",
+      "字符串",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「反转字符串里的单词 III」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「反转字符串里的单词 III」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「反转字符串里的单词 III」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public String reverseWords(String s) {\n    char[] a = s.toCharArray(); int start = 0;\n    for (int i = 0; i <= a.length; i++) if (i == a.length || a[i] == ' ') { reverse(a, start, i - 1); start = i + 1; }\n    return new String(a);\n  }\n  private void reverse(char[] a, int l, int r) { while (l < r) { char t = a[l]; a[l++] = a[r]; a[r--] = t; } }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-034-种花问题",
+    "module": "简单",
+    "title": "种花问题",
+    "tags": [
+      "算法",
+      "贪心",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「种花问题」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「种花问题」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「种花问题」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nclass Solution {\n  public boolean canPlaceFlowers(int[] bed, int n) {\n    for (int i = 0; i < bed.length && n > 0; i++) {\n      if (bed[i] == 0 && (i == 0 || bed[i-1] == 0) && (i == bed.length-1 || bed[i+1] == 0)) { bed[i] = 1; n--; }\n    }\n    return n == 0;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-035-键盘行单词",
+    "module": "简单",
+    "title": "键盘行单词",
+    "tags": [
+      "算法",
+      "哈希表",
+      "简单"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「键盘行单词」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「键盘行单词」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「键盘行单词」建模为 哈希表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常时间复杂度 O(n) 或 O(log n)，空间复杂度根据是否使用额外结构在 O(1) 到 O(n) 之间。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public String[] findWords(String[] words) {\n    String[] rows = {\"qwertyuiop\", \"asdfghjkl\", \"zxcvbnm\"};\n    int[] map = new int[26];\n    for (int r = 0; r < 3; r++) for (char c : rows[r].toCharArray()) map[c - 'a'] = r;\n    List<String> ans = new ArrayList<>();\n    for (String w : words) {\n      int row = map[Character.toLowerCase(w.charAt(0)) - 'a'];\n      boolean ok = true;\n      for (char ch : w.toCharArray()) if (map[Character.toLowerCase(ch) - 'a'] != row) { ok = false; break; }\n      if (ok) ans.add(w);\n    }\n    return ans.toArray(new String[0]);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-036-无重复字符的最长子串",
+    "module": "中等",
+    "title": "无重复字符的最长子串",
+    "tags": [
+      "算法",
+      "滑动窗口",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「无重复字符的最长子串」建模为 滑动窗口 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「无重复字符的最长子串」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「无重复字符的最长子串」建模为 滑动窗口 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int lengthOfLongestSubstring(String s) {\n    Map<Character,Integer> last = new HashMap<>();\n    int left = 0, ans = 0;\n    for (int right = 0; right < s.length(); right++) {\n      char c = s.charAt(right);\n      if (last.containsKey(c)) left = Math.max(left, last.get(c) + 1);\n      last.put(c, right);\n      ans = Math.max(ans, right - left + 1);\n    }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-037-最小覆盖子串",
+    "module": "中等",
+    "title": "最小覆盖子串",
+    "tags": [
+      "算法",
+      "滑动窗口",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最小覆盖子串」建模为 滑动窗口 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最小覆盖子串」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最小覆盖子串」建模为 滑动窗口 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public String minWindow(String s, String t) {\n    int[] need = new int[128], win = new int[128];\n    for (char c : t.toCharArray()) need[c]++;\n    int required = t.length(), left = 0, bestLen = Integer.MAX_VALUE, best = 0;\n    for (int right = 0; right < s.length(); right++) {\n      char c = s.charAt(right);\n      if (need[c] > 0 && ++win[c] <= need[c]) required--;\n      while (required == 0) {\n        if (right - left + 1 < bestLen) { bestLen = right - left + 1; best = left; }\n        char d = s.charAt(left++);\n        if (need[d] > 0 && win[d]-- <= need[d]) required++;\n      }\n    }\n    return bestLen == Integer.MAX_VALUE ? \"\" : s.substring(best, best + bestLen);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-038-和为-k-的子数组",
+    "module": "中等",
+    "title": "和为 K 的子数组",
+    "tags": [
+      "算法",
+      "前缀和",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「和为 K 的子数组」建模为 前缀和 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「和为 K 的子数组」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「和为 K 的子数组」建模为 前缀和 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int subarraySum(int[] nums, int k) {\n    Map<Integer,Integer> count = new HashMap<>();\n    count.put(0, 1);\n    int sum = 0, ans = 0;\n    for (int x : nums) {\n      sum += x;\n      ans += count.getOrDefault(sum - k, 0);\n      count.put(sum, count.getOrDefault(sum, 0) + 1);\n    }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-039-最长递增子序列",
+    "module": "中等",
+    "title": "最长递增子序列",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最长递增子序列」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最长递增子序列」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最长递增子序列」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int lengthOfLIS(int[] nums) {\n    int[] tails = new int[nums.length]; int size = 0;\n    for (int x : nums) {\n      int i = Arrays.binarySearch(tails, 0, size, x);\n      if (i < 0) i = -i - 1;\n      tails[i] = x;\n      if (i == size) size++;\n    }\n    return size;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-040-最长公共子序列",
+    "module": "中等",
+    "title": "最长公共子序列",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最长公共子序列」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最长公共子序列」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最长公共子序列」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int longestCommonSubsequence(String a, String b) {\n    int[][] dp = new int[a.length()+1][b.length()+1];\n    for (int i = 1; i <= a.length(); i++) for (int j = 1; j <= b.length(); j++)\n      dp[i][j] = a.charAt(i-1) == b.charAt(j-1) ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);\n    return dp[a.length()][b.length()];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-041-打家劫舍-ii",
+    "module": "中等",
+    "title": "打家劫舍 II",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「打家劫舍 II」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「打家劫舍 II」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「打家劫舍 II」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int rob(int[] nums) {\n    if (nums.length == 1) return nums[0];\n    return Math.max(robLine(nums, 0, nums.length-2), robLine(nums, 1, nums.length-1));\n  }\n  private int robLine(int[] a, int l, int r) {\n    int pre = 0, cur = 0;\n    for (int i = l; i <= r; i++) { int next = Math.max(cur, pre + a[i]); pre = cur; cur = next; }\n    return cur;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-042-零钱兑换",
+    "module": "中等",
+    "title": "零钱兑换",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「零钱兑换」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「零钱兑换」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「零钱兑换」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int coinChange(int[] coins, int amount) {\n    int[] dp = new int[amount + 1];\n    Arrays.fill(dp, amount + 1); dp[0] = 0;\n    for (int i = 1; i <= amount; i++) for (int c : coins) if (i >= c) dp[i] = Math.min(dp[i], dp[i-c] + 1);\n    return dp[amount] > amount ? -1 : dp[amount];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-043-单词拆分",
+    "module": "中等",
+    "title": "单词拆分",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「单词拆分」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「单词拆分」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「单词拆分」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public boolean wordBreak(String s, List<String> wordDict) {\n    Set<String> dict = new HashSet<>(wordDict);\n    boolean[] dp = new boolean[s.length()+1]; dp[0] = true;\n    for (int i = 1; i <= s.length(); i++) for (int j = 0; j < i; j++) if (dp[j] && dict.contains(s.substring(j,i))) { dp[i] = true; break; }\n    return dp[s.length()];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-044-组合总和",
+    "module": "中等",
+    "title": "组合总和",
+    "tags": [
+      "算法",
+      "回溯",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「组合总和」建模为 回溯 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「组合总和」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「组合总和」建模为 回溯 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<List<Integer>> combinationSum(int[] nums, int target) {\n    List<List<Integer>> ans = new ArrayList<>();\n    dfs(nums, target, 0, new ArrayList<>(), ans);\n    return ans;\n  }\n  private void dfs(int[] a, int remain, int start, List<Integer> path, List<List<Integer>> ans) {\n    if (remain == 0) { ans.add(new ArrayList<>(path)); return; }\n    for (int i = start; i < a.length && a[i] <= remain; i++) { path.add(a[i]); dfs(a, remain-a[i], i, path, ans); path.remove(path.size()-1); }\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-045-全排列",
+    "module": "中等",
+    "title": "全排列",
+    "tags": [
+      "算法",
+      "回溯",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「全排列」建模为 回溯 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「全排列」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「全排列」建模为 回溯 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<List<Integer>> permute(int[] nums) {\n    List<List<Integer>> ans = new ArrayList<>(); boolean[] used = new boolean[nums.length];\n    dfs(nums, used, new ArrayList<>(), ans); return ans;\n  }\n  private void dfs(int[] nums, boolean[] used, List<Integer> path, List<List<Integer>> ans) {\n    if (path.size() == nums.length) { ans.add(new ArrayList<>(path)); return; }\n    for (int i = 0; i < nums.length; i++) if (!used[i]) { used[i] = true; path.add(nums[i]); dfs(nums, used, path, ans); path.remove(path.size()-1); used[i] = false; }\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-046-子集",
+    "module": "中等",
+    "title": "子集",
+    "tags": [
+      "算法",
+      "回溯",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「子集」建模为 回溯 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「子集」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「子集」建模为 回溯 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<List<Integer>> subsets(int[] nums) {\n    List<List<Integer>> ans = new ArrayList<>();\n    dfs(nums, 0, new ArrayList<>(), ans); return ans;\n  }\n  private void dfs(int[] nums, int start, List<Integer> path, List<List<Integer>> ans) {\n    ans.add(new ArrayList<>(path));\n    for (int i = start; i < nums.length; i++) { path.add(nums[i]); dfs(nums, i+1, path, ans); path.remove(path.size()-1); }\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-047-二叉树层序遍历",
+    "module": "中等",
+    "title": "二叉树层序遍历",
+    "tags": [
+      "算法",
+      "树",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「二叉树层序遍历」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「二叉树层序遍历」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「二叉树层序遍历」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<List<Integer>> levelOrder(TreeNode root) {\n    List<List<Integer>> ans = new ArrayList<>(); if (root == null) return ans;\n    Queue<TreeNode> q = new ArrayDeque<>(); q.offer(root);\n    while (!q.isEmpty()) {\n      int size = q.size(); List<Integer> level = new ArrayList<>();\n      for (int i = 0; i < size; i++) { TreeNode n = q.poll(); level.add(n.val); if (n.left != null) q.offer(n.left); if (n.right != null) q.offer(n.right); }\n      ans.add(level);\n    }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-048-从前序和中序构造二叉树",
+    "module": "中等",
+    "title": "从前序和中序构造二叉树",
+    "tags": [
+      "算法",
+      "树",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「从前序和中序构造二叉树」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「从前序和中序构造二叉树」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「从前序和中序构造二叉树」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  Map<Integer,Integer> pos = new HashMap<>(); int pre = 0;\n  public TreeNode buildTree(int[] preorder, int[] inorder) {\n    for (int i = 0; i < inorder.length; i++) pos.put(inorder[i], i);\n    return build(preorder, 0, inorder.length - 1);\n  }\n  private TreeNode build(int[] preOrder, int l, int r) {\n    if (l > r) return null;\n    TreeNode root = new TreeNode(preOrder[pre++]);\n    int m = pos.get(root.val);\n    root.left = build(preOrder, l, m - 1); root.right = build(preOrder, m + 1, r);\n    return root;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-049-bst-中第-k-小元素",
+    "module": "中等",
+    "title": "BST 中第 K 小元素",
+    "tags": [
+      "算法",
+      "树",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「BST 中第 K 小元素」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「BST 中第 K 小元素」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「BST 中第 K 小元素」建模为 树 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int kthSmallest(TreeNode root, int k) {\n    Deque<TreeNode> st = new ArrayDeque<>();\n    while (root != null || !st.isEmpty()) {\n      while (root != null) { st.push(root); root = root.left; }\n      root = st.pop(); if (--k == 0) return root.val; root = root.right;\n    }\n    return -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-050-岛屿数量",
+    "module": "中等",
+    "title": "岛屿数量",
+    "tags": [
+      "算法",
+      "图",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「岛屿数量」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「岛屿数量」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「岛屿数量」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nclass Solution {\n  public int numIslands(char[][] grid) {\n    int ans = 0;\n    for (int i = 0; i < grid.length; i++) for (int j = 0; j < grid[0].length; j++) if (grid[i][j] == '1') { ans++; dfs(grid,i,j); }\n    return ans;\n  }\n  private void dfs(char[][] g, int i, int j) {\n    if (i<0||j<0||i==g.length||j==g[0].length||g[i][j]!='1') return;\n    g[i][j]='0'; dfs(g,i+1,j); dfs(g,i-1,j); dfs(g,i,j+1); dfs(g,i,j-1);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-051-腐烂的橘子",
+    "module": "中等",
+    "title": "腐烂的橘子",
+    "tags": [
+      "算法",
+      "图",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「腐烂的橘子」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「腐烂的橘子」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「腐烂的橘子」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int orangesRotting(int[][] grid) {\n    Queue<int[]> q = new ArrayDeque<>(); int fresh = 0, time = 0;\n    for (int i=0;i<grid.length;i++) for(int j=0;j<grid[0].length;j++){ if(grid[i][j]==2) q.offer(new int[]{i,j}); if(grid[i][j]==1) fresh++; }\n    int[][] d={{1,0},{-1,0},{0,1},{0,-1}};\n    while(fresh>0&&!q.isEmpty()){ for(int s=q.size();s>0;s--){ int[] p=q.poll(); for(int[] e:d){int x=p[0]+e[0],y=p[1]+e[1]; if(x>=0&&y>=0&&x<grid.length&&y<grid[0].length&&grid[x][y]==1){grid[x][y]=2;fresh--;q.offer(new int[]{x,y});}}} time++; }\n    return fresh==0?time:-1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-052-克隆图",
+    "module": "中等",
+    "title": "克隆图",
+    "tags": [
+      "算法",
+      "图",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「克隆图」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「克隆图」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「克隆图」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  private final Map<Node, Node> map = new HashMap<>();\n  public Node cloneGraph(Node node) {\n    if (node == null) return null;\n    if (map.containsKey(node)) return map.get(node);\n    Node copy = new Node(node.val, new ArrayList<>());\n    map.put(node, copy);\n    for (Node next : node.neighbors) copy.neighbors.add(cloneGraph(next));\n    return copy;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-053-前-k-个高频元素",
+    "module": "中等",
+    "title": "前 K 个高频元素",
+    "tags": [
+      "算法",
+      "堆",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「前 K 个高频元素」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「前 K 个高频元素」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「前 K 个高频元素」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int[] topKFrequent(int[] nums, int k) {\n    Map<Integer,Integer> freq = new HashMap<>(); for(int x:nums) freq.put(x,freq.getOrDefault(x,0)+1);\n    PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[1]-b[1]);\n    for(var e:freq.entrySet()){ pq.offer(new int[]{e.getKey(),e.getValue()}); if(pq.size()>k) pq.poll(); }\n    int[] ans = new int[k]; for(int i=0;i<k;i++) ans[i]=pq.poll()[0]; return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-054-数据流中的第-k-大元素",
+    "module": "中等",
+    "title": "数据流中的第 K 大元素",
+    "tags": [
+      "算法",
+      "堆",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「数据流中的第 K 大元素」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「数据流中的第 K 大元素」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「数据流中的第 K 大元素」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass KthLargest {\n  private final int k; private final PriorityQueue<Integer> pq = new PriorityQueue<>();\n  public KthLargest(int k, int[] nums) { this.k = k; for (int x : nums) add(x); }\n  public int add(int val) { pq.offer(val); if (pq.size() > k) pq.poll(); return pq.peek(); }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-055-股票价格跨度",
+    "module": "中等",
+    "title": "股票价格跨度",
+    "tags": [
+      "算法",
+      "单调栈",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「股票价格跨度」建模为 单调栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「股票价格跨度」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「股票价格跨度」建模为 单调栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass StockSpanner {\n  private final Deque<int[]> stack = new ArrayDeque<>();\n  public int next(int price) {\n    int span = 1;\n    while (!stack.isEmpty() && stack.peek()[0] <= price) span += stack.pop()[1];\n    stack.push(new int[]{price, span});\n    return span;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-056-滑动窗口最大值",
+    "module": "中等",
+    "title": "滑动窗口最大值",
+    "tags": [
+      "算法",
+      "单调队列",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「滑动窗口最大值」建模为 单调队列 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「滑动窗口最大值」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「滑动窗口最大值」建模为 单调队列 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int[] maxSlidingWindow(int[] nums, int k) {\n    Deque<Integer> dq = new ArrayDeque<>();\n    int[] ans = new int[nums.length - k + 1];\n    for (int i = 0; i < nums.length; i++) {\n      while (!dq.isEmpty() && dq.peekFirst() <= i - k) dq.pollFirst();\n      while (!dq.isEmpty() && nums[dq.peekLast()] <= nums[i]) dq.pollLast();\n      dq.offerLast(i);\n      if (i >= k - 1) ans[i - k + 1] = nums[dq.peekFirst()];\n    }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-057-朋友圈数量",
+    "module": "中等",
+    "title": "朋友圈数量",
+    "tags": [
+      "算法",
+      "并查集",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「朋友圈数量」建模为 并查集 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「朋友圈数量」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「朋友圈数量」建模为 并查集 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nclass Solution {\n  public int findCircleNum(int[][] isConnected) {\n    int n = isConnected.length, ans = n;\n    DSU dsu = new DSU(n);\n    for (int i = 0; i < n; i++) for (int j = i + 1; j < n; j++) if (isConnected[i][j] == 1 && dsu.union(i,j)) ans--;\n    return ans;\n  }\n  static class DSU { int[] p; DSU(int n){p=new int[n]; for(int i=0;i<n;i++)p[i]=i;} int find(int x){return p[x]==x?x:(p[x]=find(p[x]));} boolean union(int a,int b){int pa=find(a),pb=find(b); if(pa==pb)return false; p[pa]=pb; return true;} }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-058-冗余连接",
+    "module": "中等",
+    "title": "冗余连接",
+    "tags": [
+      "算法",
+      "并查集",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「冗余连接」建模为 并查集 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「冗余连接」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「冗余连接」建模为 并查集 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nclass Solution {\n  public int[] findRedundantConnection(int[][] edges) {\n    DSU dsu = new DSU(edges.length + 1);\n    for (int[] e : edges) if (!dsu.union(e[0], e[1])) return e;\n    return new int[0];\n  }\n  static class DSU { int[] p; DSU(int n){p=new int[n]; for(int i=0;i<n;i++)p[i]=i;} int find(int x){return p[x]==x?x:(p[x]=find(p[x]));} boolean union(int a,int b){int pa=find(a),pb=find(b); if(pa==pb)return false; p[pa]=pb; return true;} }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-059-搜索旋转排序数组",
+    "module": "中等",
+    "title": "搜索旋转排序数组",
+    "tags": [
+      "算法",
+      "二分",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「搜索旋转排序数组」建模为 二分 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「搜索旋转排序数组」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「搜索旋转排序数组」建模为 二分 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public int search(int[] nums, int target) {\n    int l=0,r=nums.length-1;\n    while(l<=r){int m=(l+r)>>>1; if(nums[m]==target)return m; if(nums[l]<=nums[m]){ if(nums[l]<=target&&target<nums[m])r=m-1; else l=m+1; }else{ if(nums[m]<target&&target<=nums[r])l=m+1; else r=m-1; }}\n    return -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-060-寻找峰值",
+    "module": "中等",
+    "title": "寻找峰值",
+    "tags": [
+      "算法",
+      "二分",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「寻找峰值」建模为 二分 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「寻找峰值」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「寻找峰值」建模为 二分 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public int findPeakElement(int[] nums) {\n    int l = 0, r = nums.length - 1;\n    while (l < r) {\n      int m = (l + r) >>> 1;\n      if (nums[m] < nums[m + 1]) l = m + 1; else r = m;\n    }\n    return l;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-061-跳跃游戏",
+    "module": "中等",
+    "title": "跳跃游戏",
+    "tags": [
+      "算法",
+      "贪心",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「跳跃游戏」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「跳跃游戏」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「跳跃游戏」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public boolean canJump(int[] nums) {\n    int far = 0;\n    for (int i = 0; i < nums.length; i++) { if (i > far) return false; far = Math.max(far, i + nums[i]); }\n    return true;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-062-跳跃游戏-ii",
+    "module": "中等",
+    "title": "跳跃游戏 II",
+    "tags": [
+      "算法",
+      "贪心",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「跳跃游戏 II」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「跳跃游戏 II」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「跳跃游戏 II」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public int jump(int[] nums) {\n    int end = 0, far = 0, steps = 0;\n    for (int i = 0; i < nums.length - 1; i++) { far = Math.max(far, i + nums[i]); if (i == end) { steps++; end = far; } }\n    return steps;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-063-加油站",
+    "module": "中等",
+    "title": "加油站",
+    "tags": [
+      "算法",
+      "贪心",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「加油站」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「加油站」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「加油站」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public int canCompleteCircuit(int[] gas, int[] cost) {\n    int total = 0, cur = 0, start = 0;\n    for (int i = 0; i < gas.length; i++) {\n      int diff = gas[i] - cost[i]; total += diff; cur += diff;\n      if (cur < 0) { start = i + 1; cur = 0; }\n    }\n    return total >= 0 ? start : -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-064-乘积最大子数组",
+    "module": "中等",
+    "title": "乘积最大子数组",
+    "tags": [
+      "算法",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「乘积最大子数组」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「乘积最大子数组」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「乘积最大子数组」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public int maxProduct(int[] nums) {\n    int max = nums[0], min = nums[0], ans = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n      int x = nums[i];\n      if (x < 0) { int t = max; max = min; min = t; }\n      max = Math.max(x, max * x); min = Math.min(x, min * x);\n      ans = Math.max(ans, max);\n    }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-065-除自身以外数组的乘积",
+    "module": "中等",
+    "title": "除自身以外数组的乘积",
+    "tags": [
+      "算法",
+      "数组",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「除自身以外数组的乘积」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「除自身以外数组的乘积」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「除自身以外数组的乘积」建模为 数组 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public int[] productExceptSelf(int[] nums) {\n    int[] ans = new int[nums.length]; int left = 1;\n    for (int i = 0; i < nums.length; i++) { ans[i] = left; left *= nums[i]; }\n    int right = 1;\n    for (int i = nums.length - 1; i >= 0; i--) { ans[i] *= right; right *= nums[i]; }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-066-螺旋矩阵",
+    "module": "中等",
+    "title": "螺旋矩阵",
+    "tags": [
+      "算法",
+      "矩阵",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「螺旋矩阵」建模为 矩阵 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「螺旋矩阵」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「螺旋矩阵」建模为 矩阵 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<Integer> spiralOrder(int[][] m) {\n    List<Integer> ans = new ArrayList<>(); int top=0,bot=m.length-1,l=0,r=m[0].length-1;\n    while(top<=bot&&l<=r){ for(int j=l;j<=r;j++)ans.add(m[top][j]); top++; for(int i=top;i<=bot;i++)ans.add(m[i][r]); r--; if(top<=bot){for(int j=r;j>=l;j--)ans.add(m[bot][j]); bot--;} if(l<=r){for(int i=bot;i>=top;i--)ans.add(m[i][l]); l++;}}\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-067-矩阵置零",
+    "module": "中等",
+    "title": "矩阵置零",
+    "tags": [
+      "算法",
+      "矩阵",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「矩阵置零」建模为 矩阵 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「矩阵置零」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「矩阵置零」建模为 矩阵 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public void setZeroes(int[][] m) {\n    boolean row0 = false, col0 = false;\n    for (int j = 0; j < m[0].length; j++) if (m[0][j] == 0) row0 = true;\n    for (int i = 0; i < m.length; i++) if (m[i][0] == 0) col0 = true;\n    for (int i = 1; i < m.length; i++) for (int j = 1; j < m[0].length; j++) if (m[i][j] == 0) { m[i][0] = 0; m[0][j] = 0; }\n    for (int i = 1; i < m.length; i++) for (int j = 1; j < m[0].length; j++) if (m[i][0] == 0 || m[0][j] == 0) m[i][j] = 0;\n    if (row0) for (int j = 0; j < m[0].length; j++) m[0][j] = 0;\n    if (col0) for (int i = 0; i < m.length; i++) m[i][0] = 0;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-068-字符串解码",
+    "module": "中等",
+    "title": "字符串解码",
+    "tags": [
+      "算法",
+      "字符串",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「字符串解码」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「字符串解码」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「字符串解码」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public String decodeString(String s) {\n    Deque<Integer> nums = new ArrayDeque<>(); Deque<StringBuilder> strs = new ArrayDeque<>();\n    StringBuilder cur = new StringBuilder(); int k = 0;\n    for (char c : s.toCharArray()) {\n      if (Character.isDigit(c)) k = k * 10 + c - '0';\n      else if (c == '[') { nums.push(k); strs.push(cur); k = 0; cur = new StringBuilder(); }\n      else if (c == ']') { int n = nums.pop(); StringBuilder prev = strs.pop(); while (n-- > 0) prev.append(cur); cur = prev; }\n      else cur.append(c);\n    }\n    return cur.toString();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-069-分割回文串",
+    "module": "中等",
+    "title": "分割回文串",
+    "tags": [
+      "算法",
+      "字符串",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「分割回文串」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「分割回文串」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「分割回文串」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public List<List<String>> partition(String s) {\n    List<List<String>> ans = new ArrayList<>(); dfs(s,0,new ArrayList<>(),ans); return ans;\n  }\n  private void dfs(String s,int start,List<String> path,List<List<String>> ans){ if(start==s.length()){ans.add(new ArrayList<>(path));return;} for(int end=start;end<s.length();end++) if(isPal(s,start,end)){path.add(s.substring(start,end+1));dfs(s,end+1,path,ans);path.remove(path.size()-1);} }\n  private boolean isPal(String s,int l,int r){while(l<r)if(s.charAt(l++)!=s.charAt(r--))return false;return true;}\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-070-排序链表",
+    "module": "中等",
+    "title": "排序链表",
+    "tags": [
+      "算法",
+      "链表",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「排序链表」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「排序链表」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「排序链表」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public ListNode sortList(ListNode head) {\n    if (head == null || head.next == null) return head;\n    ListNode slow = head, fast = head.next;\n    while (fast != null && fast.next != null) { slow = slow.next; fast = fast.next.next; }\n    ListNode mid = slow.next; slow.next = null;\n    return merge(sortList(head), sortList(mid));\n  }\n  private ListNode merge(ListNode a, ListNode b) {\n    ListNode d = new ListNode(0), t = d;\n    while (a != null && b != null) { if (a.val <= b.val) { t.next = a; a = a.next; } else { t.next = b; b = b.next; } t = t.next; }\n    t.next = a != null ? a : b; return d.next;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-071-环形链表-ii",
+    "module": "中等",
+    "title": "环形链表 II",
+    "tags": [
+      "算法",
+      "链表",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「环形链表 II」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「环形链表 II」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「环形链表 II」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public ListNode detectCycle(ListNode head) {\n    ListNode slow = head, fast = head;\n    while (fast != null && fast.next != null) {\n      slow = slow.next; fast = fast.next.next;\n      if (slow == fast) { ListNode p = head; while (p != slow) { p = p.next; slow = slow.next; } return p; }\n    }\n    return null;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-072-两数相加",
+    "module": "中等",
+    "title": "两数相加",
+    "tags": [
+      "算法",
+      "链表",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「两数相加」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「两数相加」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「两数相加」建模为 链表 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public ListNode addTwoNumbers(ListNode a, ListNode b) {\n    ListNode d = new ListNode(0), t = d; int carry = 0;\n    while (a != null || b != null || carry != 0) {\n      int sum = carry + (a == null ? 0 : a.val) + (b == null ? 0 : b.val);\n      carry = sum / 10; t.next = new ListNode(sum % 10); t = t.next;\n      if (a != null) a = a.next; if (b != null) b = b.next;\n    }\n    return d.next;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-073-简化-unix-路径",
+    "module": "中等",
+    "title": "简化 Unix 路径",
+    "tags": [
+      "算法",
+      "栈",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「简化 Unix 路径」建模为 栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「简化 Unix 路径」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「简化 Unix 路径」建模为 栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public String simplifyPath(String path) {\n    Deque<String> st = new ArrayDeque<>();\n    for (String part : path.split(\"/\")) {\n      if (part.isEmpty() || part.equals(\".\")) continue;\n      if (part.equals(\"..\")) { if (!st.isEmpty()) st.pop(); } else st.push(part);\n    }\n    StringBuilder ans = new StringBuilder();\n    while (!st.isEmpty()) ans.insert(0, \"/\" + st.pop());\n    return ans.length() == 0 ? \"/\" : ans.toString();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-074-逆波兰表达式求值",
+    "module": "中等",
+    "title": "逆波兰表达式求值",
+    "tags": [
+      "算法",
+      "栈",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「逆波兰表达式求值」建模为 栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「逆波兰表达式求值」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「逆波兰表达式求值」建模为 栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int evalRPN(String[] tokens) {\n    Deque<Integer> st = new ArrayDeque<>();\n    for (String t : tokens) {\n      if (!\"+-*/\".contains(t) || t.length() > 1) st.push(Integer.parseInt(t));\n      else { int b = st.pop(), a = st.pop(); st.push(t.equals(\"+\")?a+b:t.equals(\"-\")?a-b:t.equals(\"*\")?a*b:a/b); }\n    }\n    return st.pop();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-075-lru-缓存",
+    "module": "中等",
+    "title": "LRU 缓存",
+    "tags": [
+      "算法",
+      "设计",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「LRU 缓存」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「LRU 缓存」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「LRU 缓存」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass LRUCache extends LinkedHashMap<Integer,Integer> {\n  private final int cap;\n  public LRUCache(int capacity) { super(capacity, 0.75f, true); cap = capacity; }\n  public int get(int key) { return super.getOrDefault(key, -1); }\n  public void put(int key, int value) { super.put(key, value); }\n  protected boolean removeEldestEntry(Map.Entry<Integer,Integer> e) { return size() > cap; }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-076-最小栈",
+    "module": "中等",
+    "title": "最小栈",
+    "tags": [
+      "算法",
+      "设计",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最小栈」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最小栈」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最小栈」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nimport java.util.*;\nclass MinStack {\n  Deque<Integer> st = new ArrayDeque<>(), min = new ArrayDeque<>();\n  public void push(int val) { st.push(val); min.push(min.isEmpty()?val:Math.min(val,min.peek())); }\n  public void pop() { st.pop(); min.pop(); }\n  public int top() { return st.peek(); }\n  public int getMin() { return min.peek(); }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-077-前缀树-trie",
+    "module": "中等",
+    "title": "前缀树 Trie",
+    "tags": [
+      "算法",
+      "设计",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「前缀树 Trie」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「前缀树 Trie」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「前缀树 Trie」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Trie {\n  private final Trie[] child = new Trie[26]; private boolean end;\n  public void insert(String word) { Trie p=this; for(char c:word.toCharArray()){int i=c-'a'; if(p.child[i]==null)p.child[i]=new Trie(); p=p.child[i];} p.end=true; }\n  public boolean search(String word) { Trie p=node(word); return p!=null&&p.end; }\n  public boolean startsWith(String prefix) { return node(prefix)!=null; }\n  private Trie node(String s){Trie p=this; for(char c:s.toCharArray()){p=p.child[c-'a']; if(p==null)return null;} return p;}\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-078-最长回文子串",
+    "module": "中等",
+    "title": "最长回文子串",
+    "tags": [
+      "算法",
+      "字符串",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最长回文子串」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最长回文子串」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最长回文子串」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n时间复杂度通常优于暴力枚举，空间复杂度取决于使用的数据结构。\n\n【Java】\n```java\nclass Solution {\n  public String longestPalindrome(String s) {\n    int start = 0, len = 0;\n    for (int i = 0; i < s.length(); i++) {\n      int a = expand(s,i,i), b = expand(s,i,i+1), cur = Math.max(a,b);\n      if (cur > len) { len = cur; start = i - (cur - 1) / 2; }\n    }\n    return s.substring(start, start + len);\n  }\n  private int expand(String s,int l,int r){while(l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){l--;r++;}return r-l-1;}\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-079-不同路径",
+    "module": "中等",
+    "title": "不同路径",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「不同路径」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「不同路径」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「不同路径」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int uniquePaths(int m, int n) {\n    int[] dp = new int[n]; java.util.Arrays.fill(dp, 1);\n    for (int i = 1; i < m; i++) for (int j = 1; j < n; j++) dp[j] += dp[j-1];\n    return dp[n-1];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-080-最小路径和",
+    "module": "中等",
+    "title": "最小路径和",
+    "tags": [
+      "算法",
+      "动态规划",
+      "中等"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最小路径和」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最小路径和」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最小路径和」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int minPathSum(int[][] g) {\n    int m=g.length,n=g[0].length; int[] dp=new int[n];\n    for(int i=0;i<m;i++) for(int j=0;j<n;j++){ if(i==0&&j==0) dp[j]=g[i][j]; else dp[j]=Math.min(i==0?Integer.MAX_VALUE:dp[j], j==0?Integer.MAX_VALUE:dp[j-1])+g[i][j]; }\n    return dp[n-1];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-081-正则表达式匹配",
+    "module": "高难",
+    "title": "正则表达式匹配",
+    "tags": [
+      "算法",
+      "动态规划",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「正则表达式匹配」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「正则表达式匹配」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「正则表达式匹配」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public boolean isMatch(String s, String p) {\n    boolean[][] dp = new boolean[s.length()+1][p.length()+1]; dp[0][0]=true;\n    for(int j=2;j<=p.length();j++) if(p.charAt(j-1)=='*') dp[0][j]=dp[0][j-2];\n    for(int i=1;i<=s.length();i++) for(int j=1;j<=p.length();j++){ char pc=p.charAt(j-1); if(pc=='*'){ dp[i][j]=dp[i][j-2] || (match(s,p,i,j-1)&&dp[i-1][j]); } else dp[i][j]=match(s,p,i,j)&&dp[i-1][j-1]; }\n    return dp[s.length()][p.length()];\n  }\n  private boolean match(String s,String p,int i,int j){return p.charAt(j-1)=='.'||s.charAt(i-1)==p.charAt(j-1);}\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-082-通配符匹配",
+    "module": "高难",
+    "title": "通配符匹配",
+    "tags": [
+      "算法",
+      "动态规划",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「通配符匹配」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「通配符匹配」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「通配符匹配」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public boolean isMatch(String s, String p) {\n    boolean[][] dp = new boolean[s.length()+1][p.length()+1]; dp[0][0]=true;\n    for(int j=1;j<=p.length();j++) if(p.charAt(j-1)=='*') dp[0][j]=dp[0][j-1];\n    for(int i=1;i<=s.length();i++) for(int j=1;j<=p.length();j++){ char c=p.charAt(j-1); dp[i][j]=c=='*' ? dp[i][j-1]||dp[i-1][j] : (c=='?'||c==s.charAt(i-1))&&dp[i-1][j-1]; }\n    return dp[s.length()][p.length()];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-083-戳气球",
+    "module": "高难",
+    "title": "戳气球",
+    "tags": [
+      "算法",
+      "动态规划",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「戳气球」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「戳气球」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「戳气球」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int maxCoins(int[] nums) {\n    int n=nums.length; int[] a=new int[n+2]; a[0]=a[n+1]=1; for(int i=0;i<n;i++)a[i+1]=nums[i];\n    int[][] dp=new int[n+2][n+2];\n    for(int len=2;len<n+2;len++) for(int l=0;l+len<n+2;l++){ int r=l+len; for(int k=l+1;k<r;k++) dp[l][r]=Math.max(dp[l][r], dp[l][k]+dp[k][r]+a[l]*a[k]*a[r]); }\n    return dp[0][n+1];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-084-买卖股票的最佳时机-iii",
+    "module": "高难",
+    "title": "买卖股票的最佳时机 III",
+    "tags": [
+      "算法",
+      "动态规划",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「买卖股票的最佳时机 III」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「买卖股票的最佳时机 III」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「买卖股票的最佳时机 III」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int maxProfit(int[] prices) {\n    int buy1=Integer.MIN_VALUE,sell1=0,buy2=Integer.MIN_VALUE,sell2=0;\n    for(int p:prices){ buy1=Math.max(buy1,-p); sell1=Math.max(sell1,buy1+p); buy2=Math.max(buy2,sell1-p); sell2=Math.max(sell2,buy2+p); }\n    return sell2;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-085-最大利润含冷冻期",
+    "module": "高难",
+    "title": "最大利润含冷冻期",
+    "tags": [
+      "算法",
+      "动态规划",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最大利润含冷冻期」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最大利润含冷冻期」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最大利润含冷冻期」建模为 动态规划 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n常见时间复杂度 O(n^2) 或 O(mn)，空间复杂度可通过状态压缩优化。\n\n【Java】\n```java\nclass Solution {\n  public int maxProfit(int[] prices) {\n    int hold=Integer.MIN_VALUE/2, sold=0, rest=0;\n    for(int p:prices){ int prevSold=sold; sold=hold+p; hold=Math.max(hold,rest-p); rest=Math.max(rest,prevSold); }\n    return Math.max(sold,rest);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-086-单词接龙",
+    "module": "高难",
+    "title": "单词接龙",
+    "tags": [
+      "算法",
+      "图",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「单词接龙」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「单词接龙」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「单词接龙」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int ladderLength(String begin, String end, List<String> words) {\n    Set<String> dict=new HashSet<>(words); if(!dict.contains(end))return 0;\n    Queue<String> q=new ArrayDeque<>(); q.offer(begin); int step=1;\n    while(!q.isEmpty()){ for(int s=q.size();s>0;s--){ char[] a=q.poll().toCharArray(); for(int i=0;i<a.length;i++){ char old=a[i]; for(char c='a';c<='z';c++){ a[i]=c; String next=new String(a); if(next.equals(end))return step+1; if(dict.remove(next))q.offer(next);} a[i]=old; }} step++; }\n    return 0;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-087-最小基因变化",
+    "module": "高难",
+    "title": "最小基因变化",
+    "tags": [
+      "算法",
+      "图",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最小基因变化」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最小基因变化」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最小基因变化」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  public int minMutation(String start, String end, String[] bank) {\n    Set<String> dict = new HashSet<>(Arrays.asList(bank));\n    if (!dict.contains(end)) return -1;\n    char[] genes = {'A', 'C', 'G', 'T'};\n    Queue<String> queue = new ArrayDeque<>();\n    queue.offer(start);\n    Set<String> visited = new HashSet<>();\n    visited.add(start);\n    int step = 0;\n    while (!queue.isEmpty()) {\n      for (int size = queue.size(); size > 0; size--) {\n        String cur = queue.poll();\n        if (cur.equals(end)) return step;\n        char[] arr = cur.toCharArray();\n        for (int i = 0; i < arr.length; i++) {\n          char old = arr[i];\n          for (char g : genes) {\n            if (g == old) continue;\n            arr[i] = g;\n            String next = new String(arr);\n            if (dict.contains(next) && visited.add(next)) queue.offer(next);\n          }\n          arr[i] = old;\n        }\n      }\n      step++;\n    }\n    return -1;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-088-网络延迟时间",
+    "module": "高难",
+    "title": "网络延迟时间",
+    "tags": [
+      "算法",
+      "图",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「网络延迟时间」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「网络延迟时间」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「网络延迟时间」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int networkDelayTime(int[][] times, int n, int k) {\n    List<int[]>[] g=new ArrayList[n+1]; for(int i=1;i<=n;i++)g[i]=new ArrayList<>(); for(int[] e:times)g[e[0]].add(new int[]{e[1],e[2]});\n    int[] dist=new int[n+1]; Arrays.fill(dist,1_000_000_000); dist[k]=0; PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[1]-b[1]); pq.offer(new int[]{k,0});\n    while(!pq.isEmpty()){int[] cur=pq.poll(); if(cur[1]!=dist[cur[0]])continue; for(int[] e:g[cur[0]]) if(cur[1]+e[1]<dist[e[0]]){dist[e[0]]=cur[1]+e[1]; pq.offer(new int[]{e[0],dist[e[0]]});}}\n    int ans=0; for(int i=1;i<=n;i++) ans=Math.max(ans,dist[i]); return ans==1_000_000_000?-1:ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-089-最短路径访问所有节点",
+    "module": "高难",
+    "title": "最短路径访问所有节点",
+    "tags": [
+      "算法",
+      "图",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最短路径访问所有节点」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最短路径访问所有节点」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最短路径访问所有节点」建模为 图 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  public int shortestPathLength(int[][] graph) {\n    int n = graph.length;\n    int target = (1 << n) - 1;\n    Queue<int[]> queue = new ArrayDeque<>();\n    boolean[][] seen = new boolean[n][1 << n];\n    for (int i = 0; i < n; i++) {\n      int mask = 1 << i;\n      queue.offer(new int[] {i, mask, 0});\n      seen[i][mask] = true;\n    }\n    while (!queue.isEmpty()) {\n      int[] cur = queue.poll();\n      int node = cur[0], mask = cur[1], dist = cur[2];\n      if (mask == target) return dist;\n      for (int next : graph[node]) {\n        int nextMask = mask | (1 << next);\n        if (!seen[next][nextMask]) {\n          seen[next][nextMask] = true;\n          queue.offer(new int[] {next, nextMask, dist + 1});\n        }\n      }\n    }\n    return 0;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-090-编辑距离",
+    "module": "高难",
+    "title": "编辑距离",
+    "tags": [
+      "算法",
+      "字符串",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「编辑距离」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「编辑距离」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「编辑距离」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nclass Solution {\n  public int minDistance(String a, String b) {\n    int[][] dp = new int[a.length()+1][b.length()+1];\n    for(int i=0;i<=a.length();i++) dp[i][0]=i; for(int j=0;j<=b.length();j++) dp[0][j]=j;\n    for(int i=1;i<=a.length();i++) for(int j=1;j<=b.length();j++) dp[i][j]=a.charAt(i-1)==b.charAt(j-1)?dp[i-1][j-1]:Math.min(dp[i-1][j-1],Math.min(dp[i-1][j],dp[i][j-1]))+1;\n    return dp[a.length()][b.length()];\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-091-最小窗口子序列",
+    "module": "高难",
+    "title": "最小窗口子序列",
+    "tags": [
+      "算法",
+      "字符串",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「最小窗口子序列」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「最小窗口子序列」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「最小窗口子序列」建模为 字符串 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  public String minWindow(String s1, String s2) {\n    int bestStart = -1, bestLen = Integer.MAX_VALUE;\n    int i = 0, n = s1.length(), m = s2.length();\n    while (i < n) {\n      int j = 0;\n      while (i < n) {\n        if (s1.charAt(i) == s2.charAt(j) && ++j == m) break;\n        i++;\n      }\n      if (i == n) break;\n      int end = i + 1;\n      j = m - 1;\n      while (i >= 0) {\n        if (s1.charAt(i) == s2.charAt(j) && --j < 0) break;\n        i--;\n      }\n      if (end - i < bestLen) {\n        bestLen = end - i;\n        bestStart = i;\n      }\n      i++;\n    }\n    return bestStart == -1 ? \"\" : s1.substring(bestStart, bestStart + bestLen);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-092-合并-k-个升序链表",
+    "module": "高难",
+    "title": "合并 K 个升序链表",
+    "tags": [
+      "算法",
+      "堆",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「合并 K 个升序链表」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「合并 K 个升序链表」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「合并 K 个升序链表」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public ListNode mergeKLists(ListNode[] lists) {\n    PriorityQueue<ListNode> pq = new PriorityQueue<>((a,b)->a.val-b.val);\n    for(ListNode n:lists) if(n!=null) pq.offer(n);\n    ListNode dummy=new ListNode(0), tail=dummy;\n    while(!pq.isEmpty()){ ListNode n=pq.poll(); tail.next=n; tail=n; if(n.next!=null)pq.offer(n.next); }\n    return dummy.next;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-093-滑动窗口中位数",
+    "module": "高难",
+    "title": "滑动窗口中位数",
+    "tags": [
+      "算法",
+      "堆",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「滑动窗口中位数」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「滑动窗口中位数」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「滑动窗口中位数」建模为 堆 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  private PriorityQueue<Integer> small = new PriorityQueue<>((a, b) -> Integer.compare(b, a));\n  private PriorityQueue<Integer> large = new PriorityQueue<>();\n  private Map<Integer, Integer> delayed = new HashMap<>();\n  private int smallSize = 0, largeSize = 0;\n\n  public double[] medianSlidingWindow(int[] nums, int k) {\n    double[] ans = new double[nums.length - k + 1];\n    for (int i = 0; i < nums.length; i++) {\n      add(nums[i]);\n      if (i >= k) remove(nums[i - k]);\n      if (i >= k - 1) ans[i - k + 1] = median(k);\n    }\n    return ans;\n  }\n\n  private void add(int num) {\n    if (small.isEmpty() || num <= small.peek()) { small.offer(num); smallSize++; }\n    else { large.offer(num); largeSize++; }\n    balance();\n  }\n\n  private void remove(int num) {\n    delayed.put(num, delayed.getOrDefault(num, 0) + 1);\n    if (num <= small.peek()) smallSize--; else largeSize--;\n    prune(small); prune(large); balance();\n  }\n\n  private void balance() {\n    if (smallSize > largeSize + 1) { large.offer(small.poll()); smallSize--; largeSize++; prune(small); }\n    if (smallSize < largeSize) { small.offer(large.poll()); largeSize--; smallSize++; prune(large); }\n  }\n\n  private void prune(PriorityQueue<Integer> heap) {\n    while (!heap.isEmpty() && delayed.getOrDefault(heap.peek(), 0) > 0) {\n      int x = heap.poll();\n      delayed.put(x, delayed.get(x) - 1);\n    }\n  }\n\n  private double median(int k) {\n    return (k & 1) == 1 ? small.peek() : ((long) small.peek() + large.peek()) / 2.0;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-094-二进制矩阵最大矩形",
+    "module": "高难",
+    "title": "二进制矩阵最大矩形",
+    "tags": [
+      "算法",
+      "单调栈",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「二进制矩阵最大矩形」建模为 单调栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「二进制矩阵最大矩形」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「二进制矩阵最大矩形」建模为 单调栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  public int maximalRectangle(char[][] matrix) {\n    if (matrix.length == 0 || matrix[0].length == 0) return 0;\n    int[] heights = new int[matrix[0].length];\n    int ans = 0;\n    for (char[] row : matrix) {\n      for (int j = 0; j < row.length; j++) {\n        heights[j] = row[j] == '1' ? heights[j] + 1 : 0;\n      }\n      ans = Math.max(ans, largestRectangleArea(heights));\n    }\n    return ans;\n  }\n\n  private int largestRectangleArea(int[] heights) {\n    Deque<Integer> stack = new ArrayDeque<>();\n    int ans = 0;\n    for (int i = 0; i <= heights.length; i++) {\n      int h = i == heights.length ? 0 : heights[i];\n      while (!stack.isEmpty() && h < heights[stack.peek()]) {\n        int height = heights[stack.pop()];\n        int left = stack.isEmpty() ? -1 : stack.peek();\n        ans = Math.max(ans, height * (i - left - 1));\n      }\n      stack.push(i);\n    }\n    return ans;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-095-移掉-k-位数字",
+    "module": "高难",
+    "title": "移掉 K 位数字",
+    "tags": [
+      "算法",
+      "单调栈",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「移掉 K 位数字」建模为 单调栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「移掉 K 位数字」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「移掉 K 位数字」建模为 单调栈 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public String removeKdigits(String num, int k) {\n    Deque<Character> st=new ArrayDeque<>();\n    for(char c:num.toCharArray()){while(k>0&&!st.isEmpty()&&st.peekLast()>c){st.pollLast();k--;}st.offerLast(c);}\n    while(k-->0)st.pollLast(); StringBuilder sb=new StringBuilder(); boolean leading=true; for(char c:st){ if(leading&&c=='0')continue; leading=false; sb.append(c);} return sb.length()==0?\"0\":sb.toString();\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-096-分发糖果",
+    "module": "高难",
+    "title": "分发糖果",
+    "tags": [
+      "算法",
+      "贪心",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「分发糖果」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「分发糖果」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「分发糖果」建模为 贪心 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  public int candy(int[] ratings) {\n    int n = ratings.length;\n    int[] candies = new int[n];\n    Arrays.fill(candies, 1);\n    for (int i = 1; i < n; i++) {\n      if (ratings[i] > ratings[i - 1]) candies[i] = candies[i - 1] + 1;\n    }\n    for (int i = n - 2; i >= 0; i--) {\n      if (ratings[i] > ratings[i + 1]) candies[i] = Math.max(candies[i], candies[i + 1] + 1);\n    }\n    int sum = 0;\n    for (int c : candies) sum += c;\n    return sum;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-097-账户合并",
+    "module": "高难",
+    "title": "账户合并",
+    "tags": [
+      "算法",
+      "并查集",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「账户合并」建模为 并查集 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "复杂度取决于点边规模或堆操作，回答时要明确主导步骤。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「账户合并」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「账户合并」建模为 并查集 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n复杂度取决于点边规模或堆操作，回答时要明确主导步骤。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  public List<List<String>> accountsMerge(List<List<String>> accounts) {\n    Map<String, String> parent = new HashMap<>();\n    Map<String, String> owner = new HashMap<>();\n    for (List<String> account : accounts) {\n      String name = account.get(0);\n      for (int i = 1; i < account.size(); i++) {\n        parent.putIfAbsent(account.get(i), account.get(i));\n        owner.put(account.get(i), name);\n        union(parent, account.get(1), account.get(i));\n      }\n    }\n    Map<String, TreeSet<String>> groups = new HashMap<>();\n    for (String email : parent.keySet()) {\n      groups.computeIfAbsent(find(parent, email), k -> new TreeSet<>()).add(email);\n    }\n    List<List<String>> ans = new ArrayList<>();\n    for (TreeSet<String> emails : groups.values()) {\n      List<String> merged = new ArrayList<>();\n      merged.add(owner.get(emails.first()));\n      merged.addAll(emails);\n      ans.add(merged);\n    }\n    return ans;\n  }\n\n  private String find(Map<String, String> parent, String x) {\n    if (!parent.get(x).equals(x)) parent.put(x, find(parent, parent.get(x)));\n    return parent.get(x);\n  }\n\n  private void union(Map<String, String> parent, String a, String b) {\n    parent.put(find(parent, a), find(parent, b));\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-098-单词搜索-ii",
+    "module": "高难",
+    "title": "单词搜索 II",
+    "tags": [
+      "算法",
+      "搜索",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「单词搜索 II」建模为 搜索 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「单词搜索 II」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「单词搜索 II」建模为 搜索 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\n\nclass Solution {\n  static class TrieNode {\n    TrieNode[] next = new TrieNode[26];\n    String word;\n  }\n\n  public List<String> findWords(char[][] board, String[] words) {\n    TrieNode root = buildTrie(words);\n    List<String> ans = new ArrayList<>();\n    for (int i = 0; i < board.length; i++) {\n      for (int j = 0; j < board[0].length; j++) dfs(board, i, j, root, ans);\n    }\n    return ans;\n  }\n\n  private void dfs(char[][] board, int i, int j, TrieNode node, List<String> ans) {\n    if (i < 0 || i == board.length || j < 0 || j == board[0].length || board[i][j] == '#') return;\n    char c = board[i][j];\n    TrieNode next = node.next[c - 'a'];\n    if (next == null) return;\n    if (next.word != null) {\n      ans.add(next.word);\n      next.word = null;\n    }\n    board[i][j] = '#';\n    dfs(board, i + 1, j, next, ans);\n    dfs(board, i - 1, j, next, ans);\n    dfs(board, i, j + 1, next, ans);\n    dfs(board, i, j - 1, next, ans);\n    board[i][j] = c;\n  }\n\n  private TrieNode buildTrie(String[] words) {\n    TrieNode root = new TrieNode();\n    for (String word : words) {\n      TrieNode cur = root;\n      for (char c : word.toCharArray()) {\n        int idx = c - 'a';\n        if (cur.next[idx] == null) cur.next[idx] = new TrieNode();\n        cur = cur.next[idx];\n      }\n      cur.word = word;\n    }\n    return root;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-099-lfu-缓存",
+    "module": "高难",
+    "title": "LFU 缓存",
+    "tags": [
+      "算法",
+      "设计",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「LFU 缓存」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「LFU 缓存」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「LFU 缓存」建模为 设计 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\n\nclass LFUCache {\n  private final int capacity;\n  private int minFreq = 0;\n  private final Map<Integer, Integer> values = new HashMap<>();\n  private final Map<Integer, Integer> freqs = new HashMap<>();\n  private final Map<Integer, LinkedHashSet<Integer>> buckets = new HashMap<>();\n\n  public LFUCache(int capacity) {\n    this.capacity = capacity;\n  }\n\n  public int get(int key) {\n    if (!values.containsKey(key)) return -1;\n    touch(key);\n    return values.get(key);\n  }\n\n  public void put(int key, int value) {\n    if (capacity == 0) return;\n    if (values.containsKey(key)) {\n      values.put(key, value);\n      touch(key);\n      return;\n    }\n    if (values.size() == capacity) {\n      int evict = buckets.get(minFreq).iterator().next();\n      buckets.get(minFreq).remove(evict);\n      values.remove(evict);\n      freqs.remove(evict);\n    }\n    values.put(key, value);\n    freqs.put(key, 1);\n    buckets.computeIfAbsent(1, k -> new LinkedHashSet<>()).add(key);\n    minFreq = 1;\n  }\n\n  private void touch(int key) {\n    int freq = freqs.get(key);\n    buckets.get(freq).remove(key);\n    if (freq == minFreq && buckets.get(freq).isEmpty()) minFreq++;\n    freqs.put(key, freq + 1);\n    buckets.computeIfAbsent(freq + 1, k -> new LinkedHashSet<>()).add(key);\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
+  },
+  {
+    "id": "algorithm-general-extra-100-基本计算器",
+    "module": "高难",
+    "title": "基本计算器",
+    "tags": [
+      "算法",
+      "数学",
+      "高难"
+    ],
+    "reviewStatus": "notMastered",
+    "checkpoints": [
+      "问题建模与边界条件",
+      "核心数据结构或状态定义",
+      "时间复杂度和空间复杂度",
+      "代码实现的边界处理"
+    ],
+    "answerPoints": [
+      "将「基本计算器」建模为 数学 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。",
+      "实现时先处理空输入、单元素、重复值和越界条件。",
+      "通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。"
+    ],
+    "followUps": [
+      "如果输入规模扩大，当前解法是否还能通过？",
+      "如何构造一个能暴露边界错误的测试用例？",
+      "是否能说明暴力解、优化解和复杂度差异？"
+    ],
+    "mistakes": [
+      "只写代码不解释状态含义或指针不变量。",
+      "忽略空输入、重复元素、越界、溢出和返回格式。"
+    ],
+    "techCategory": "algorithm",
+    "techLanguage": "general",
+    "standardAnswer": "【题目描述】\n解决「基本计算器」并返回题目要求的结果。\n\n【示例】\n输入：典型输入\n输出：目标输出\n\n【解题思路】\n• 将「基本计算器」建模为 数学 问题，先定义状态、指针或辅助结构，再按输入顺序更新答案。\n• 实现时先处理空输入、单元素、重复值和越界条件，再进入主循环或递归。\n\n【复杂度分析】\n通常需要高阶数据结构、状态压缩或区间 DP，复杂度要结合状态数量说明。\n\n【Java】\n```java\nimport java.util.*;\nclass Solution {\n  public int calculate(String s) {\n    Deque<Integer> st=new ArrayDeque<>(); int ans=0,num=0,sign=1;\n    for(char c:s.toCharArray()){ if(Character.isDigit(c)) num=num*10+c-'0'; else if(c=='+'||c=='-'){ans+=sign*num; num=0; sign=c=='+'?1:-1;} else if(c=='('){st.push(ans); st.push(sign); ans=0; sign=1;} else if(c==')'){ans+=sign*num; num=0; ans*=st.pop(); ans+=st.pop();}}\n    return ans+sign*num;\n  }\n}\n```\n【易错点】\n• 说明状态定义、转移条件或指针含义，不要只写最终代码。\n• 注意空输入、重复值、越界、溢出和返回格式。\n• 面试表达要先讲暴力解，再讲优化思路和复杂度。"
   }
 ]

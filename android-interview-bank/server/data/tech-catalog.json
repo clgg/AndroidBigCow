@@ -39,7 +39,7 @@
       {
         "id": "java-backend",
         "label": "Java",
-        "description": "JVM、Spring 与服务治理"
+        "description": "Java 基础、集合并发、JVM 与服务端工程"
       },
       {
         "id": "go",

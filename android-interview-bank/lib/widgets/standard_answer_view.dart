@@ -133,6 +133,10 @@ class _CodeTabsState extends State<_CodeTabs> {
   Widget build(BuildContext context) {
     final palette = context.palette;
     final selected = widget.sections[_selectedIndex];
+    final code = _formatCodeForDisplay(
+      _stripCodeFence(selected.body),
+      selected.title,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,6 +182,7 @@ class _CodeTabsState extends State<_CodeTabs> {
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,
+                constraints: const BoxConstraints(maxHeight: 360),
                 decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF08111D)
@@ -187,15 +192,20 @@ class _CodeTabsState extends State<_CodeTabs> {
                   ),
                 ),
                 padding: const EdgeInsets.all(12),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SelectableText(
-                    _stripCodeFence(selected.body),
-                    style: const TextStyle(
-                      color: Color(0xFFE5E7EB),
-                      fontFamily: 'monospace',
-                      fontSize: 13,
-                      height: 1.45,
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SelectableText(
+                        code,
+                        style: const TextStyle(
+                          color: Color(0xFFE5E7EB),
+                          fontFamily: 'monospace',
+                          fontSize: 12,
+                          height: 1.45,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -234,4 +244,147 @@ String _stripCodeFence(String body) {
     return lines.sublist(1, lines.length - 1).join('\n').trimRight();
   }
   return body.trimRight();
+}
+
+String _formatCodeForDisplay(String code, String language) {
+  final normalizedLanguage = language.trim().toLowerCase();
+  if (normalizedLanguage == 'python' || normalizedLanguage == 'py') {
+    return code.trimRight();
+  }
+  if (code.trim().contains('\n')) {
+    return code.trimRight();
+  }
+  if (!_usesBraceSyntax(normalizedLanguage)) {
+    return code.trimRight();
+  }
+  return _formatBraceSyntax(code);
+}
+
+bool _usesBraceSyntax(String language) {
+  const languages = {
+    'c',
+    'c++',
+    'cpp',
+    'go',
+    'golang',
+    'java',
+    'javascript',
+    'js',
+    'kotlin',
+    'typescript',
+    'ts',
+  };
+  return languages.contains(language);
+}
+
+String _formatBraceSyntax(String code) {
+  final buffer = StringBuffer();
+  var indent = 0;
+  var parenDepth = 0;
+  var inString = false;
+  var stringQuote = '';
+  var escaped = false;
+  var pendingSpace = false;
+
+  bool endsWithOpenBoundary() {
+    final text = buffer.toString();
+    return text.isEmpty || RegExp(r'[\s({\[]$').hasMatch(text);
+  }
+
+  void writeIndent() {
+    buffer.write('  ' * indent);
+  }
+
+  void newline({bool trimRight = true}) {
+    var text = buffer.toString();
+    if (trimRight) {
+      text = text.replaceFirst(RegExp(r'[ \t]+$'), '');
+      buffer
+        ..clear()
+        ..write(text);
+    }
+    if (!buffer.toString().endsWith('\n')) {
+      buffer.writeln();
+    }
+    writeIndent();
+    pendingSpace = false;
+  }
+
+  for (var i = 0; i < code.length; i++) {
+    final char = code[i];
+
+    if (inString) {
+      buffer.write(char);
+      if (escaped) {
+        escaped = false;
+      } else if (char == '\\') {
+        escaped = true;
+      } else if (char == stringQuote) {
+        inString = false;
+        stringQuote = '';
+      }
+      continue;
+    }
+
+    if (char == '"' || char == "'" || char == '`') {
+      if (pendingSpace && !endsWithOpenBoundary()) {
+        buffer.write(' ');
+      }
+      pendingSpace = false;
+      inString = true;
+      stringQuote = char;
+      buffer.write(char);
+      continue;
+    }
+
+    if (char.trim().isEmpty) {
+      pendingSpace = true;
+      continue;
+    }
+
+    if (pendingSpace && !endsWithOpenBoundary()) {
+      buffer.write(' ');
+    }
+    pendingSpace = false;
+
+    if (char == '(' || char == '[') {
+      parenDepth += 1;
+      buffer.write(char);
+      continue;
+    }
+    if (char == ')' || char == ']') {
+      parenDepth = parenDepth > 0 ? parenDepth - 1 : 0;
+      buffer.write(char);
+      continue;
+    }
+    if (char == '{') {
+      buffer.write(' {');
+      indent += 1;
+      newline();
+      continue;
+    }
+    if (char == '}') {
+      indent = indent > 0 ? indent - 1 : 0;
+      newline();
+      buffer.write('}');
+      if (i + 1 < code.length && code[i + 1] != ';' && code[i + 1] != ',') {
+        newline();
+      }
+      continue;
+    }
+    if (char == ';' && parenDepth == 0) {
+      buffer.write(';');
+      newline();
+      continue;
+    }
+
+    buffer.write(char);
+  }
+
+  return buffer
+      .toString()
+      .split('\n')
+      .map((line) => line.trimRight())
+      .join('\n')
+      .trimRight();
 }

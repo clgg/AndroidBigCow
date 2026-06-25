@@ -128,15 +128,21 @@ void main() {
     final algorithm = repository.forTechStack(
       const SelectedTechStack(categoryId: 'algorithm', languageId: 'general'),
     );
+    final backendJava = repository.forTechStack(
+      const SelectedTechStack(
+          categoryId: 'backend', languageId: 'java-backend'),
+    );
 
-    expect(repository.all.length, 324);
+    expect(repository.all.length, 624);
     expect(uniqueIds.length, repository.all.length);
-    expect(repository.modules.length, 37);
+    expect(repository.modules.length, 45);
     expect(flutter.all.length, 172);
-    expect(algorithm.all.length, 30);
-    expect(algorithm.filter(module: '简单').length, 10);
-    expect(algorithm.filter(module: '中等').length, 15);
-    expect(algorithm.filter(module: '高难').length, 5);
+    expect(algorithm.all.length, 130);
+    expect(backendJava.all.length, 200);
+    expect(backendJava.modules.length, 8);
+    expect(algorithm.filter(module: '简单').length, 45);
+    expect(algorithm.filter(module: '中等').length, 60);
+    expect(algorithm.filter(module: '高难').length, 25);
     expect(repository.filter(module: 'Java').length, greaterThanOrEqualTo(27));
     expect(
       repository.all.any(
